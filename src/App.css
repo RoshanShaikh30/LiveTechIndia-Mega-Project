@@ -70,6 +70,25 @@ url("./assets/bg5.jpg");
   cursor: pointer;
 }
 
+.menu-container{
+  position: relative;
+}
+
+.dropdown-menu{
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #e9dfc6;
+  padding: 15px 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 180px;
+  z-index: 1000;
+}
+
 .hero{
  display: flex;
  width: 100%;

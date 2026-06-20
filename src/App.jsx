@@ -31,10 +31,20 @@ function App() {
         <li className={activeTab === "Calendar" ? "active" : ""}
         onClick={() => setActiveTab("Calendar")}> Calendar </li>
       </ul>
-
+     <div className="menu-container">
       <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
         ☰
       </div>
+      {menuOpen && (
+       <div className="dropdown-menu">
+        <p onClick={() => setActiveTab("Orbit")}>Orbit</p>
+        <p onClick={() => setActiveTab("Routine Builder")}> Routine Builder
+        </p>
+        <p onClick={() => setActiveTab("Calendar")}>Calendar
+        </p>
+       </div>
+      )}
+     </div>
      </nav>
 
      {activeTab === "Orbit" && (
@@ -113,9 +123,15 @@ less time managing your plans and more time following them.</p>
 
        <div className="footer-contact">
         <h3>Contact</h3>
-        <p>GitHub</p>
-        <p>LinkedIn</p>
-        <p>Email</p>
+        <a href="https://github.com/RoshanShaikh30"
+        target="_blank"
+        rel="noopener noreferrer"> <p>GitHub</p> </a>
+        <a href="https://www.linkedin.com/in/roshan-shaikh-r14/"
+        target="_blank"
+        rel="noopener noreferrer"> <p>LinkedIn</p> </a>
+        <a href="mailto:roshanrizwan1414@gmail.com"
+        target="_blank"
+        rel="noopener noreferrer"> <p>Email</p> </a>
        </div>
      </footer>
 
