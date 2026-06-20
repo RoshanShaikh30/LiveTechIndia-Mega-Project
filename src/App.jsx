@@ -112,6 +112,7 @@ less time managing your plans and more time following them.</p>
        <h2>Orbit</h2>
        <p>Adaptive Routine & Schedule Manager</p>
        <p> Built for people whose schedules change frequently. </p>
+       <p> Developed by Roshan Shaikh! </p>
       </div>
 
        <div className="footer-links">
