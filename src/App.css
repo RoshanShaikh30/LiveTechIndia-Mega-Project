@@ -255,6 +255,30 @@ url("./assets/bg5.jpg");
   opacity: 0.7;
 }
 
+
+/* ROUTINE BUILDER PAGE:  */
+
+.routine-builder{
+  min-height: 100vh;
+  padding: 50px;
+}
+
+.routine-builder h1{
+  font-family: "Ahsing", cursive;
+  font-size: 3rem;
+  color: #3d251e;
+}
+
+.routine-builder p{
+  font-size: 1.2rem;
+  color: #4b342b;
+}
+
+
+
+
+
+
 /* .features-title{
   font-size: 3rem;
   margin-bottom: 10px;

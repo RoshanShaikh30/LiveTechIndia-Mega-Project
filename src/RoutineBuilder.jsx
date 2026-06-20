@@ -1,8 +1,12 @@
+import "./App.css";
+
 function RoutineBuilder() {
   return (
-    <div>
-      <h1>Routine Builder</h1>
-      <p>Coming Soon...hehe</p>
+    <div class="routine-builder">
+      <h1>Build Your Orbit</h1>
+      <p>
+        Tell Orbit about your schedule, goals, and habits so it can create a routine that adapts to your life.
+      </p>
     </div>
   );
 }
