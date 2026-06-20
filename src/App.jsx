@@ -1,3 +1,6 @@
+import { useState } from "react";
+import RoutineBuilder from "./RoutineBuilder";
+import Calendar from "./Calendar";
 import "./App.css";
 import orbitLogo from "./actual-logo.png";
 import graphic1 from "./assets/graphic1.png";
@@ -6,6 +9,9 @@ import graphic3 from "./assets/graphic3.png";
 import bg2 from "./assets/bg5.jpg";
 
 function App() {
+  const [activeTab, setActiveTab] = useState("Orbit");
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
 
     <div className="landing-page">
@@ -16,15 +22,22 @@ function App() {
       </div>
 
       <ul className="nav-links">
-        <li className="active">Orbit</li>
-        <li>Routine Builder</li>
-        <li>Calendar</li>
+        <li className={activeTab === "Orbit" ? "active" : ""}
+        onClick={() => setActiveTab("Orbit")}>Orbit</li>
+
+        <li className={activeTab === "RoutineBuilder" ? "active" : ""}
+        onClick={() => setActiveTab("RoutineBuilder")}>Routine Builder</li>
+
+        <li className={activeTab === "Calendar" ? "active" : ""}
+        onClick={() => setActiveTab("Calendar")}> Calendar </li>
       </ul>
 
-      <div className="menu-icon">☰
+      <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
+        ☰
       </div>
      </nav>
 
+     {activeTab === "Orbit" && (
      <div className="hero">
 
       <div className="hero-left">
@@ -72,10 +85,42 @@ less time managing your plans and more time following them.</p>
         <h1 className="title">Orbit</h1>
         <p className="tagline"> Adaptive Routine & Schedule Manager </p>
         <p className="description">Plan smarter. Adapt automatically. Build routines that adjust to real life.</p>
-        <button className="start-btn"> Start Onboarding </button>
+        <button className="start-btn" onClick={() => setActiveTab("RoutineBuilder")}>
+          Start Onboarding
+        </button>
       </div>
 
-     </div>
+     </div> )}
+
+     {activeTab === "RoutineBuilder" && <RoutineBuilder />}
+     {activeTab === "Calendar" && <Calendar />}
+
+     <footer className="footer">
+
+      <div className="footer-left">
+       <img src={orbitLogo} alt="Orbit Logo" />
+       <h2>Orbit</h2>
+       <p>Adaptive Routine & Schedule Manager</p>
+       <p> Built for people whose schedules change frequently. </p>
+      </div>
+
+       <div className="footer-links">
+        <h3>Project</h3>
+        <p>Orbit</p>
+        <p>Routine Builder</p>
+        <p>Calendar</p>
+       </div>
+
+       <div className="footer-contact">
+        <h3>Contact</h3>
+        <p>GitHub</p>
+        <p>LinkedIn</p>
+        <p>Email</p>
+       </div>
+     </footer>
+
+     {/* {activeTab === "RoutineBuilder" && <RoutineBuilder />}
+     {activeTab === "Calendar" && <Calendar />} */}
     </div>
   );
 }

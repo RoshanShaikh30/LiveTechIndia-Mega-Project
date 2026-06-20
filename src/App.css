@@ -196,6 +196,37 @@ url("./assets/bg5.jpg");
   opacity: 0.9;
 }
 
+.footer{
+  margin-top: 80.5px;
+  margin-bottom: -20px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding: 60px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #e9dfc6;
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(61,37,30,0.15);
+}
+
+.footer-left{
+  max-width: 300px;
+}
+
+.footer-left img{
+  width: 80px;
+}
+
+.footer h2,
+.footer h3{
+  color: #504542;
+}
+
+.footer p{
+  color: #504542;
+}
+
 /* .features-title{
   font-size: 3rem;
   margin-bottom: 10px;
