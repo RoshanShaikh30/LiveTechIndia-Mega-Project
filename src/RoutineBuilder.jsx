@@ -7,6 +7,16 @@ function RoutineBuilder() {
       <p>
         Tell Orbit about your schedule, goals, and habits so it can create a routine that adapts to your life.
       </p>
+
+      <div className="builder-section">
+
+       <h2>About You</h2>
+       <p>Which option best describes you?</p>
+
+      </div>
+
+
+
       <div className="builder-section">
        <h2>Basic Schedule</h2>
        <div className="schedule-grid">
@@ -37,7 +47,7 @@ function RoutineBuilder() {
          </div>
 
        </div>
-       
+
       </div>
 
       <div className="builder-section">

@@ -296,6 +296,22 @@ url("./assets/bg5.jpg");
   padding: 50px;
 }
 
+.schedule-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.input-group{
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label{
+  margin-bottom: 8px;
+  color: #3d251e;
+  font-weight: 500;
+}
 
 
 /* .features-title{
