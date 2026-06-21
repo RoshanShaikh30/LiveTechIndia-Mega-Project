@@ -8,15 +8,60 @@ function RoutineBuilder() {
         Tell Orbit about your schedule, goals, and habits so it can create a routine that adapts to your life.
       </p>
 
-      <div className="builder-section">
+      <div className="onboarding-card">
+
+       <div className="section-header">
+
+        <div className="step-circle">
+
+        </div>
+
+        <div>
+         <h2>About You</h2>
+         <p>Which option best describes you?</p>
+        </div>
+
+       </div> {/* section header ends here. */}
+
+       <div className="choice-grid">
+
+        <div className="choice-card">
+          Student
+        </div>
+
+        <div className="choice-card">
+          Working Professional
+        </div>
+
+        <div className="choice-card">
+          Freelancer
+        </div>
+
+       <div className="choice-card">
+          Homemaker
+       </div>
+
+       <div className="choice-card">
+          Other
+       </div>
+
+      </div>
+
+     </div>
+  </div>
+); 
+
+}
+
+export default RoutineBuilder;
+
+      {/* <div className="builder-section">
 
        <h2>About You</h2>
        <p>Which option best describes you?</p>
 
-      </div>
-
-
-
+      </div> 
+      // abcd
       <div className="builder-section">
        <h2>Basic Schedule</h2>
        <div className="schedule-grid">
@@ -60,9 +105,4 @@ function RoutineBuilder() {
 
       <div className="builder-section">
        <h2>Priorities</h2>
-      </div>
-    </div>
-  );
-}
-
-export default RoutineBuilder;
+      </div> */}
