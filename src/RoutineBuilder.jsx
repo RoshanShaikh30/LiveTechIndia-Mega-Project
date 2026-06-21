@@ -45,9 +45,9 @@ function RoutineBuilder() {
           Other
        </div>
 
-      </div>
+      </div> {/* choice grid ends here. */}
 
-     </div>
+     </div> {/* onboarding card ends here. */}
   </div>
 ); 
 
