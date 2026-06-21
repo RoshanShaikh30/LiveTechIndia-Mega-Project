@@ -48,6 +48,7 @@ function RoutineBuilder() {
       </div> {/* choice grid ends here. */}
 
      </div> {/* onboarding card ends here. */}
+     <div className="progress-section"> Progress dots here </div>
   </div>
 ); 
 

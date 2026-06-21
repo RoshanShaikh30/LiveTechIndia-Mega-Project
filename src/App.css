@@ -4,18 +4,11 @@
 }
 
 body {
-  background:
-linear-gradient(
-rgba(255,255,255,0.08),
-rgba(255,255,255,0.16)),
-url("./assets/bg5.jpg");
+  background: #f5efdc;
   /* background-image: url("./assets/bg5.jpg"); */
   margin: 0;
   font-family: Arial, sans-serif;
   color: #3d251e;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 }
 
 .navbar{
@@ -176,6 +169,12 @@ url("./assets/bg5.jpg");
   display: flex;
   flex-direction: column;
   padding: 20px;
+  background: linear-gradient(
+           rgba(255,255,255,0.08),
+           rgba(255,255,255,0.16)), url("./assets/bg5.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .logo {
@@ -261,6 +260,7 @@ url("./assets/bg5.jpg");
 .routine-builder{
   min-height: auto;
   padding: 10px;
+  background: #f5efdc;
 }
 
 .routine-builder h1{
@@ -313,6 +313,12 @@ url("./assets/bg5.jpg");
   font-weight: 500;
 }
 
+
+/* background:
+linear-gradient(
+rgba(255,255,255,0.08),
+rgba(255,255,255,0.16)),
+url("./assets/bg5.jpg"); */
 
 /* .features-title{
   font-size: 3rem;
