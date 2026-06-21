@@ -259,8 +259,11 @@ body {
 
 .routine-builder{
   min-height: auto;
-  padding: 10px;
   background: #f5efdc;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 22px;
+  border-radius: 30px;
 }
 
 .routine-builder h2{
@@ -270,16 +273,15 @@ body {
   margin: 0;
 }
 
+.routine-builder h3{
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  color: #3d251e;
+}
+
 .routine-builder p{
   font-size: 1.2rem;
   color: #4b342b;
-}
-
-.routine-builder{
-  max-width: 1500px;
-  margin: 40px auto;
-  padding: 22px;
-  border-radius: 30px;
 }
 
 .schedule-grid{
@@ -303,7 +305,7 @@ body {
   background: rgba(255,255,255,0.35);
   border-radius: 30px;
   border: 1px solid rgba(61,37,30,0.1);
-  padding: 50px;
+  padding: 35px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
@@ -317,12 +319,49 @@ body {
   background: rgba(255,255,255,0.35);
   border: 1px solid rgba(61,37,30,0.15);
   border-radius: 20px;
-  padding: 30px;
+  padding: 22px;
   text-align: center;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.choice-card{
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.choice-card:hover{
+  transform: translateY(-2px);
+}
+
+.choice-card.selected{
+  background: #3d251e;
+  color: #f5efdc;
+  border: 1px solid #3d251e;
 }
 
 .other-card{
   grid-column: span 2;
+}
+
+.progress-section{
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.dot{
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #3d251e;
+}
+
+.dot.active{
+  background: #3d251e;
 }
 
 /* .builder-section{

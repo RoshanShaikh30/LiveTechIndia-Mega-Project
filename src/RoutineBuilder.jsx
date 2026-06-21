@@ -1,9 +1,11 @@
 import "./App.css";
+import { useState } from "react";
 
 function RoutineBuilder() {
+  const [selectedRole, setSelectedRole] = useState("");
   return (
-    <div class="routine-builder">
-      <h2>Build Your Orbit</h2>
+    <div className="routine-builder">
+      <h2 className="build-your-orbit">Build Your Orbit</h2>
       <p>
         Tell Orbit about your schedule, goals, and habits so it can create a routine that adapts to your life.
       </p>
@@ -17,7 +19,7 @@ function RoutineBuilder() {
         </div>
 
         <div>
-         <h2>About You</h2>
+         <b> <h3>About You</h3> </b>
          <p>Which option best describes you?</p>
         </div>
 
@@ -25,30 +27,46 @@ function RoutineBuilder() {
 
        <div className="choice-grid">
 
-        <div className="choice-card">
+        <div className={`choice-card ${selectedRole === "Student" ? "selected" : ""}`}
+        onClick={() => setSelectedRole("Student")}>
           Student
         </div>
 
-        <div className="choice-card">
+        <div className={`choice-card ${selectedRole === "Working Professional" ? "selected" : ""}`}
+        onClick={() => setSelectedRole("Working Professional")}>
           Working Professional
         </div>
 
-        <div className="choice-card">
+        <div className={`choice-card ${selectedRole === "Freelancer" ? "selected" : ""}`}
+        onClick={() => setSelectedRole("Freelancer")}>
           Freelancer
         </div>
 
-       <div className="choice-card">
+       <div className={`choice-card ${selectedRole === "Homemaker" ? "selected" : ""}`}
+        onClick={() => setSelectedRole("Homemaker")}>
           Homemaker
        </div>
 
-       <div className="choice-card other-card">
+       <div className={`choice-card other-card ${selectedRole === "Other" ? "selected" : ""}`}
+  onClick={() => setSelectedRole("Other")}>
           Other
        </div>
 
       </div> {/* choice grid ends here. */}
 
      </div> {/* onboarding card ends here. */}
-     <div className="progress-section"> Progress dots here </div>
+     <div className="progress-section"> 
+       <span className="dot active"></span>
+       <span className="dot"></span>
+       <span className="dot"></span>
+       <span className="dot"></span>
+       <span className="dot"></span>
+     </div>
+     <div className="next-container">
+      <button className="next-btn">
+        Next
+      </button>
+     </div>
   </div>
 ); 
 
