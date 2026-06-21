@@ -9,6 +9,35 @@ function RoutineBuilder() {
       </p>
       <div className="builder-section">
        <h2>Basic Schedule</h2>
+       <div className="schedule-grid">
+
+         <div className="input-group">
+           <label>Wake Up Time</label>
+           <input type="time" />
+         </div>
+
+         <div className="input-group">
+           <label>Sleep Time</label>
+           <input type="time" />
+         </div>
+
+         <div className="input-group">
+           <label>College Start</label>
+           <input type="time" />
+         </div>
+
+         <div className="input-group">
+           <label>College End</label>
+            <input type="time" />
+         </div>
+
+         <div className="input-group">
+            <label>Travel Time (minutes)</label>
+            <input type="number" />
+         </div>
+
+       </div>
+       
       </div>
 
       <div className="builder-section">

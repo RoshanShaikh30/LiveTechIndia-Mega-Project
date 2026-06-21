@@ -38,7 +38,7 @@ function App() {
       {menuOpen && (
        <div className="dropdown-menu">
         <p onClick={() => setActiveTab("Orbit")}>Orbit</p>
-        <p onClick={() => setActiveTab("Routine Builder")}> Routine Builder
+        <p onClick={() => setActiveTab("RoutineBuilder")}> Routine Builder
         </p>
         <p onClick={() => setActiveTab("Calendar")}>Calendar
         </p>
@@ -48,6 +48,7 @@ function App() {
      </nav>
 
      {activeTab === "Orbit" && (
+      <>
      <div className="hero">
 
       <div className="hero-left">
@@ -100,11 +101,7 @@ less time managing your plans and more time following them.</p>
         </button>
       </div>
 
-     </div> )}
-
-     {activeTab === "RoutineBuilder" && <RoutineBuilder />}
-     {activeTab === "Calendar" && <Calendar />}
-
+     </div> 
      <footer className="footer">
 
       <div className="footer-left">
@@ -135,9 +132,11 @@ less time managing your plans and more time following them.</p>
         rel="noopener noreferrer"> <p>Email</p> </a>
        </div>
      </footer>
+     </>)}
 
-     {/* {activeTab === "RoutineBuilder" && <RoutineBuilder />}
-     {activeTab === "Calendar" && <Calendar />} */}
+     {activeTab === "RoutineBuilder" && <RoutineBuilder />}
+     {activeTab === "Calendar" && <Calendar />}
+
     </div>
   );
 }

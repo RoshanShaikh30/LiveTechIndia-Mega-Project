@@ -259,13 +259,13 @@ url("./assets/bg5.jpg");
 /* ROUTINE BUILDER PAGE:  */
 
 .routine-builder{
-  min-height: 100vh;
-  padding: 50px;
+  min-height: auto;
+  padding: 10px;
 }
 
 .routine-builder h1{
   font-family: "Ahsing", cursive;
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #3d251e;
 }
 
@@ -274,8 +274,27 @@ url("./assets/bg5.jpg");
   color: #4b342b;
 }
 
+.builder-section{
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  border-radius: 25px;
+  border: 1px solid rgba(61,37,30,0.15);
+  padding: 15px;
+  margin-top: 25px;
+  min-height: 100px;
+}
 
+.builder-section h2{
+  font-family: "Playfair Display";
+  color: #3d251e;
+  margin-bottom: 20px;
+}
 
+.routine-builder{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px;
+}
 
 
 
