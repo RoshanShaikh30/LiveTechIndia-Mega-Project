@@ -263,10 +263,11 @@ body {
   background: #f5efdc;
 }
 
-.routine-builder h1{
+.routine-builder h2{
   font-family: "Ahsing", cursive;
-  font-size: 2.5rem;
+  font-size: 2.1rem;
   color: #3d251e;
+  margin: 0;
 }
 
 .routine-builder p{
@@ -274,26 +275,11 @@ body {
   color: #4b342b;
 }
 
-.builder-section{
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(8px);
-  border-radius: 25px;
-  border: 1px solid rgba(61,37,30,0.15);
-  padding: 15px;
-  margin-top: 25px;
-  min-height: 100px;
-}
-
-.builder-section h2{
-  font-family: "Playfair Display";
-  color: #3d251e;
-  margin-bottom: 20px;
-}
-
 .routine-builder{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 50px;
+  max-width: 1500px;
+  margin: 40px auto;
+  padding: 22px;
+  border-radius: 30px;
 }
 
 .schedule-grid{
@@ -313,6 +299,47 @@ body {
   font-weight: 500;
 }
 
+.onboarding-card{
+  background: rgba(255,255,255,0.35);
+  border-radius: 30px;
+  border: 1px solid rgba(61,37,30,0.1);
+  padding: 50px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.choice-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.choice-card{
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(61,37,30,0.15);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+}
+
+.other-card{
+  grid-column: span 2;
+}
+
+/* .builder-section{
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  border-radius: 25px;
+  border: 1px solid rgba(61,37,30,0.15);
+  padding: 15px;
+  margin-top: 25px;
+  min-height: 100px;
+}
+
+.builder-section h2{
+  font-family: "Playfair Display";
+  color: #3d251e;
+  margin-bottom: 20px;
+} */
 
 /* background:
 linear-gradient(
