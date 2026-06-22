@@ -12,6 +12,8 @@ function RoutineBuilder() {
   const [selectedRole, setSelectedRole] = useState("");
   const [step, setStep] = useState(1);
   const [otherRole, setOtherRole] = useState("");
+  const [scheduleType, setScheduleType] = useState("");
+  const [productiveHours, setProductiveHours] = useState([]);
 
   return (
     <div className="routine-builder">
@@ -118,7 +120,136 @@ function RoutineBuilder() {
 
       <div className="onboarding-card">
        <h3>Basic Schedule</h3>
-       <p> Tell Orbit about your daily schedule. </p>
+       <p> Tell Orbit about your daily schedule so we can build a routine that fits your life!</p>
+        
+       <div className="section-divider"></div>
+
+       <div className="schedule-section">
+
+        <h4> 1. How is your weekly schedule? </h4>
+        <div className="schedule-type-grid">
+
+          <div className={`schedule-option ${scheduleType === "same" ? "selected" : ""  }`}
+          onClick = {() => setScheduleType("same" )} >
+            <h5> Mostly Same Every Day</h5>
+            <p> My wake and sleep times are similar each day.</p>
+          </div>
+          <div className={`schedule-option ${scheduleType === "different" ? "selected" : "" }`}
+          onClick = {() => setScheduleType("different")}>
+            <h5>Different Across the Week</h5>
+            <p>My schedule changes on different days.</p>
+          </div>
+
+         </div>
+        </div>
+
+        {scheduleType === "same" && (
+         <div className="time-section">
+
+           <div className="input-group">
+             <label>Wake Up Time</label>
+             <input type="time" />
+           </div>
+
+           <div className="input-group">
+             <label>Sleep Time</label>
+             <input type="time" />
+            </div>
+
+          </div>
+        )}
+
+        {scheduleType === "different" && (
+         <div className="weekly-schedule">
+
+           <h4>2. Wake Up & Sleep Time (Per Day)</h4>
+           <div className="day-row">
+             <span>Mon</span>
+             <input type="time" />
+             <input type="time" />
+           </div>
+
+           <div className="day-row">
+             <span>Tue</span>
+             <input type="time" />
+             <input type="time" />
+            </div>
+
+            <div className="day-row">
+              <span>Wed</span>
+              <input type="time" />
+              <input type="time" />
+            </div>
+
+            <div className="day-row">
+              <span>Thu</span>
+              <input type="time" />
+              <input type="time" />
+            </div>
+
+            <div className="day-row">
+             <span>Fri</span>
+             <input type="time" />
+             <input type="time" />
+            </div>
+
+            <div className="day-row">
+              <span>Sat</span>
+              <input type="time"/>
+              <input type="time" />
+            </div>
+
+            <div className="day-row">
+              <span>Sun</span>
+              <input type="time"/>
+              <input type="time" />
+            </div>
+
+          </div>
+        )}
+
+        <div className="section-divider"> </div>
+
+        <h4>3. When are you most productive?</h4>
+        <div className="multi-card-grid">
+
+         <div className="multi-card">Morning</div>
+         <div className="multi-card">Afternoon</div>
+         <div className="multi-card">Evening</div>
+         <div className="multi-card">Night</div>
+
+        </div>
+
+        <div className="section-divider"> </div>
+
+        <h4>4. Which days are usually free?</h4>
+
+        <div className="days-grid">
+
+         <div className="day-pill">Mon</div>
+         <div className="day-pill">Tue</div>
+         <div className="day-pill">Wed</div>
+         <div className="day-pill">Thu</div>
+         <div className="day-pill">Fri</div>
+         <div className="day-pill">Sat</div>
+         <div className="day-pill">Sun</div>
+
+        </div>
+
+        <div className="section-divider"> </div> 
+
+        <h4>5.Fixed Commitments!</h4>
+
+        <div className="multi-card-grid">
+
+         <div className="multi-card">College</div>
+         <div className="multi-card">Job</div>
+         <div className="multi-card">Coaching</div>
+         <div className="multi-card">Family</div>
+         <div className="multi-card">Other</div>
+
+        </div>
+
 
       </div> /*basic schedule onboardin card ends here */
       )}
