@@ -13,6 +13,7 @@ import {
   FaUsers,
   FaBolt,
   FaBook,
+  FaTint,
   FaDumbbell,
   FaRocket,
   FaSeedling,
@@ -25,7 +26,10 @@ import {
   FaInfinity,
   FaCalendarWeek,
   FaCalendarCheck,
-  FaCalendarDay
+  FaCalendarDay,
+  FaBookOpen,
+  FaSpa,
+  FaAppleAlt
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
@@ -46,6 +50,9 @@ function RoutineBuilder() {
   const [deadlineType, setDeadlineType] = useState("");
   const [customDeadline, setCustomDeadline] = useState("");
   const [successVision, setSuccessVision] = useState("");
+  const [selectedHabits, setSelectedHabits] = useState([]);
+  const [habitInput, setHabitInput] = useState("");
+  const [customHabits, setCustomHabits] = useState([]);
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -132,6 +139,27 @@ const allGoals = [
   ...customGoals
 ];
 
+const toggleHabit = (habit) => {
+  if (selectedHabits.includes(habit)) {
+    setSelectedHabits(
+      selectedHabits.filter(item => item !== habit)
+    );
+  } else {
+    setSelectedHabits([
+      ...selectedHabits,
+      habit
+    ]);
+  }
+};
+
+const addCustomHabit = () => {
+  if (habitInput.trim() === "") return;
+  setCustomHabits([
+    ...customHabits,
+    habitInput.trim()
+  ]);
+  setHabitInput("");
+};
 
   return (
     <div className="routine-builder">
@@ -746,7 +774,7 @@ const allGoals = [
     <h4>4. What would success look like?</h4>
 
     <p>
-      Describe what achieving your goals would look like for you.
+      Imagine a few months from now. What would make you feel like you've achieved these goals?
     </p>
   </div>
 
@@ -773,9 +801,158 @@ const allGoals = [
 
       {step === 4 && (
         <div className="onboarding-card">
-          <h3>Habits</h3>
-          <p> What habits would you like Orbit to support? </p>
-        </div>
+
+         <h3>Let's talk about your habits</h3>
+
+         <p>Help Orbit understand the habits you already have and the ones you'd like to build.
+         </p>
+
+        <div className="section-divider"></div>
+
+        <div className="goal-section-row">
+
+  <div className="schedule-question">
+    <h4>1. What habits would you like to focus on?</h4>
+    <p>Select all that apply.</p>
+  </div>
+
+  <div className="habit-grid">
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Study Consistently")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Study Consistently")}
+    >
+      <FaBook className="habit-icon study" />
+      <span>Study Consistently</span>
+    </div>
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Drink More Water")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Drink More Water")}
+    >
+      <FaTint className="habit-icon water" />
+      <span>Drink More Water</span>
+    </div>
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Exercise")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Exercise")}
+    >
+      <FaDumbbell className="habit-icon exercise" />
+      <span>Exercise</span>
+    </div>
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Better Sleep")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Better Sleep")}
+    >
+      <FaMoon className="habit-icon sleep" />
+      <span>Better Sleep</span>
+    </div>
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Reading")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Reading")}
+    >
+      <FaBookOpen className="habit-icon reading" />
+      <span>Reading</span>
+    </div>
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Mindfulness")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Mindfulness")}
+    >
+      <FaSpa className="habit-icon mindfulness" />
+      <span>Mindfulness</span>
+    </div>
+
+    <div
+      className={`habit-card ${
+        selectedHabits.includes("Healthy Eating")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabit("Healthy Eating")}
+    >
+      <FaAppleAlt className="habit-icon food" />
+      <span>Healthy Eating</span>
+    </div>
+
+    <div className={`habit-card ${
+    selectedHabits.includes("Other")
+      ? "selected"
+      : ""
+    }`}
+    onClick={() => toggleHabit("Other")}>
+     <FaPlus className="habit-icon" />
+     <span>Other</span>
+    </div>
+
+  </div>
+
+</div>
+
+{customHabits.length > 0 && (
+  <div className="custom-habit-list">
+
+    {customHabits.map((habit, index) => (
+      <div
+        key={index}
+        className="goal-chip"
+      >
+        {habit}
+      </div>
+    ))}
+
+  </div>
+)}
+
+{selectedHabits.includes("Other") && (
+<div className="other-goal-box">
+
+  <input
+    type="text"
+    placeholder="Type a habit..."
+    value={habitInput}
+    onChange={(e) =>
+      setHabitInput(e.target.value)
+    }/>
+
+  <button
+    className="add-goal-btn"
+    onClick={addCustomHabit}
+  >
+    Add
+  </button>
+
+</div>
+)}
+
+       </div>
       ) } {/* habits onboarding card ends here. */}
 
       {step === 5 && (

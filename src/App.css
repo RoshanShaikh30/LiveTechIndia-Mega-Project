@@ -937,6 +937,129 @@ body {
   border:none;
 }
 
+.success-section{
+  flex:1;
+  min-width: 0;
+  position:relative;
+}
+
+.success-textarea{
+  width:100%;
+  box-sizing: border-box;
+  min-height:140px;
+  resize:none;
+  padding:18px;
+  border-radius:18px;
+  border:1px solid rgba(61,37,30,0.12);
+  background:rgba(255,255,255,0.35);
+  font-family:inherit;
+  font-size:0.95rem;
+  color:#3d251e;
+}
+
+.success-textarea:focus{
+  outline:none;
+  border-color:#3d251e;
+}
+
+.character-count{
+  text-align:right;
+  margin-top:8px;
+
+  font-size:0.85rem;
+  color:#8a746d;
+}
+
+.habit-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  flex:1;
+}
+
+.habit-card{
+  min-height:110px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+
+  border-radius:18px;
+  background:rgba(255,255,255,0.35);
+  border:1px solid rgba(61,37,30,0.15);
+
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.habit-card.selected{
+  background:#3d251e;
+  color:#f5efdc;
+}
+
+.habit-icon{
+  font-size:1.8rem;
+}
+
+.study{
+  color:#f5a623;
+}
+
+.water{
+  color:#4aa3ff;
+}
+
+.exercise{
+  color:#ff9f43;
+}
+
+.sleep{
+  color:#5c3d2e;
+}
+
+.reading{
+  color:#7ab648;
+}
+
+.mindfulness{
+  color:#9b59b6;
+}
+
+.food{
+  color:#4caf50;
+}
+
+.other-goal-box{
+  display:flex;
+  gap:12px;
+  margin-top:20px;
+}
+
+.other-goal-box input{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(61,37,30,0.15);
+}
+
+.add-goal-btn{
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  background:#3d251e;
+  color:#fff;
+  cursor:pointer;
+}
+
+.custom-habit-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:20px;
+}
+
 /* .builder-section{
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(8px);
