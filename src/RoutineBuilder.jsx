@@ -11,7 +11,8 @@ import {
   FaCalendarAlt,
   FaCheckCircle,
   FaUsers,
-  FaBolt
+  FaBolt,
+  FaBook
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
@@ -376,12 +377,20 @@ const toggleCommitment = (commitment) => {
     className={`multi-card ${
       commitments.includes("College") ? "selected" : ""
     }`}
-    onClick={() => toggleCommitment("College")}>College</div>
+    onClick={() => toggleCommitment("College")}>
+      <FaGraduationCap className="commitment-icon" />
+      <span>College</span>
+      </div>
+
          <div
     className={`multi-card ${
       commitments.includes("Job") ? "selected" : ""
     }`}
-    onClick={() => toggleCommitment("Job")}>Job</div>
+    onClick={() => toggleCommitment("Job")}>
+      <FaBriefcase className="commitment-icon" />
+      <span>Job</span>
+      </div>
+
          <div
     className={`multi-card ${
       commitments.includes("Coaching") ? "selected" : ""
