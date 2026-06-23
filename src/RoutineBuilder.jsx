@@ -12,7 +12,12 @@ import {
   FaCheckCircle,
   FaUsers,
   FaBolt,
-  FaBook
+  FaBook,
+  FaDumbbell,
+  FaRocket,
+  FaSeedling,
+  FaPlus,
+  FaBrain
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
@@ -25,6 +30,10 @@ function RoutineBuilder() {
   const [productiveHours, setProductiveHours] = useState([]);
   const [freeDays, setFreeDays] = useState([]);
   const [commitments, setCommitments] = useState([]);
+  const [selectedGoals, setSelectedGoals] = useState([]);
+  const [otherGoal, setOtherGoal] = useState("");
+  const [customGoals, setCustomGoals] = useState([]);
+  const [goalPriority, setGoalPriority] = useState({});
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -74,6 +83,29 @@ const toggleCommitment = (commitment) => {
       commitment
     ]);
   }
+};
+
+const toggleGoal = (goal) => {
+
+  if (selectedGoals.includes(goal)) {
+    setSelectedGoals(
+      selectedGoals.filter(item => item !== goal)
+    );
+  } else {
+    setSelectedGoals([
+      ...selectedGoals,
+      goal
+    ]);
+  }
+};
+
+const addCustomGoal = () => {
+  if (!otherGoal.trim()) return;
+  setCustomGoals([
+    ...customGoals,
+    otherGoal.trim()
+  ]);
+  setOtherGoal("");
 };
 
   return (
@@ -436,8 +468,107 @@ const toggleCommitment = (commitment) => {
       {step === 3 && (
        <div className="onboarding-card">
          <h3>Goals</h3>
-         <p> What are you currently working toward? </p>
+         <p> Help Orbit understand what matters to you so it can build a routine that moves you closer to your goals. </p>
+
+        <div className="section-divider"></div>
+        <div className="schedule-header-row">
+        <div className="schedule-question">
+         <h4>1. What are you currently working toward?</h4>
+         <p>Select all that apply.</p>
+        </div>
+
+        <div className="goal-grid">
+          <div className={`goal-card ${selectedGoals.includes("Study") ? "selected" : ""}`}
+           onClick={() => toggleGoal("Study")}>
+            <FaBook className="goal-icon"/>
+            <span>Study</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Fitness") ? "selected" : ""}`}
+           onClick={() => toggleGoal("Fitness")}>
+             <FaDumbbell className="goal-icon"/>
+             <span>Fitness</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Skill Learning") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Skill Learning")}>
+            <FaLaptopCode className="goal-icon"/>
+            <span>Skill Learning</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Reading") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Reading")}>
+           <FaBook className="goal-icon"/>
+           <span>Reading</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Project") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Project")}>
+           <FaRocket className="goal-icon"/>
+           <span>Project</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Career") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Career")}>
+           <FaBriefcase className="goal-icon"/>
+           <span>Career</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Personal Growth") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Personal Growth")}>
+           <FaSeedling className="goal-icon"/>
+           <span>Personal Growth</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Mental Health") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Mental Health")}>
+            <FaBrain className="goal-icon"/>
+            <span>Mental Health</span>
+          </div>
+
+          <div className={`goal-card ${selectedGoals.includes("Other") ? "selected" : ""}`}
+          onClick={() => toggleGoal("Other")}>
+           <FaPlus className="goal-icon"/>
+           <span>Other</span>
+          </div>
+
+        </div>
+        </div>
+
+        {selectedGoals.includes("Other") && (
+         <div className="custom-goal-section">
+          <div className="custom-goal-input-row">
+           <input type="text" className="other-input"
+             placeholder="Add a custom goal..."
+             value={otherGoal}
+             onChange={(e) => setOtherGoal(e.target.value)}/>
+
+           <button className="add-goal-btn" onClick={addCustomGoal}>
+           Add</button>
+
+          </div>
+
+          {customGoals.length > 0 && (
+           <div className="custom-goals-list">
+            {customGoals.map((goal, index) => (
+             <div key={index} className="goal-chip">
+              {goal}
+             </div>
+          ))}
+           </div>
+        )}
+         </div>
+       )}
+        
+        {/* {selectedGoals.includes("Other") && (
+         <input type="text" className="other-input"
+         placeholder="Tell Orbit about your goal..."
+         value={otherGoal}
+         onChange={(e) => setOtherGoal(e.target.value)}/>
+        )} */}
+
        </div>
+
       ) } {/* goals onboarding card ends here. */}
 
       {step === 4 && (
