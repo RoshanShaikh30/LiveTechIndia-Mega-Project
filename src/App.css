@@ -881,6 +881,62 @@ body {
   border: 2px solid #3d251e;
 }
 
+.deadline-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+.deadline-card{
+  width:130px;
+  min-height:110px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.35);
+  border:1px solid rgba(61,37,30,0.15);
+  cursor:pointer;
+  transition:0.3s;
+  position:relative;
+}
+
+.deadline-card.selected{
+  background:#3d251e;
+  color:#f5efdc;
+  border-color:#3d251e;
+}
+
+.deadline-icon{
+  font-size:1.6rem;
+}
+
+.week{
+  color:#8e44ad;
+}
+
+.month{
+  color:#6c5ce7;
+}
+
+.three-months{
+  color:#f39c12;
+}
+
+.custom{
+  color:#8e5a35;
+}
+
+.custom-date-input{
+  margin-top:8px;
+  width:90%;
+  padding:8px;
+  border-radius:10px;
+  border:none;
+}
+
 /* .builder-section{
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(8px);
