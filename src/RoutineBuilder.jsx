@@ -30,10 +30,18 @@ import {
   FaBookOpen,
   FaSpa,
   FaAppleAlt,
-  FaTimes
+  FaTimes,
+  FaBatteryHalf,
+  FaBell,
+  FaTasks,
+  FaShieldAlt,
+  FaSyncAlt,
+  FaQuestionCircle,
+  FaLightbulb,
+  FaMagic
 } from "react-icons/fa";
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function RoutineBuilder() {
   const [habitIntent, setHabitIntent] = useState([]);
@@ -55,6 +63,19 @@ function RoutineBuilder() {
   const [selectedHabits, setSelectedHabits] = useState([]);
   const [habitInput, setHabitInput] = useState("");
   const [customHabits, setCustomHabits] = useState([]);
+  const [habitFrequency, setHabitFrequency] = useState("");
+  const [habitObstacles, setHabitObstacles] = useState([]);
+  const [habitObstacleInput, setHabitObstacleInput] = useState("");
+  const [customHabitObstacles, setCustomHabitObstacles] = useState([]);
+  const [orbitHelp, setOrbitHelp] = useState([]);
+  const [orbitHelpInput, setOrbitHelpInput] = useState("");
+  const [customOrbitHelp, setCustomOrbitHelp] = useState([]);
+  const [priorityStruggles, setPriorityStruggles] = useState([]);
+  const [priorityStruggleInput, setPriorityStruggleInput] = useState("");
+  const [customPriorityStruggles, setCustomPriorityStruggles] = useState([]);
+  const [routineStructure, setRoutineStructure] = useState("");
+  const [planChangePreference, setPlanChangePreference] = useState("");
+  const [priorityNotes, setPriorityNotes] = useState("");
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -141,6 +162,74 @@ const allGoals = [
   ...customGoals
 ];
 
+const allHabitChoices = [
+  ...selectedHabits.filter(habit => habit !== "Other"),
+  ...customHabits
+];
+
+useEffect(() => {
+  const orbitOnboarding = {
+    role: selectedRole === "Other" ? otherRole : selectedRole,
+    scheduleType,
+    productiveHours,
+    freeDays,
+    commitments,
+    goals: allGoals,
+    goalPriority,
+    dailyTime,
+    deadlineType,
+    customDeadline,
+    successVision,
+    habits: allHabitChoices,
+    habitIntent,
+    habitFrequency,
+    habitObstacles: [
+      ...habitObstacles.filter(obstacle => obstacle !== "Other"),
+      ...customHabitObstacles
+    ],
+    orbitHelp: [
+      ...orbitHelp.filter(help => help !== "Other"),
+      ...customOrbitHelp
+    ],
+    priorityStruggles: [
+      ...priorityStruggles.filter(struggle => struggle !== "Other"),
+      ...customPriorityStruggles
+    ],
+    routineStructure,
+    planChangePreference,
+    priorityNotes
+  };
+
+  localStorage.setItem("orbitOnboarding", JSON.stringify(orbitOnboarding));
+}, [
+  selectedRole,
+  otherRole,
+  scheduleType,
+  productiveHours,
+  freeDays,
+  commitments,
+  selectedGoals,
+  customGoals,
+  goalPriority,
+  dailyTime,
+  deadlineType,
+  customDeadline,
+  successVision,
+  selectedHabits,
+  customHabits,
+  habitIntent,
+  habitFrequency,
+  habitObstacles,
+  customHabitObstacles,
+  orbitHelp,
+  customOrbitHelp,
+  priorityStruggles,
+  customPriorityStruggles,
+  routineStructure,
+  planChangePreference,
+  priorityNotes
+]);
+
 const toggleHabit = (habit) => {
 
   if (selectedHabits.includes(habit)) {
@@ -181,6 +270,87 @@ const toggleHabitIntent = (intent) => {
       intent
     ]);
   }
+};
+
+const toggleHabitObstacle = (obstacle) => {
+
+  if (habitObstacles.includes(obstacle)) {
+    setHabitObstacles(
+      habitObstacles.filter(item => item !== obstacle)
+    );
+    if (obstacle === "Other") {
+      setCustomHabitObstacles([]);
+      setHabitObstacleInput("");
+    }
+  } else {
+    setHabitObstacles([
+      ...habitObstacles,
+      obstacle
+    ]);
+  }
+};
+
+const addCustomHabitObstacle = () => {
+  if (!habitObstacleInput.trim()) return;
+  setCustomHabitObstacles([
+    ...customHabitObstacles,
+    habitObstacleInput.trim()
+  ]);
+  setHabitObstacleInput("");
+};
+
+const toggleOrbitHelp = (help) => {
+
+  if (orbitHelp.includes(help)) {
+    setOrbitHelp(
+      orbitHelp.filter(item => item !== help)
+    );
+    if (help === "Other") {
+      setCustomOrbitHelp([]);
+      setOrbitHelpInput("");
+    }
+  } else {
+    setOrbitHelp([
+      ...orbitHelp,
+      help
+    ]);
+  }
+};
+
+const addCustomOrbitHelp = () => {
+  if (!orbitHelpInput.trim()) return;
+  setCustomOrbitHelp([
+    ...customOrbitHelp,
+    orbitHelpInput.trim()
+  ]);
+  setOrbitHelpInput("");
+};
+
+const togglePriorityStruggle = (struggle) => {
+
+  if (priorityStruggles.includes(struggle)) {
+    setPriorityStruggles(
+      priorityStruggles.filter(item => item !== struggle)
+    );
+    if (struggle === "Other") {
+      setCustomPriorityStruggles([]);
+      setPriorityStruggleInput("");
+    }
+  } else {
+    setPriorityStruggles([
+      ...priorityStruggles,
+      struggle
+    ]);
+  }
+};
+
+const addCustomPriorityStruggle = () => {
+  if (!priorityStruggleInput.trim()) return;
+  setCustomPriorityStruggles([
+    ...customPriorityStruggles,
+    priorityStruggleInput.trim()
+  ]);
+  setPriorityStruggleInput("");
 };
 
   return (
@@ -1024,13 +1194,408 @@ const toggleHabitIntent = (intent) => {
     </div>
     </div>
 
+       <div className="section-divider"></div>
+
+<div className="goal-section-row">
+
+  <div className="schedule-question">
+    <h4>3. How often would you ideally like to do these habits?</h4>
+    <p>Choose one option.</p>
+  </div>
+
+  <div className="time-commitment-grid">
+
+    <div
+      className={`time-card ${habitFrequency === "Every day" ? "selected" : ""}`}
+      onClick={() => setHabitFrequency("Every day")}
+    >
+      <FaCalendarDay className="time-icon" />
+      <span>Every day</span>
+    </div>
+
+    <div
+      className={`time-card ${habitFrequency === "5-6 days/week" ? "selected" : ""}`}
+      onClick={() => setHabitFrequency("5-6 days/week")}
+    >
+      <FaCalendarCheck className="time-icon" />
+      <span>5-6 days/week</span>
+    </div>
+
+    <div
+      className={`time-card ${habitFrequency === "3-4 days/week" ? "selected" : ""}`}
+      onClick={() => setHabitFrequency("3-4 days/week")}
+    >
+      <FaCalendarWeek className="time-icon" />
+      <span>3-4 days/week</span>
+    </div>
+
+    <div
+      className={`time-card ${habitFrequency === "1-2 days/week" ? "selected" : ""}`}
+      onClick={() => setHabitFrequency("1-2 days/week")}
+    >
+      <FaRegClock className="time-icon" />
+      <span>1-2 days/week</span>
+    </div>
+
+    <div
+      className={`time-card ${habitFrequency === "Flexible" ? "selected" : ""}`}
+      onClick={() => setHabitFrequency("Flexible")}
+    >
+      <FaInfinity className="time-icon" />
+      <span>Flexible</span>
+    </div>
+
+  </div>
+
+</div>
+
+       <div className="section-divider"></div>
+
+<div className="goal-section-row">
+
+  <div className="schedule-question">
+    <h4>4. What usually gets in the way?</h4>
+    <p>Select all that apply.</p>
+  </div>
+
+  <div className="habit-grid compact">
+
+    <div className={`habit-card ${habitObstacles.includes("Lack of Time") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Lack of Time")}>
+      <FaClock className="habit-icon" />
+      <span>Lack of Time</span>
+    </div>
+
+    <div className={`habit-card ${habitObstacles.includes("Low Energy") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Low Energy")}>
+      <FaBatteryHalf className="habit-icon" />
+      <span>Low Energy</span>
+    </div>
+
+    <div className={`habit-card ${habitObstacles.includes("Distractions") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Distractions")}>
+      <FaBell className="habit-icon" />
+      <span>Distractions</span>
+    </div>
+
+    <div className={`habit-card ${habitObstacles.includes("Work / Studies") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Work / Studies")}>
+      <FaBook className="habit-icon" />
+      <span>Work / Studies</span>
+    </div>
+
+    <div className={`habit-card ${habitObstacles.includes("Family Responsibilities") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Family Responsibilities")}>
+      <FaUsers className="habit-icon" />
+      <span>Family Responsibilities</span>
+    </div>
+
+    <div className={`habit-card ${habitObstacles.includes("Forgetting") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Forgetting")}>
+      <FaQuestionCircle className="habit-icon" />
+      <span>Forgetting</span>
+    </div>
+
+    <div className={`habit-card ${habitObstacles.includes("Other") ? "selected" : ""}`}
+      onClick={() => toggleHabitObstacle("Other")}>
+      <FaPlus className="habit-icon" />
+      <span>Other</span>
+    </div>
+
+  </div>
+
+</div>
+
+{habitObstacles.includes("Other") && (
+<div className="other-goal-box">
+
+  <input
+    type="text"
+    placeholder="Type what gets in the way..."
+    value={habitObstacleInput}
+    onChange={(e) => setHabitObstacleInput(e.target.value)}
+  />
+
+  <button className="add-goal-btn" onClick={addCustomHabitObstacle}>
+    Add
+  </button>
+
+</div>
+)}
+
+{habitObstacles.includes("Other") &&
+ customHabitObstacles.length > 0 && (
+  <div className="custom-habit-list">
+    {customHabitObstacles.map((obstacle, index) => (
+      <div key={index} className="goal-chip">
+        {obstacle}
+      </div>
+    ))}
+  </div>
+)}
+
+       <div className="section-divider"></div>
+
+<div className="goal-section-row">
+
+  <div className="schedule-question">
+    <h4>5. How would you like Orbit to help?</h4>
+    <p>Select all that apply.</p>
+  </div>
+
+  <div className="habit-grid compact">
+
+    <div className={`habit-card ${orbitHelp.includes("Reminders") ? "selected" : ""}`}
+      onClick={() => toggleOrbitHelp("Reminders")}>
+      <FaBell className="habit-icon" />
+      <span>Reminders</span>
+    </div>
+
+    <div className={`habit-card ${orbitHelp.includes("Progress Tracking") ? "selected" : ""}`}
+      onClick={() => toggleOrbitHelp("Progress Tracking")}>
+      <FaTasks className="habit-icon" />
+      <span>Progress Tracking</span>
+    </div>
+
+    <div className={`habit-card ${orbitHelp.includes("Daily Goals") ? "selected" : ""}`}
+      onClick={() => toggleOrbitHelp("Daily Goals")}>
+      <FaCheckCircle className="habit-icon" />
+      <span>Daily Goals</span>
+    </div>
+
+    <div className={`habit-card ${orbitHelp.includes("Motivation") ? "selected" : ""}`}
+      onClick={() => toggleOrbitHelp("Motivation")}>
+      <FaBolt className="habit-icon" />
+      <span>Motivation</span>
+    </div>
+
+    <div className={`habit-card ${orbitHelp.includes("Habit Scheduling") ? "selected" : ""}`}
+      onClick={() => toggleOrbitHelp("Habit Scheduling")}>
+      <FaCalendarAlt className="habit-icon" />
+      <span>Habit Scheduling</span>
+    </div>
+
+    <div className={`habit-card ${orbitHelp.includes("Other") ? "selected" : ""}`}
+      onClick={() => toggleOrbitHelp("Other")}>
+      <FaPlus className="habit-icon" />
+      <span>Other</span>
+    </div>
+
+  </div>
+
+</div>
+
+{orbitHelp.includes("Other") && (
+<div className="other-goal-box">
+
+  <input
+    type="text"
+    placeholder="Type how Orbit can help..."
+    value={orbitHelpInput}
+    onChange={(e) => setOrbitHelpInput(e.target.value)}
+  />
+
+  <button className="add-goal-btn" onClick={addCustomOrbitHelp}>
+    Add
+  </button>
+
+</div>
+)}
+
+{orbitHelp.includes("Other") &&
+ customOrbitHelp.length > 0 && (
+  <div className="custom-habit-list">
+    {customOrbitHelp.map((help, index) => (
+      <div key={index} className="goal-chip">
+        {help}
+      </div>
+    ))}
+  </div>
+)}
+
        </div>
       ) } {/* habits onboarding card ends here. */}
 
       {step === 5 && (
-        <div className="onboarding-card">
-         <h3>Priorities</h3>
-         <p> What's most important in your routine right now? </p>
+        <div className="onboarding-card priorities-card">
+         <div className="priorities-header">
+          <h3>Let's set your priorities</h3>
+          <p>Help Orbit understand what challenges you face and how you want your routine to adapt.</p>
+         </div>
+
+         <div className="priorities-layout">
+
+          <div className="priority-panel struggle-panel">
+           <h4>1. What do you struggle with the most?</h4>
+           <p>Select all that apply.</p>
+
+           <div className="habit-grid compact">
+            <div className={`habit-card ${priorityStruggles.includes("Consistency") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Consistency")}>
+              <FaCheckCircle className="habit-icon" />
+              <span>Consistency</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Procrastination") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Procrastination")}>
+              <FaHourglassHalf className="habit-icon" />
+              <span>Procrastination</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Time Management") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Time Management")}>
+              <FaClock className="habit-icon" />
+              <span>Time Management</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Distractions") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Distractions")}>
+              <FaBell className="habit-icon" />
+              <span>Distractions</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Burnout") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Burnout")}>
+              <FaBatteryHalf className="habit-icon" />
+              <span>Burnout</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Motivation") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Motivation")}>
+              <FaMagic className="habit-icon" />
+              <span>Motivation</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Overcommitment") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Overcommitment")}>
+              <FaTasks className="habit-icon" />
+              <span>Overcommitment</span>
+            </div>
+
+            <div className={`habit-card ${priorityStruggles.includes("Other") ? "selected" : ""}`}
+              onClick={() => togglePriorityStruggle("Other")}>
+              <FaPlus className="habit-icon" />
+              <span>Other</span>
+            </div>
+           </div>
+
+           {priorityStruggles.includes("Other") && (
+            <div className="other-goal-box priority-other-box">
+             <input
+              type="text"
+              placeholder="Type your challenge..."
+              value={priorityStruggleInput}
+              onChange={(e) => setPriorityStruggleInput(e.target.value)}
+             />
+             <button className="add-goal-btn" onClick={addCustomPriorityStruggle}>
+              Add
+             </button>
+            </div>
+           )}
+
+           {priorityStruggles.includes("Other") &&
+            customPriorityStruggles.length > 0 && (
+             <div className="custom-habit-list">
+              {customPriorityStruggles.map((struggle, index) => (
+               <div key={index} className="goal-chip">
+                {struggle}
+               </div>
+              ))}
+             </div>
+           )}
+          </div>
+
+          <div className="priorities-side">
+           <div className="priority-panel">
+            <h4>2. How structured do you want your routine?</h4>
+            <p>Choose one option.</p>
+
+            <div className="priority-option-grid">
+             <div className={`priority-choice-card ${routineStructure === "Very Structured" ? "selected" : ""}`}
+              onClick={() => setRoutineStructure("Very Structured")}>
+              <FaCalendarAlt className="priority-choice-icon" />
+              <span>Very Structured</span>
+              <p>I want a strict plan to follow.</p>
+             </div>
+
+             <div className={`priority-choice-card ${routineStructure === "Balanced" ? "selected" : ""}`}
+              onClick={() => setRoutineStructure("Balanced")}>
+              <FaShieldAlt className="priority-choice-icon" />
+              <span>Balanced</span>
+              <p>I want structure with some flexibility.</p>
+             </div>
+
+             <div className={`priority-choice-card ${routineStructure === "Flexible" ? "selected" : ""}`}
+              onClick={() => setRoutineStructure("Flexible")}>
+              <FaInfinity className="priority-choice-icon" />
+              <span>Flexible</span>
+              <p>I prefer flexibility with general guidance.</p>
+             </div>
+
+             <div className={`priority-choice-card ${routineStructure === "Highly Adaptive" ? "selected" : ""}`}
+              onClick={() => setRoutineStructure("Highly Adaptive")}>
+              <FaMagic className="priority-choice-icon" />
+              <span>Highly Adaptive</span>
+              <p>I want Orbit to adapt as much as possible.</p>
+             </div>
+            </div>
+           </div>
+
+           <div className="priority-panel">
+            <h4>3. What should Orbit do when plans change?</h4>
+            <p>Choose one option.</p>
+
+            <div className="priority-option-grid">
+             <div className={`priority-choice-card ${planChangePreference === "Automatically Adjust" ? "selected" : ""}`}
+              onClick={() => setPlanChangePreference("Automatically Adjust")}>
+              <FaSyncAlt className="priority-choice-icon" />
+              <span>Automatically Adjust</span>
+             </div>
+
+             <div className={`priority-choice-card ${planChangePreference === "Ask Before Changing" ? "selected" : ""}`}
+              onClick={() => setPlanChangePreference("Ask Before Changing")}>
+              <FaQuestionCircle className="priority-choice-icon" />
+              <span>Ask Before Changing</span>
+             </div>
+
+             <div className={`priority-choice-card ${planChangePreference === "Only Suggest Changes" ? "selected" : ""}`}
+              onClick={() => setPlanChangePreference("Only Suggest Changes")}>
+              <FaLightbulb className="priority-choice-icon" />
+              <span>Only Suggest Changes</span>
+             </div>
+
+             <div className={`priority-choice-card ${planChangePreference === "Never Change Without Permission" ? "selected" : ""}`}
+              onClick={() => setPlanChangePreference("Never Change Without Permission")}>
+              <FaShieldAlt className="priority-choice-icon" />
+              <span>Never Change Without Permission</span>
+             </div>
+            </div>
+           </div>
+          </div>
+
+         </div>
+
+         <div className="priority-panel notes-panel">
+          <h4>4. Anything else Orbit should know?</h4>
+          <p>Optional notes</p>
+
+          <textarea
+           className="success-textarea priority-textarea"
+           placeholder="Share anything that will help Orbit build a routine that truly works for you..."
+           value={priorityNotes}
+           onChange={(e) => setPriorityNotes(e.target.value)}
+           maxLength={500}
+          />
+
+          <div className="character-count">
+           {priorityNotes.length}/500
+          </div>
+
+          <button className="generate-orbit-btn">
+           <FaMagic />
+           Generate My Orbit
+          </button>
+         </div>
         </div>
       ) } {/* priorities onboarding card ends here. */}
 
@@ -1053,7 +1618,7 @@ const toggleHabitIntent = (intent) => {
      </div>
 
      <div className="next-container">
-      <button className="next-btn" disabled={!selectedRole} onClick={() => step < 5 && setStep(step + 1)}>
+      <button className="next-btn" disabled={!selectedRole || step === 5} onClick={() => step < 5 && setStep(step + 1)}>
         Next
       </button>
      </div>
