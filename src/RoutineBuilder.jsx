@@ -108,6 +108,13 @@ const addCustomGoal = () => {
   setOtherGoal("");
 };
 
+const handlePriorityChange = (goal, priority) => {
+  setGoalPriority({
+    ...goalPriority,
+    [goal]: priority
+  });
+};
+
   return (
     <div className="routine-builder">
       <h2 className="build-your-orbit">Build Your Orbit</h2>
