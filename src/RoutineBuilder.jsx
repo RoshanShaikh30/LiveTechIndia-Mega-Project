@@ -3,7 +3,14 @@ import {
   FaBriefcase,
   FaLaptopCode,
   FaHome,
-  FaEllipsisH
+  FaEllipsisH,
+  FaSun,
+  FaMoon,
+  FaGraduationCap,
+  FaCalendarAlt,
+  FaCheckCircle,
+  FaUsers,
+  FaBolt
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
@@ -14,6 +21,58 @@ function RoutineBuilder() {
   const [otherRole, setOtherRole] = useState("");
   const [scheduleType, setScheduleType] = useState("");
   const [productiveHours, setProductiveHours] = useState([]);
+  const [freeDays, setFreeDays] = useState([]);
+  const [commitments, setCommitments] = useState([]);
+
+  console.log("Role:", selectedRole);
+  console.log("Schedule Type:", scheduleType);
+  console.log("Productive Hours:", productiveHours);
+  console.log("Free Days:", freeDays);
+  console.log("Commitments:", commitments);
+
+  const toggleProductiveHour = (hour) => {
+  if (productiveHours.includes(hour)) {
+    setProductiveHours(
+      productiveHours.filter(item => item !== hour)
+    );
+  } else {
+    setProductiveHours([
+      ...productiveHours,
+      hour
+    ]);
+  }
+
+};
+
+const toggleFreeDay = (day) => {
+  if (freeDays.includes(day)) {
+    setFreeDays(
+      freeDays.filter(item => item !== day)
+    );
+  } else {
+    setFreeDays([
+      ...freeDays,
+      day
+    ]);
+  }
+
+};
+
+const toggleCommitment = (commitment) => {
+
+  if (commitments.includes(commitment)) {
+    setCommitments(
+      commitments.filter(item => item !== commitment)
+    );
+  }
+
+  else {
+    setCommitments([
+      ...commitments,
+      commitment
+    ]);
+  }
+};
 
   return (
     <div className="routine-builder">
@@ -131,19 +190,34 @@ function RoutineBuilder() {
 
           <div className={`schedule-option ${scheduleType === "same" ? "selected" : ""  }`}
           onClick = {() => setScheduleType("same" )} >
+            {scheduleType === "same" && (
+            <FaCheckCircle className="check-icon" />
+            )}
+            <FaSun className="schedule-icon"/>
+            <div>
             <h5> Mostly Same Every Day</h5>
             <p> My wake and sleep times are similar each day.</p>
+            </div>
           </div>
+
           <div className={`schedule-option ${scheduleType === "different" ? "selected" : "" }`}
           onClick = {() => setScheduleType("different")}>
+            {scheduleType === "different" && (
+            <FaCheckCircle className="check-icon" />
+            )}
+            <FaCalendarAlt className="schedule-icon"/>
+            <div>
             <h5>Different Across the Week</h5>
             <p>My schedule changes on different days.</p>
+            </div>
           </div>
 
          </div>
         </div>
 
         {scheduleType === "same" && (
+         <>
+         <h4> 2. Wake Up & Sleep Time </h4>
          <div className="time-section">
 
            <div className="input-group">
@@ -157,11 +231,11 @@ function RoutineBuilder() {
             </div>
 
           </div>
+          </>
         )}
 
         {scheduleType === "different" && (
          <div className="weekly-schedule">
-
            <h4>2. Wake Up & Sleep Time (Per Day)</h4>
            <div className="day-row">
              <span>Mon</span>
@@ -213,10 +287,26 @@ function RoutineBuilder() {
         <h4>3. When are you most productive?</h4>
         <div className="multi-card-grid">
 
-         <div className="multi-card">Morning</div>
-         <div className="multi-card">Afternoon</div>
-         <div className="multi-card">Evening</div>
-         <div className="multi-card">Night</div>
+         <div
+    className={`multi-card ${
+      productiveHours.includes("Morning") ? "selected" : ""
+    }`}
+    onClick={() => toggleProductiveHour("Morning")}>Morning</div>
+         <div
+    className={`multi-card ${
+      productiveHours.includes("Afternoon") ? "selected" : ""
+    }`}
+    onClick={() => toggleProductiveHour("Afternoon")}>Afternoon</div>
+         <div
+    className={`multi-card ${
+      productiveHours.includes("Evening") ? "selected" : ""
+    }`}
+    onClick={() => toggleProductiveHour("Evening")}>Evening</div>
+         <div
+    className={`multi-card ${
+      productiveHours.includes("Night") ? "selected" : ""
+    }`}
+    onClick={() => toggleProductiveHour("Night")}>Night</div>
 
         </div>
 
@@ -226,13 +316,27 @@ function RoutineBuilder() {
 
         <div className="days-grid">
 
-         <div className="day-pill">Mon</div>
-         <div className="day-pill">Tue</div>
-         <div className="day-pill">Wed</div>
-         <div className="day-pill">Thu</div>
-         <div className="day-pill">Fri</div>
-         <div className="day-pill">Sat</div>
-         <div className="day-pill">Sun</div>
+         <div
+    className={`day-pill ${freeDays.includes("Mon") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Mon")}>Mon</div>
+          <div
+    className={`day-pill ${freeDays.includes("Tue") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Tue")}>Tue</div>
+         <div
+    className={`day-pill ${freeDays.includes("Wed") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Wed")}>Wed</div>
+         <div
+    className={`day-pill ${freeDays.includes("Thu") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Thu")}>Thu</div>
+         <div
+    className={`day-pill ${freeDays.includes("Fri") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Fri")}>Fri</div>
+         <div
+    className={`day-pill ${freeDays.includes("Sat") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Sat")}>Sat</div>
+         <div
+    className={`day-pill ${freeDays.includes("Sun") ? "selected" : ""}`}
+    onClick={() => toggleFreeDay("Sun")}>Sun</div>
 
         </div>
 
@@ -242,13 +346,39 @@ function RoutineBuilder() {
 
         <div className="multi-card-grid">
 
-         <div className="multi-card">College</div>
-         <div className="multi-card">Job</div>
-         <div className="multi-card">Coaching</div>
-         <div className="multi-card">Family</div>
-         <div className="multi-card">Other</div>
+         <div
+    className={`multi-card ${
+      commitments.includes("College") ? "selected" : ""
+    }`}
+    onClick={() => toggleCommitment("College")}>College</div>
+         <div
+    className={`multi-card ${
+      commitments.includes("Job") ? "selected" : ""
+    }`}
+    onClick={() => toggleCommitment("Job")}>Job</div>
+         <div
+    className={`multi-card ${
+      commitments.includes("Coaching") ? "selected" : ""
+    }`}
+    onClick={() => toggleCommitment("Coaching")}>Coaching</div>
+         <div
+    className={`multi-card ${
+      commitments.includes("Family") ? "selected" : ""
+    }`}
+    onClick={() => toggleCommitment("Family")}>Family</div>
+         <div
+    className={`multi-card ${
+      commitments.includes("Other") ? "selected" : ""
+    }`}
+    onClick={() => toggleCommitment("Other")}>Other</div>
 
         </div>
+        {commitments.includes("Other") && (
+        <input
+          type="text"
+          placeholder="Tell Orbit about your commitment..."
+          className="other-input"/>
+         )}
 
 
       </div> /*basic schedule onboardin card ends here */

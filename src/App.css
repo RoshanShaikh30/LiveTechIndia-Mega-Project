@@ -471,17 +471,49 @@ body {
 }
 
 .schedule-option{
-  padding: 20px;
+  padding: 16px 20px;
+  min-height: 90px;
   border-radius: 20px;
   border: 1px solid rgba(61,37,30,0.15);
   background: rgba(255,255,255,0.35);
   cursor: pointer;
   transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.schedule-option h5{
+  font-size: 1rem;
+}
+
+.schedule-option p{
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 .schedule-option.selected{
-  background: #3d251e;
-  color: #f5efdc;
+  border: 2px solid #3d251e;
+  background: rgba(255,255,255,0.5)
+}
+
+.schedule-icon{
+  font-size: 1.7rem;
+  flex-shrink: 0;
+  color: #f4a62a;
+}
+
+.schedule-option:nth-child(2) .schedule-icon{
+  color:#8b5a3c;
+}
+
+.check-icon{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.2rem;
+  color: #3d251e;
 }
 
 .time-section{
@@ -526,12 +558,19 @@ body {
 }
 
 .multi-card{
-  padding: 22px;
+  padding: 14px;
   text-align: center;
   border-radius: 18px;
   background: rgba(255,255,255,0.35);
   border: 1px solid rgba(61,37,30,0.15);
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.multi-card.selected{
+  background: #3d251e;
+  color: #f5efdc;
+  border: 1px solid #3d251e;
 }
 
 .days-grid{
@@ -542,17 +581,21 @@ body {
 }
 
 .day-pill{
-  padding: 10px 18px;
+  padding: 8px 14px;
   border-radius: 999px;
   background: rgba(255,255,255,0.35);
   border: 1px solid rgba(61,37,30,0.15);
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.schedule-option.selected h5,
-.schedule-option.selected p{
+.day-pill.selected{
+  background: #3d251e;
   color: #f5efdc;
+  border: 1px solid #3d251e;
 }
+
+
 
 /* .builder-section{
   background: rgba(255,255,255,0.08);
