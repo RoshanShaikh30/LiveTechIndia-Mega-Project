@@ -21,7 +21,11 @@ import {
   FaClock,
   FaStopwatch,
   FaRegClock,
-  FaHourglassHalf
+  FaHourglassHalf,
+  FaInfinity,
+  FaCalendarWeek,
+  FaCalendarCheck,
+  FaCalendarDay
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
@@ -662,6 +666,76 @@ const allGoals = [
          value={otherGoal}
          onChange={(e) => setOtherGoal(e.target.value)}/>
         )} */}
+
+        <div className="section-divider"></div>
+
+       <div className="goal-section-row">
+
+         <div className="schedule-question">
+           <h4>3. Do you have a deadline for these goals?</h4>
+           <p>
+            This helps Orbit plan better around your timeline.
+           </p>
+         </div>
+
+         <div className="deadline-grid">
+
+           <div className={`deadline-card ${deadlineType === "none" ? "selected" : ""
+           }`}
+           onClick={() => setDeadlineType("none")}>
+             <FaInfinity className="deadline-icon" />
+             <span>No deadline</span>
+           </div>
+
+         <div className={`deadline-card ${deadlineType === "week" ? "selected" : ""
+          }`}
+          onClick={() => setDeadlineType("week")}>
+            <FaCalendarWeek className="deadline-icon week" />
+            <span>Within a week</span>
+          </div>
+
+         <div
+          className={`deadline-card ${
+          deadlineType === "month" ? "selected" : ""
+         }`}
+        onClick={() => setDeadlineType("month")}>
+          <FaCalendarCheck className="deadline-icon month" />
+          <span>Within a month</span>
+        </div>
+
+    <div
+      className={`deadline-card ${
+        deadlineType === "threeMonths" ? "selected" : ""
+      }`}
+      onClick={() => setDeadlineType("threeMonths")}
+    >
+      <FaCalendarAlt className="deadline-icon three-months" />
+      <span>Within 3 months</span>
+    </div>
+
+    <div
+      className={`deadline-card ${
+        deadlineType === "custom" ? "selected" : ""
+      }`}
+      onClick={() => setDeadlineType("custom")}
+    >
+      <FaCalendarDay className="deadline-icon custom" />
+      <span>Custom date</span>
+
+      {deadlineType === "custom" && (
+        <input
+          type="date"
+          value={customDeadline}
+          onChange={(e) => setCustomDeadline(e.target.value)}
+          onClick={(e) => e.stopPropagation()}
+          className="custom-date-input"
+        />
+      )}
+    </div>
+
+    </div>
+
+   </div>
 
        </div>
       ) } {/* goals onboarding card ends here. */}
