@@ -888,13 +888,13 @@ body {
 }
 
 .deadline-card{
-  width:130px;
-  min-height:110px;
+  width:118px;
+  min-height:120px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:10px;
+  gap:5px;
   border-radius:16px;
   background:rgba(255,255,255,0.35);
   border:1px solid rgba(61,37,30,0.15);

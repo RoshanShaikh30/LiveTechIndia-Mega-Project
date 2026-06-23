@@ -45,6 +45,7 @@ function RoutineBuilder() {
   const [dailyTime, setDailyTime] = useState("");
   const [deadlineType, setDeadlineType] = useState("");
   const [customDeadline, setCustomDeadline] = useState("");
+  const [successVision, setSuccessVision] = useState("");
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -736,6 +737,36 @@ const allGoals = [
     </div>
 
    </div>
+
+   <div className="section-divider"></div>
+
+<div className="goal-section-row">
+
+  <div className="schedule-question">
+    <h4>4. What would success look like?</h4>
+
+    <p>
+      Describe what achieving your goals would look like for you.
+    </p>
+  </div>
+
+  <div className="success-section">
+
+    <textarea
+      className="success-textarea"
+      placeholder="Example: Score above 85% in exams, get fit and healthy, build my portfolio website..."
+      value={successVision}
+      onChange={(e) => setSuccessVision(e.target.value)}
+      maxLength={300}
+    />
+
+    <div className="character-count">
+      {successVision.length}/300
+    </div>
+
+  </div>
+
+</div>
 
        </div>
       ) } {/* goals onboarding card ends here. */}
