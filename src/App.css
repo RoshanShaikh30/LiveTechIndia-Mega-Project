@@ -473,6 +473,7 @@ body {
 .schedule-option{
   padding: 16px 20px;
   min-height: 90px;
+  width: auto;
   border-radius: 20px;
   border: 1px solid rgba(61,37,30,0.15);
   background: rgba(255,255,255,0.35);
@@ -482,6 +483,7 @@ body {
   align-items: center;
   gap: 16px;
   position: relative;
+  flex-shrink: 0;
 }
 
 .schedule-option h5{
@@ -550,6 +552,16 @@ body {
   border: 1px solid rgba(61,37,30,0.15);
 }
 
+.commitment-grid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.commitment-grid .multi-card{
+  width: 180px;
+}
+
 .multi-card-grid{
   display: grid;
   grid-template-columns: repeat(4,1fr);
@@ -565,6 +577,10 @@ body {
   border: 1px solid rgba(61,37,30,0.15);
   cursor: pointer;
   transition: 0.3s;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .multi-card.selected{
@@ -614,16 +630,35 @@ body {
 }
 
 .schedule-header-row{
-  display: grid;
-  grid-template-columns: 320px 1fr;
+  display: flex;
   gap: 30px;
-  align-items: start;
 }
 
 .schedule-question p{
   font-size: 0.95rem;
   color: #6f5a52;
   margin-top: 6px;
+}
+
+.productive-icon{
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.morning{
+  color:#f4a62a;
+}
+
+.afternoon{
+  color:#f7b63d;
+}
+
+.evening{
+  color:#e58c2f;
+}
+
+.night{
+  color:#5a3b2c;
 }
 
 /* .builder-section{

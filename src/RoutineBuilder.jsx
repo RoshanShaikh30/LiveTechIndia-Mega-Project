@@ -5,6 +5,7 @@ import {
   FaHome,
   FaEllipsisH,
   FaSun,
+  FaCloudSun,
   FaMoon,
   FaGraduationCap,
   FaCalendarAlt,
@@ -296,22 +297,37 @@ const toggleCommitment = (commitment) => {
     className={`multi-card ${
       productiveHours.includes("Morning") ? "selected" : ""
     }`}
-    onClick={() => toggleProductiveHour("Morning")}>Morning</div>
+    onClick={() => toggleProductiveHour("Morning")}>
+      <FaSun className="productive-icon morning" />
+      <span>Morning</span>
+      </div>
+
          <div
     className={`multi-card ${
       productiveHours.includes("Afternoon") ? "selected" : ""
     }`}
-    onClick={() => toggleProductiveHour("Afternoon")}>Afternoon</div>
+    onClick={() => toggleProductiveHour("Afternoon")}>
+      <FaSun className="productive-icon afternoon" />
+      <span>Afternoon</span>
+      </div>
+
          <div
     className={`multi-card ${
       productiveHours.includes("Evening") ? "selected" : ""
     }`}
-    onClick={() => toggleProductiveHour("Evening")}>Evening</div>
+    onClick={() => toggleProductiveHour("Evening")}>
+      <FaCloudSun className="productive-icon evening" />
+      <span>Evening</span>
+    </div>
+
          <div
     className={`multi-card ${
       productiveHours.includes("Night") ? "selected" : ""
     }`}
-    onClick={() => toggleProductiveHour("Night")}>Night</div>
+    onClick={() => toggleProductiveHour("Night")}>
+      <FaMoon className="productive-icon night"/>
+      <span>Night</span>
+      </div>
 
         </div>
         </div>
@@ -354,7 +370,7 @@ const toggleCommitment = (commitment) => {
 
         <h4>5.Fixed Commitments!</h4>
 
-        <div className="multi-card-grid">
+        <div className="commitment-grid">
 
          <div
     className={`multi-card ${
