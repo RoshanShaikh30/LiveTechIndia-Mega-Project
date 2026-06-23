@@ -184,8 +184,11 @@ const toggleCommitment = (commitment) => {
        <div className="section-divider"></div>
 
        <div className="schedule-section">
-
+       <div className="schedule-header-row">
+       <div className="schedule-question">
         <h4> 1. How is your weekly schedule? </h4>
+        <p>This helps us understand how to plan your schedule.</p>
+       </div>
         <div className="schedule-type-grid">
 
           <div className={`schedule-option ${scheduleType === "same" ? "selected" : ""  }`}
@@ -212,6 +215,7 @@ const toggleCommitment = (commitment) => {
             </div>
           </div>
 
+         </div>
          </div>
         </div>
 
@@ -283,7 +287,8 @@ const toggleCommitment = (commitment) => {
         )}
 
         <div className="section-divider"> </div>
-
+        <div className="two-column-section">
+         <div className="column-card"> 
         <h4>3. When are you most productive?</h4>
         <div className="multi-card-grid">
 
@@ -309,8 +314,11 @@ const toggleCommitment = (commitment) => {
     onClick={() => toggleProductiveHour("Night")}>Night</div>
 
         </div>
-
-        <div className="section-divider"> </div>
+        </div>
+       
+     
+        {/* <div className="section-divider"> </div> */}
+      <div className="column-card">
 
         <h4>4. Which days are usually free?</h4>
 
@@ -339,6 +347,8 @@ const toggleCommitment = (commitment) => {
     onClick={() => toggleFreeDay("Sun")}>Sun</div>
 
         </div>
+      </div>
+      </div>
 
         <div className="section-divider"> </div> 
 

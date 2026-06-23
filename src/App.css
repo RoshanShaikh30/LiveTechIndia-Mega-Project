@@ -595,7 +595,36 @@ body {
   border: 1px solid #3d251e;
 }
 
+.two-column-section{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
 
+.column-card{
+  width: 100%;
+}
+
+.column-card:first-child{
+  border-right: 1px solid rgba(61,37,30,0.12);
+  padding-right: 25px;
+}
+.column-card:last-child{
+  padding-left: 25px;
+}
+
+.schedule-header-row{
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.schedule-question p{
+  font-size: 0.95rem;
+  color: #6f5a52;
+  margin-top: 6px;
+}
 
 /* .builder-section{
   background: rgba(255,255,255,0.08);
