@@ -140,10 +140,16 @@ const allGoals = [
 ];
 
 const toggleHabit = (habit) => {
+
   if (selectedHabits.includes(habit)) {
-    setSelectedHabits(
-      selectedHabits.filter(item => item !== habit)
-    );
+    const updatedHabits =
+      selectedHabits.filter(item => item !== habit);
+
+    setSelectedHabits(updatedHabits);
+    if (habit === "Other") {
+      setCustomHabits([]);
+      setHabitInput("");
+    }
   } else {
     setSelectedHabits([
       ...selectedHabits,
