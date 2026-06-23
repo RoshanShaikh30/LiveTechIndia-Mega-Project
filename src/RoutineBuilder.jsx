@@ -17,7 +17,11 @@ import {
   FaRocket,
   FaSeedling,
   FaPlus,
-  FaBrain
+  FaBrain,
+  FaClock,
+  FaStopwatch,
+  FaRegClock,
+  FaHourglassHalf
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
@@ -35,6 +39,8 @@ function RoutineBuilder() {
   const [customGoals, setCustomGoals] = useState([]);
   const [goalPriority, setGoalPriority] = useState({});
   const [dailyTime, setDailyTime] = useState("");
+  const [deadlineType, setDeadlineType] = useState("");
+  const [customDeadline, setCustomDeadline] = useState("");
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -481,6 +487,7 @@ const allGoals = [
 
       {step === 3 && (
        <div className="onboarding-card">
+
          <h3>Goals</h3>
          <p> Help Orbit understand what matters to you so it can build a routine that moves you closer to your goals. </p>
 
@@ -577,12 +584,15 @@ const allGoals = [
        {allGoals.length > 1 && (
         <div className="priority-section">
         <div className="section-divider"></div>
+        <div className="priority-box">
          <h4>Help Orbit understand what matters most</h4>
          <p>Rank your selected goals by importance.</p>
 
         {allGoals.map((goal) => (
          <div key={goal} className="priority-row">
-         <span>{goal}</span>
+         <div className="priority-goal">
+           <span>{goal}</span>
+         </div> 
          <select value={goalPriority[goal] || ""}
           onChange={(e) =>
           handlePriorityChange(goal, e.target.value)
@@ -596,9 +606,56 @@ const allGoals = [
 
          </div>
         ))}
+
+        <p className="priority-note">Highest priority goals will receive more focus in your routine.</p>
+
+         </div>
          </div>
        )}
         
+        <div className="section-divider"></div>
+
+    <div className="goal-section-row">
+       <div className="goal-question">
+        <h4>2. How much time can you dedicate daily?</h4>
+        <p> Be realistic. This helps Orbit build a realistic schedule! </p>
+       </div>
+
+        <div className="time-commitment-grid">
+
+         <div className={`time-card ${dailyTime === "Less than 30 mins" ? "selected" : ""}`}
+         onClick={() => setDailyTime("Less than 30 mins")}>
+          <FaStopwatch className="time-icon"/>
+          <span>Less than 30 mins</span>
+         </div>
+
+         <div className={`time-card ${dailyTime === "30 mins - 1 hr" ? "selected" : ""}`}
+         onClick={() => setDailyTime("30 mins - 1 hr")}>
+          <FaClock className="time-icon" />
+          <span>30 mins - 1 hr</span>
+         </div>
+
+         <div className={`time-card ${dailyTime === "1 - 2 hrs" ? "selected" : ""}`}
+         onClick={() => setDailyTime("1 - 2 hrs")}>
+          <FaRegClock className="time-icon" />
+          <span>1 - 2 hrs</span>
+         </div>
+
+         <div className={`time-card ${dailyTime === "2 - 4 hrs" ? "selected" : ""}`}
+         onClick={() => setDailyTime("2 - 4 hrs")}>
+          <FaHourglassHalf className="time-icon" />
+          <span>2 - 4 hrs</span>
+         </div>
+
+         <div className={`time-card ${dailyTime === "4+ hrs" ? "selected" : ""}`}
+         onClick={() => setDailyTime("4+ hrs")}>
+          <FaRocket className="time-icon" />
+          <span>4+ hrs</span>
+         </div>
+
+        </div> 
+        </div>
+
         {/* {selectedGoals.includes("Other") && (
          <input type="text" className="other-input"
          placeholder="Tell Orbit about your goal..."
