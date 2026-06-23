@@ -340,7 +340,7 @@ const toggleCommitment = (commitment) => {
         <h4>4. Which days are usually free?</h4>
 
         <div className="days-grid">
-
+         <div className="days-row">
          <div
     className={`day-pill ${freeDays.includes("Mon") ? "selected" : ""}`}
     onClick={() => toggleFreeDay("Mon")}>Mon</div>
@@ -353,6 +353,8 @@ const toggleCommitment = (commitment) => {
          <div
     className={`day-pill ${freeDays.includes("Thu") ? "selected" : ""}`}
     onClick={() => toggleFreeDay("Thu")}>Thu</div>
+         </div>
+         <div className="days-row">
          <div
     className={`day-pill ${freeDays.includes("Fri") ? "selected" : ""}`}
     onClick={() => toggleFreeDay("Fri")}>Fri</div>
@@ -362,6 +364,7 @@ const toggleCommitment = (commitment) => {
          <div
     className={`day-pill ${freeDays.includes("Sun") ? "selected" : ""}`}
     onClick={() => toggleFreeDay("Sun")}>Sun</div>
+    </div>
 
         </div>
       </div>
@@ -395,17 +398,28 @@ const toggleCommitment = (commitment) => {
     className={`multi-card ${
       commitments.includes("Coaching") ? "selected" : ""
     }`}
-    onClick={() => toggleCommitment("Coaching")}>Coaching</div>
+    onClick={() => toggleCommitment("Coaching")}>
+      <FaBook className="commitment-icon"/>
+      <span> Coaching </span>
+      </div>
+
          <div
     className={`multi-card ${
       commitments.includes("Family") ? "selected" : ""
     }`}
-    onClick={() => toggleCommitment("Family")}>Family</div>
+    onClick={() => toggleCommitment("Family")}>
+      <FaUsers className="commitment-icon" />
+      <span>Family</span>
+    </div>
+
          <div
     className={`multi-card ${
       commitments.includes("Other") ? "selected" : ""
     }`}
-    onClick={() => toggleCommitment("Other")}>Other</div>
+    onClick={() => toggleCommitment("Other")}>
+      <FaEllipsisH className="commitment-icon"/>
+      <span>Other</span>
+    </div>
 
         </div>
         {commitments.includes("Other") && (

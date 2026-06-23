@@ -263,8 +263,8 @@ body {
   background: rgba(245, 239, 220, 0.65);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(61,37,30,0.08);
-  width: 90%;
-  max-width: 1300px;
+  width: 70%;
+  /* max-width: 1300px; */
   margin: 20px auto;
   padding: 15px;
   border-radius: 30px;
@@ -292,6 +292,21 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
+}
+
+.input-group input{
+  width: 140px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(61,37,30,0.15);
+  background: rgba(255,255,255,0.65);
+  font-size: 1rem;
+  color: #3d251e;
+  outline: none;
+}
+
+.input-group input:focus{
+  border-color: #8b5e49;
 }
 
 .input-group{
@@ -465,15 +480,16 @@ body {
 }
 
 .schedule-type-grid{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: flex;
   gap: 18px;
+  width: fit-content;
 }
 
 .schedule-option{
   padding: 16px 20px;
   min-height: 90px;
-  width: auto;
+  width: 280px;
   border-radius: 20px;
   border: 1px solid rgba(61,37,30,0.15);
   background: rgba(255,255,255,0.35);
@@ -483,7 +499,6 @@ body {
   align-items: center;
   gap: 16px;
   position: relative;
-  flex-shrink: 0;
 }
 
 .schedule-option h5{
@@ -562,6 +577,11 @@ body {
   width: 180px;
 }
 
+.commitment-icon{
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
 .multi-card-grid{
   display: grid;
   grid-template-columns: repeat(4,1fr);
@@ -591,12 +611,21 @@ body {
 
 .days-grid{
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
-  margin-top: 18px;
+}
+
+.days-row{
+  display:flex;
+  gap: 12px;
 }
 
 .day-pill{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 40px;
   padding: 8px 14px;
   border-radius: 999px;
   background: rgba(255,255,255,0.35);
@@ -619,6 +648,7 @@ body {
 
 .column-card{
   width: 100%;
+  min-width: 0;
 }
 
 .column-card:first-child{
@@ -632,6 +662,11 @@ body {
 .schedule-header-row{
   display: flex;
   gap: 30px;
+}
+
+.schedule-question{
+  width: 320px;
+  flex-shrink: 0;
 }
 
 .schedule-question p{
