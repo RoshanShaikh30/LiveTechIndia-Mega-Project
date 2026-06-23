@@ -34,6 +34,7 @@ function RoutineBuilder() {
   const [otherGoal, setOtherGoal] = useState("");
   const [customGoals, setCustomGoals] = useState([]);
   const [goalPriority, setGoalPriority] = useState({});
+  const [dailyTime, setDailyTime] = useState("");
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);

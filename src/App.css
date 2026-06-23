@@ -763,6 +763,32 @@ body {
   border: 1px solid rgba(61,37,30,0.15);
 }
 
+.priority-section{
+  margin-top: 25px;
+}
+
+.priority-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 12px 0;
+}
+
+.priority-row span{
+  font-weight: 500;
+  color: #3d251e;
+}
+
+.priority-row select{
+  width: 180px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(61,37,30,0.15);
+  background: rgba(255,255,255,0.65);
+  color: #3d251e;
+}
+
 /* .builder-section{
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(8px);
