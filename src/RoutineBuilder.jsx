@@ -29,12 +29,14 @@ import {
   FaCalendarDay,
   FaBookOpen,
   FaSpa,
-  FaAppleAlt
+  FaAppleAlt,
+  FaTimes
 } from "react-icons/fa";
 import "./App.css";
 import { useState } from "react";
 
 function RoutineBuilder() {
+  const [habitIntent, setHabitIntent] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
   const [step, setStep] = useState(1);
   const [otherRole, setOtherRole] = useState("");
@@ -165,6 +167,20 @@ const addCustomHabit = () => {
     habitInput.trim()
   ]);
   setHabitInput("");
+};
+
+const toggleHabitIntent = (intent) => {
+
+  if (habitIntent.includes(intent)) {
+    setHabitIntent(
+      habitIntent.filter(item => item !== intent)
+    );
+  } else {
+    setHabitIntent([
+      ...habitIntent,
+      intent
+    ]);
+  }
 };
 
   return (
@@ -922,7 +938,8 @@ const addCustomHabit = () => {
 
 </div>
 
-{customHabits.length > 0 && (
+{selectedHabits.includes("Other") &&
+ customHabits.length > 0 && (
   <div className="custom-habit-list">
 
     {customHabits.map((habit, index) => (
@@ -957,6 +974,55 @@ const addCustomHabit = () => {
 
 </div>
 )}
+
+       <div className="section-divider"></div>
+
+<div className="goal-section-row">
+
+  <div className="schedule-question">
+    <h4>2. Are you trying to...</h4>
+    <p>Select all that apply.</p>
+  </div>
+
+  <div className="habit-intent-grid">
+
+    <div
+      className={`intent-card ${
+        habitIntent.includes("Build")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabitIntent("Build")}
+    >
+      <FaPlus className="intent-icon" />
+      <span>Build a New Habit</span>
+    </div>
+
+    <div
+      className={`intent-card ${
+        habitIntent.includes("Improve")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabitIntent("Improve")}
+    >
+      <FaBolt className="intent-icon" />
+      <span>Improve an Existing Habit</span>
+    </div>
+
+    <div
+      className={`intent-card ${
+        habitIntent.includes("Break")
+          ? "selected"
+          : ""
+      }`}
+      onClick={() => toggleHabitIntent("Break")}
+    >
+      <FaTimes className="intent-icon" />
+      <span>Break a Bad Habit</span>
+    </div>
+    </div>
+    </div>
 
        </div>
       ) } {/* habits onboarding card ends here. */}
