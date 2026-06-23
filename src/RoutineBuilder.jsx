@@ -115,6 +115,12 @@ const handlePriorityChange = (goal, priority) => {
   });
 };
 
+const allGoals = [
+  ...selectedGoals.filter(goal => goal !== "Other"),
+  ...customGoals
+];
+
+
   return (
     <div className="routine-builder">
       <h2 className="build-your-orbit">Build Your Orbit</h2>
@@ -566,6 +572,31 @@ const handlePriorityChange = (goal, priority) => {
         )}
          </div>
        )}
+
+       {allGoals.length > 1 && (
+        <div className="priority-section">
+        <div className="section-divider"></div>
+         <h4>Help Orbit understand what matters most</h4>
+         <p>Rank your selected goals by importance.</p>
+
+        {allGoals.map((goal) => (
+         <div key={goal} className="priority-row">
+         <span>{goal}</span>
+         <select value={goalPriority[goal] || ""}
+          onChange={(e) =>
+          handlePriorityChange(goal, e.target.value)
+        }>
+           <option value="">Select</option>
+           <option value="Highest">Highest</option>
+           <option value="High">High</option>
+           <option value="Medium">Medium</option>
+           <option value="Low">Low</option>
+          </select>
+
+         </div>
+        ))}
+         </div>
+       )}
         
         {/* {selectedGoals.includes("Other") && (
          <input type="text" className="other-input"
@@ -575,7 +606,6 @@ const handlePriorityChange = (goal, priority) => {
         )} */}
 
        </div>
-
       ) } {/* goals onboarding card ends here. */}
 
       {step === 4 && (
