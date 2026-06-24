@@ -79,7 +79,7 @@ function RoutineBuilder({ onComplete }) {
   const [routineStructure, setRoutineStructure] = useState("");
   const [planChangePreference, setPlanChangePreference] = useState("");
   const [priorityNotes, setPriorityNotes] = useState("");
-  const [saved, setSaved] = useState(false);
+  // const [saved, setSaved] = useState(false);
   const [successSaved, setSuccessSaved] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
 
