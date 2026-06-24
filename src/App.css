@@ -1583,6 +1583,21 @@ body {
   border:1px solid rgba(61,37,30,0.08);
 }
 
+.calendar-bottom-section {
+  width: 100%;
+}
+
+.bottom-insight-row {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.bottom-insight-row .insight-card {
+  flex: 1;
+  min-width: 180px;
+}
+
 .focus-card{
   min-height:96px;
   background:

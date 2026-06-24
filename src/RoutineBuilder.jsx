@@ -79,6 +79,9 @@ function RoutineBuilder({ onComplete }) {
   const [routineStructure, setRoutineStructure] = useState("");
   const [planChangePreference, setPlanChangePreference] = useState("");
   const [priorityNotes, setPriorityNotes] = useState("");
+  const [saved, setSaved] = useState(false);
+  const [successSaved, setSuccessSaved] = useState(false);
+  const [notesSaved, setNotesSaved] = useState(false);
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -1055,6 +1058,21 @@ const addCustomPriorityStruggle = () => {
 
     <div className="character-count">
       {successVision.length}/300
+
+      <button
+  className="save-btn"
+  onClick={() => {
+    localStorage.setItem(
+      "orbitSuccessVision",
+      successVision
+    );
+    setSuccessSaved(true);
+    setTimeout(() => {
+      setSuccessSaved(false);
+    }, 2000);
+  }}>
+  {successSaved ? "✓ Saved" : "Save"}
+</button>
     </div>
 
   </div>

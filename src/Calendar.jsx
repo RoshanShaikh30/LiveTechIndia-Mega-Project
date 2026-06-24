@@ -265,7 +265,94 @@ function Calendar() {
             </div>
           </section>
         )}
+        {activePage === "Calendar" && (
+ <div className = "calendar-bottom-section">         
+  <div className="bottom-insight-row">
+
+    {/* Today's Focus */}
+
+    <div className="insight-card focus-card">
+      <div className="insight-label">
+        <FaRegCalendarCheck />
+        <strong>Today's Focus</strong>
+      </div>
+
+      <div className="focus-content">
+        <div className="focus-target">O</div>
+
+        <div>
+          <h4>{focusGoal}</h4>
+          <p>
+            {onboardingData.dailyTime || "A realistic focus block"} at 2:00 PM
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Reminders */}
+
+    <div className="insight-card">
+      <div className="insight-label">
+        <FaBell />
+        <strong>Reminders</strong>
+      </div>
+
+      <div className="insight-row">
+        <span className="small-icon reminder">
+          <FaBell />
+        </span>
+
+        <div>
+          <h4>{focusGoal} check-in</h4>
+
+          <p>
+            {onboardingData.deadlineType
+              ? "Aligned with your goal timeline"
+              : "Review your progress today"}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Habit Streaks */}
+
+    <div className="insight-card">
+      <div className="insight-label">
+        <FaFire />
+        <strong>Habit Streaks</strong>
+      </div>
+
+      <div className="insight-row">
+        <span className="small-icon streak">
+          <FaFire />
+        </span>
+
+        <div>
+          <h4>{habitFocus}</h4>
+
+          <p>
+            {onboardingData.habitFrequency || "Habit streak"} plan
+          </p>
+
+          <div className="streak-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+)}
       </main>
+
+      
 
       <aside className="orbit-insights">
         <div className="insights-heading">
