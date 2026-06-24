@@ -134,7 +134,9 @@ less time managing your plans and more time following them.</p>
      </footer>
      </>)}
 
-     {activeTab === "RoutineBuilder" && <RoutineBuilder />}
+     {activeTab === "RoutineBuilder" && (
+      <RoutineBuilder onComplete={() => setActiveTab("Calendar")}
+      />)}
      {activeTab === "Calendar" && <Calendar />}
 
     </div>

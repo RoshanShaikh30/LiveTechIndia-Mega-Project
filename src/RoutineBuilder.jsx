@@ -41,17 +41,20 @@ import {
   FaMagic
 } from "react-icons/fa";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-function RoutineBuilder() {
+function RoutineBuilder({ onComplete }) {
   const [habitIntent, setHabitIntent] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
   const [step, setStep] = useState(1);
   const [otherRole, setOtherRole] = useState("");
+  const [customRole, setCustomRole] = useState("");
   const [scheduleType, setScheduleType] = useState("");
   const [productiveHours, setProductiveHours] = useState([]);
   const [freeDays, setFreeDays] = useState([]);
   const [commitments, setCommitments] = useState([]);
+  const [commitmentInput, setCommitmentInput] = useState("");
+  const [customCommitments, setCustomCommitments] = useState([]);
   const [selectedGoals, setSelectedGoals] = useState([]);
   const [otherGoal, setOtherGoal] = useState("");
   const [customGoals, setCustomGoals] = useState([]);
@@ -97,6 +100,25 @@ function RoutineBuilder() {
 
 };
 
+const generateOrbit = () => {
+  const routine = [
+    {
+      time: "7:00 AM",
+      task: "Wake Up"
+    },
+    {
+      time: "8:00 AM",
+      task: "Morning Routine"
+    }
+  ];
+
+  localStorage.setItem(
+    "orbitRoutine",
+    JSON.stringify(routine)
+  );
+  onComplete();
+};
+
 const toggleFreeDay = (day) => {
   if (freeDays.includes(day)) {
     setFreeDays(
@@ -117,6 +139,10 @@ const toggleCommitment = (commitment) => {
     setCommitments(
       commitments.filter(item => item !== commitment)
     );
+    if (commitment === "Other") {
+      setCustomCommitments([]);
+      setCommitmentInput("");
+    }
   }
 
   else {
@@ -125,6 +151,21 @@ const toggleCommitment = (commitment) => {
       commitment
     ]);
   }
+};
+
+const saveCustomRole = () => {
+  if (!otherRole.trim()) return;
+  setCustomRole(otherRole.trim());
+  setOtherRole("");
+};
+
+const addCustomCommitment = () => {
+  if (!commitmentInput.trim()) return;
+  setCustomCommitments([
+    ...customCommitments,
+    commitmentInput.trim()
+  ]);
+  setCommitmentInput("");
 };
 
 const toggleGoal = (goal) => {
@@ -157,23 +198,28 @@ const handlePriorityChange = (goal, priority) => {
   });
 };
 
-const allGoals = [
+const allGoals = useMemo(() => [
   ...selectedGoals.filter(goal => goal !== "Other"),
   ...customGoals
-];
+], [selectedGoals, customGoals]);
 
-const allHabitChoices = [
+const allHabitChoices = useMemo(() => [
   ...selectedHabits.filter(habit => habit !== "Other"),
   ...customHabits
-];
+], [selectedHabits, customHabits]);
+
+const allCommitments = useMemo(() => [
+  ...commitments.filter(commitment => commitment !== "Other"),
+  ...customCommitments
+], [commitments, customCommitments]);
 
 useEffect(() => {
   const orbitOnboarding = {
-    role: selectedRole === "Other" ? otherRole : selectedRole,
+    role: selectedRole === "Other" ? customRole : selectedRole,
     scheduleType,
     productiveHours,
     freeDays,
-    commitments,
+    commitments: allCommitments,
     goals: allGoals,
     goalPriority,
     dailyTime,
@@ -204,19 +250,18 @@ useEffect(() => {
 }, [
   selectedRole,
   otherRole,
+  customRole,
   scheduleType,
   productiveHours,
   freeDays,
-  commitments,
-  selectedGoals,
-  customGoals,
+  allCommitments,
+  allGoals,
   goalPriority,
   dailyTime,
   deadlineType,
   customDeadline,
   successVision,
-  selectedHabits,
-  customHabits,
+  allHabitChoices,
   habitIntent,
   habitFrequency,
   habitObstacles,
@@ -427,14 +472,24 @@ const addCustomPriorityStruggle = () => {
          {/* <p> Something else! (You can tell us) </p> */}
 
          {selectedRole === "Other" && (
-          <input 
-          type="text"
-          placeholder="Tell us what best describes you..."
-          value={otherRole}
-          onChange={(e) => setOtherRole(e.target.value)}
-          className="other-input"
-          onClick={(e) => e.stopPropagation()}
-          />
+          <div className="other-save-box" onClick={(e) => e.stopPropagation()}>
+           <input 
+           type="text"
+           placeholder="Tell us what best describes you..."
+           value={otherRole}
+           onChange={(e) => setOtherRole(e.target.value)}
+           className="other-input"
+           />
+           <button className="add-goal-btn" onClick={saveCustomRole}>
+            Save
+           </button>
+          </div>
+         )}
+
+         {selectedRole === "Other" && customRole && (
+          <div className="custom-habit-list role-custom-list">
+           <div className="goal-chip">{customRole}</div>
+          </div>
          )}
 
        </div>
@@ -700,11 +755,29 @@ const addCustomPriorityStruggle = () => {
 
         </div>
         {commitments.includes("Other") && (
-        <input
-          type="text"
-          placeholder="Tell Orbit about your commitment..."
-          className="other-input"/>
+        <div className="other-goal-box">
+          <input
+            type="text"
+            placeholder="Tell Orbit about your commitment..."
+            value={commitmentInput}
+            onChange={(e) => setCommitmentInput(e.target.value)}
+          />
+          <button className="add-goal-btn" onClick={addCustomCommitment}>
+            Add
+          </button>
+        </div>
          )}
+
+        {commitments.includes("Other") &&
+         customCommitments.length > 0 && (
+          <div className="custom-habit-list">
+            {customCommitments.map((commitment, index) => (
+              <div key={index} className="goal-chip">
+                {commitment}
+              </div>
+            ))}
+          </div>
+        )}
 
 
       </div> /*basic schedule onboardin card ends here */
@@ -1591,7 +1664,7 @@ const addCustomPriorityStruggle = () => {
            {priorityNotes.length}/500
           </div>
 
-          <button className="generate-orbit-btn">
+          <button className="generate-orbit-btn" onClick={generateOrbit}>
            <FaMagic />
            Generate My Orbit
           </button>
