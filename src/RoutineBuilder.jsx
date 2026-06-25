@@ -1678,9 +1678,27 @@ const addCustomPriorityStruggle = () => {
            maxLength={500}
           />
 
-          <div className="character-count">
-           {priorityNotes.length}/500
-          </div>
+          <div className="textarea-footer">
+  <span>{priorityNotes.length}/500</span>
+
+  <button
+    className="save-btn"
+    onClick={() => {
+      localStorage.setItem(
+        "orbitPriorityNotes",
+        priorityNotes
+      );
+
+      setNotesSaved(true);
+
+      setTimeout(() => {
+        setNotesSaved(false);
+      }, 2000);
+    }}
+  >
+    {notesSaved ? "✓ Saved" : "Save"}
+  </button>
+</div>
 
           <button className="generate-orbit-btn" onClick={generateOrbit}>
            <FaMagic />

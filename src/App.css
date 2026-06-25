@@ -960,6 +960,20 @@ body {
   position:relative;
 }
 
+.textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.save-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .success-textarea{
   width:100%;
   box-sizing: border-box;
