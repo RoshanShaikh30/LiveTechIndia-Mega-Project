@@ -4,10 +4,6 @@ from orbit_ai.adjustment_engine import AdjustmentEngine
 
 
 class OrbitAI:
-    """
-    Main AI brain for Orbit.
-    Every AI-related decision starts here.
-    """
 
     def __init__(self):
 
@@ -16,21 +12,51 @@ class OrbitAI:
         self.adjustment_engine = AdjustmentEngine()
 
     def analyze_user(self, user_data):
-        """
-        Analyze onboarding responses.
-        """
+
+        print("\n===== ORBIT AI ANALYSIS =====")
+
+        missing_information = self.find_missing_information(user_data)
+
+        if missing_information:
+
+            print("Missing Information Found:")
+            print(missing_information)
+
+            questions = self.question_engine.generate_questions(
+                missing_information
+            )
+
+            return {
+                "status": "needs_more_information",
+                "missing": missing_information,
+                "questions": questions
+            }
+
+        print("Enough information received.")
+
+        routine = self.routine_engine.generate_routine(user_data)
 
         return {
-            "questions": self.question_engine.generate_questions(user_data)
+            "status": "ready",
+            "routine": routine
         }
 
-    def generate_routine(self, user_data):
+    def find_missing_information(self, user_data):
 
-        return self.routine_engine.generate_routine(user_data)
+        missing = []
 
-    def adjust_schedule(self, routine, adjustment):
+        commitments = user_data.get("fixedCommitments", [])
+        habits = user_data.get("habits", [])
+        goals = user_data.get("goals", [])
 
-        return self.adjustment_engine.adjust_schedule(
-            routine,
-            adjustment
-        )
+        if "Coaching" in commitments:
+            missing.append("coaching_time")
+            missing.append("coaching_duration")
+
+        if "Reading" in habits:
+            missing.append("reading_duration")
+
+        if "Study" in goals:
+            missing.append("study_session")
+
+        return missing
