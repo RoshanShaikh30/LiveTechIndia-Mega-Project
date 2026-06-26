@@ -1788,6 +1788,12 @@ const addCustomPriorityStruggle = () => {
 
     </div>
 
+    <OrbitQuestionModal
+    isOpen={showQuestionModal}
+    groupedQuestions={groupedQuestions}
+    onClose={() => setShowQuestionModal(false)}
+/>
+
   </div>
 ); 
 

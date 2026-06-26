@@ -4,6 +4,7 @@ function OrbitQuestionModal({
   isOpen,
   groupedQuestions,
   onClose
+
 }) {
 
   if (!isOpen) return null;
