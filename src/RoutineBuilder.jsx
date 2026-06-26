@@ -41,6 +41,7 @@ import {
   FaMagic
 } from "react-icons/fa";
 import "./App.css";
+import OrbitQuestionModal from "./OrbitQuestionModal";
 import { useEffect, useMemo, useState } from "react";
 
 function RoutineBuilder({ onComplete }) {
@@ -82,6 +83,8 @@ function RoutineBuilder({ onComplete }) {
   // const [saved, setSaved] = useState(false);
   const [successSaved, setSuccessSaved] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [groupedQuestions, setGroupedQuestions] = useState([]);
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
