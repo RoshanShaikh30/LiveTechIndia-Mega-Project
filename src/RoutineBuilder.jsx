@@ -106,24 +106,73 @@ function RoutineBuilder({ onComplete }) {
 
 };
 
-const generateOrbit = () => {
-  const routine = [
-    {
-      time: "7:00 AM",
-      task: "Wake Up"
-    },
-    {
-      time: "8:00 AM",
-      task: "Morning Routine"
-    }
-  ];
+const generateOrbit = async () => {
 
-  localStorage.setItem(
-    "orbitRoutine",
-    JSON.stringify(routine)
+  const onboardingData = JSON.parse(
+    localStorage.getItem("orbitOnboarding")
   );
-  onComplete();
+
+  try {
+
+    const response = await fetch(
+      "http://127.0.0.1:8000/orbit/analyze",
+      {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(onboardingData)
+
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    if (data.status === "needs_more_information") {
+
+      setGroupedQuestions(data.questions);
+
+      setShowQuestionModal(true);
+
+      return;
+
+    }
+
+    onComplete();
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+  }
+
 };
+
+// const generateOrbit = () => {
+//   const routine = [
+//     {
+//       time: "7:00 AM",
+//       task: "Wake Up"
+//     },
+//     {
+//       time: "8:00 AM",
+//       task: "Morning Routine"
+//     }
+//   ];
+
+//   localStorage.setItem(
+//     "orbitRoutine",
+//     JSON.stringify(routine)
+//   );
+//   onComplete();
+// };
 
 const toggleFreeDay = (day) => {
   if (freeDays.includes(day)) {
