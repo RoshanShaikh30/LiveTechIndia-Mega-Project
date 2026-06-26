@@ -1,0 +1,37 @@
+.orbit-modal-overlay {
+
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+
+}
+
+.orbit-modal {
+
+    width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+
+}
+
+.activity-group{
+
+    margin-top:25px;
+
+}
+
+.question-card{
+
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-top:10px;
+
+}
