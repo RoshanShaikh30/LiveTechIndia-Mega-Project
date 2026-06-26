@@ -1,61 +1,103 @@
+"""
+Orbit Question Engine
+
+NOTE:
+Although this file is named Question Engine,
+it functions as Orbit's reasoning engine.
+
+Its responsibility is NOT simply generating questions.
+
+It:
+1. Analyzes user information.
+2. Determines what information is missing.
+3. Decides whether more questions are required.
+4. Returns structured question requests for Orbit AI.
+
+Question generation is only one part of its reasoning process.
+"""
+
+from knowledge.category_rules import CATEGORY_RULES
+from knowledge.question_templates import QUESTION_TEMPLATES
+
+
 class QuestionEngine:
 
-    def generate_questions(self, missing_information):
+    def analyze_activity(
+        self,
+        activity_name,
+        category,
+        known_information
+    ):
 
         questions = []
 
-        for item in missing_information:
+        category_data = CATEGORY_RULES.get(category)
 
-            if item == "coaching_time":
+        if not category_data:
+            return questions
 
-                questions.append({
-                    "id": item,
-                    "question": "What time does your coaching start?",
-                    "type": "time"
-                })
+        for rule in category_data["required_fields"]:
 
-            elif item == "coaching_duration":
+            field = rule["field"]
 
-                questions.append({
-                    "id": item,
-                    "question": "How long does coaching usually last?",
-                    "type": "duration",
-                    "allow_custom": True,
-                    "suggestions": [
-                        "30 mins",
-                        "1 hour",
-                        "2 hours"
-                    ]
-                })
+            if field in known_information:
+                continue
 
-            elif item == "reading_duration":
+            template = QUESTION_TEMPLATES[field]
 
-                questions.append({
-                    "id": item,
-                    "question": "How long do you usually read?",
-                    "type": "duration",
-                    "allow_custom":True,
-                    "suggestions": [
-                        "15 mins",
-                        "30 mins",
-                        "45 mins",
-                        "1 hour"
-                    ]
-                })
+            question = {
+                "activity": activity_name,
+                "field": field,
+                "question": template["question"].replace(
+                    "{activity}",
+                    activity_name
+                ),
+                "input_type": template["input_type"],
+                "allow_custom": template.get(
+                    "allow_custom",
+                    False
+                )
+            }
 
-            elif item == "study_session":
+            if "suggestions" in template:
+                question["suggestions"] = template["suggestions"]
 
-                questions.append({
-                    "id": item,
-                    "question": "How long do you prefer one study session?",
-                    "type": "duration",
-                    "allow_custom":True,
-                    "suggestions": [
-                        "30 mins",
-                        "45 mins",
-                        "1 hour",
-                        "2 hours"
-                    ]
-                })
+            questions.append(question)
 
         return questions
+    
+    def analyze_user(self, user_data):
+
+        grouped_questions = []
+
+        sections = [
+            ("habits", "habit"),
+            ("goals", "goal"),
+            ("fixedCommitments", "fixed_commitment")
+        ]
+
+        for section_name, category in sections:
+
+            activities = user_data.get(section_name, [])
+
+            for activity in activities:
+
+                activity_questions = self.analyze_activity(
+                    activity_name=activity,
+                    category=category,
+                    known_information={}
+                )
+
+                if activity_questions:
+
+                 grouped_questions.append({
+
+                  "activity": activity,
+
+                  "category": category,
+
+                  "questions": activity_questions
+
+                })
+
+        return grouped_questions
