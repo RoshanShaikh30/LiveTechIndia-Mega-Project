@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import OptionsList from "../components/OptionsList";
 
-function DurationInput({ question }) {
+function DurationInput({ question , onChange }) {
 
     const [selected, setSelected] = useState("");
 
@@ -26,7 +26,12 @@ function DurationInput({ question }) {
 
                 selected={selected}
 
-                onSelect={setSelected}
+                onSelect={
+                    (value) => {
+                        setSelected(value);
+                        onChange(value);
+                    }
+                }
 
             />
 
@@ -51,8 +56,10 @@ function DurationInput({ question }) {
 
                             value={custom}
 
-                            onChange={(e) =>
+                            onChange={(e) =>{
                                 setCustom(e.target.value)
+                                onChange(e.target.value);
+                            }
                             }
 
                         />
