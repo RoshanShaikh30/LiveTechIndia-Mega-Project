@@ -7,8 +7,17 @@ function OrbitQuestionModal({
   onClose
 
 }) {
-  
+
   const [answers, setAnswers] = useState({});
+  const updateAnswer = (activity, field, value) => {
+  setAnswers((prev) => ({
+    ...prev,
+    [activity]: {
+      ...prev[activity],
+      [field]: value,
+      },
+     }));
+    };
 
   if (!isOpen) return null;
 
