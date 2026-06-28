@@ -3,6 +3,20 @@ ACTIVITY_LIBRARY = {
     "Reading": {
 
         "category": "habit",
+        
+        "nature": "continuous",
+
+        "recurring": True,
+
+        "deadline_possible": False,
+
+         "needs": [
+
+            "duration",
+
+           "preferred_time"
+ 
+        ],
 
         "recommended_duration": [
             "15 mins",
@@ -22,6 +36,24 @@ ACTIVITY_LIBRARY = {
     "Gym": {
 
         "category": "habit",
+        
+        "nature": "continuous",
+
+        "recurring": True,
+
+        "deadline_possible": False,
+
+        "needs": [
+
+           "duration",
+
+           "preferred_time",
+
+           "days",
+
+           "priority"
+
+       ],
 
         "recommended_duration": [
             "30 mins",
@@ -43,6 +75,22 @@ ACTIVITY_LIBRARY = {
 
     "College": {
 
-        "category": "fixed_commitment"
+        "category": "fixed_commitment",
+        
+        "nature": "fixed",
+
+        "recurring": True,
+
+        "deadline_possible": False,
+
+        "needs": [
+
+           "days",
+
+           "start_time",
+
+           "end_time"
+
+       ]
     }
 }

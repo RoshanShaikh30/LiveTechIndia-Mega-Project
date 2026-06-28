@@ -13,12 +13,12 @@ function OrbitQuestionModal({
 
 }) {
 
-  console.log(groupedQuestions);
+  // console.log(groupedQuestions);
 
   const [answers, setAnswers] = useState({});
   const updateAnswer = (activity, field, value) => {
 
-  console.log(activity,field,value);
+  // console.log(activity,field,value);
 
   setAnswers((prev) => ({
     ...prev,
