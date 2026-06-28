@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from orbit_ai.engine import OrbitAI
+from orbit_ai.routine_engine import RoutineEngine
 
 app = FastAPI()
 
@@ -20,6 +21,7 @@ app.add_middleware(
 )
 
 orbit = OrbitAI()
+routine_engine = RoutineEngine()
 
 @app.get("/")
 def home():
@@ -32,3 +34,8 @@ def home():
 def analyze_user(user_data: dict):
 
     return orbit.analyze_user(user_data)
+
+@app.post("/orbit/generate-routine")
+def generate_routine(data: dict):
+
+    return routine_engine.generate_routine(data)
