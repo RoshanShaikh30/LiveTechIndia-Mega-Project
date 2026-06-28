@@ -18,6 +18,7 @@ Question generation is only one part of its reasoning process.
 
 from knowledge.category_rules import CATEGORY_RULES
 from knowledge.question_templates import QUESTION_TEMPLATES
+from knowledge.activity_library import ACTIVITY_LIBRARY
 
 
 class QuestionEngine:
@@ -31,14 +32,34 @@ class QuestionEngine:
 
         questions = []
 
-        category_data = CATEGORY_RULES.get(category)
+        # category_data = CATEGORY_RULES.get(category)
 
-        if not category_data:
-            return questions
+        # if not category_data:
+        #     return questions
 
-        for rule in category_data["required_fields"]:
+        # for rule in category_data["required_fields"]:
 
-            field = rule["field"]
+        #     field = rule["field"]
+        
+        activity_data = ACTIVITY_LIBRARY.get(activity_name)
+
+        if activity_data:
+
+           required_fields = activity_data["needs"]
+
+        else:
+
+             category_data = CATEGORY_RULES.get(category)
+
+             if not category_data:
+               return questions
+
+             required_fields = [
+               rule["field"]
+             for rule in category_data["required_fields"]
+             ]
+
+        for field in required_fields:
 
             if field in known_information:
                 continue

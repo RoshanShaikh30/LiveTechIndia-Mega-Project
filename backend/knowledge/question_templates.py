@@ -2,7 +2,7 @@ QUESTION_TEMPLATES = {
 
     "duration": {
 
-        "question": "How much time would you like to spend on {activity}?",
+        "question": "How long would you like to spend on {activity}?",
 
         "input_type": "duration",
 
@@ -38,7 +38,7 @@ QUESTION_TEMPLATES = {
 
     "days": {
 
-        "question": "Which days do you usually have {activity}?",
+        "question": "Which days would you like to schedule {activity}?",
 
         "input_type": "days"
     },

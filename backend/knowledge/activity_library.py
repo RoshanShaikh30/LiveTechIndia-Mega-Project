@@ -104,5 +104,92 @@ ACTIVITY_LIBRARY = {
            "end_time"
 
        ]
-    }
+    },
+    
+    "Study": {
+
+    "category": "goal",
+
+    "nature": "continuous",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "duration",
+        "preferred_time",
+        "priority"
+    ],
+
+    "recommended_duration": [
+        "30 mins",
+        "1 hour",
+        "2 hours"
+    ],
+
+    "preferred_times": [
+        "Morning",
+        "Afternoon",
+        "Evening",
+        "Night"
+    ]
+},
+    "Mindfulness": {
+
+    "category": "habit",
+
+    "nature": "continuous",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "duration",
+        "preferred_time",
+        "priority"
+    ],
+
+    "recommended_duration": [
+        "15 mins",
+        "30 mins",
+        "45 mins",
+        "1 hour"
+    ],
+
+    "preferred_times": [
+        "Morning",
+        "Evening",
+        "Night"
+    ]
+},
+    "Personal Growth": {
+
+    "category": "goal",
+
+    "nature": "continuous",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "duration",
+        "preferred_time",
+        "priority"
+    ],
+
+    "recommended_duration": [
+        "30 mins",
+        "45 mins",
+        "1 hour"
+    ],
+
+    "preferred_times": [
+        "Morning",
+        "Afternoon",
+        "Evening"
+    ]
+}
 }
