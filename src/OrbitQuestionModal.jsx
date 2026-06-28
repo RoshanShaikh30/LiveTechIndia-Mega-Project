@@ -101,6 +101,30 @@ function OrbitQuestionModal({
   />
 )}
 
+{question.input_type === "date" && (
+  <DateInput
+    onChange={(value) =>
+      updateAnswer(
+        group.activity,
+        question.field,
+        value
+      )
+    }
+  />
+)}
+
+{question.input_type === "days" && (
+  <DaysInput
+    onChange={(value) =>
+      updateAnswer(
+        group.activity,
+        question.field,
+        value
+      )
+    }
+  />
+)}
+
                 {/* <p>
 
                   Input Type:
