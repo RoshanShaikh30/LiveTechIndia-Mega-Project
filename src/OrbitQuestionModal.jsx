@@ -59,7 +59,39 @@ function OrbitQuestionModal({
 
                 </label>
 
-                <p>
+                {question.input_type === "duration" && (
+                 <DurationInput
+                   question={question}
+                   onChange={(value) => updateAnswer(
+                     group.activity,
+                     question.field,
+                     value
+                    )
+                   }/>
+                 )}
+
+                {question.input_type === "time_preference" && (
+                  <TimePreferenceInput
+                   onChange={(value) => updateAnswer(
+                    group.activity,
+                    question.field,
+                    value
+                   )}/>
+                 )}
+
+{question.input_type === "priority" && (
+  <PriorityInput
+    onChange={(value) =>
+      updateAnswer(
+        group.activity,
+        question.field,
+        value
+      )
+    }
+  />
+)}
+
+                {/* <p>
 
                   Input Type:
 
@@ -70,7 +102,7 @@ function OrbitQuestionModal({
 
                   </strong>
 
-                </p>
+                </p> */}
 
               </div>
 
