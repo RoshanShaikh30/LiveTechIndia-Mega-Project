@@ -1,4 +1,4 @@
-import "./TimePreferenceInput.css";
+// import "./TimePreferenceInput.css";
 
 function TimePreferenceInput({ onChange }) {
 

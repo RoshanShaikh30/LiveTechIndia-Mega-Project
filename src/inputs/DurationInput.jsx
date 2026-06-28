@@ -14,11 +14,11 @@ function DurationInput({ question , onChange }) {
 
         <div>
 
-            <label>
+            {/* <label>
 
                 {question.question}
 
-            </label>
+            </label> */}
 
             <OptionsList
 

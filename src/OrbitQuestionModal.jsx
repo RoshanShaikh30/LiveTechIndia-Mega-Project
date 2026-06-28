@@ -1,5 +1,8 @@
 import "./OrbitQuestionModal.css";
 import { useState } from "react";
+import DurationInput from "./inputs/DurationInput";
+import TimePreferenceInput from "./inputs/TimePreferenceInput";
+import PriorityInput from "./inputs/PriorityInput";
 
 function OrbitQuestionModal({
   isOpen,
@@ -12,6 +15,9 @@ function OrbitQuestionModal({
 
   const [answers, setAnswers] = useState({});
   const updateAnswer = (activity, field, value) => {
+
+  console.log(activity,field,value);
+
   setAnswers((prev) => ({
     ...prev,
     [activity]: {
@@ -58,6 +64,8 @@ function OrbitQuestionModal({
                   {question.question}
 
                 </label>
+
+                {/* <p>{question.input_type}</p> */}
 
                 {question.input_type === "duration" && (
                  <DurationInput
@@ -111,6 +119,10 @@ function OrbitQuestionModal({
           </div>
 
         ))}
+
+        <button onClick = {() => console.log(answers)}>
+          Generate Routine
+        </button>
 
         <button onClick={onClose}>
 

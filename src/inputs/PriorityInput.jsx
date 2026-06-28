@@ -1,4 +1,4 @@
-import "./PriorityInput.css";
+// import "./PriorityInput.css";
 
 function PriorityInput({ onChange }) {
 
