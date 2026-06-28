@@ -5,6 +5,7 @@ from orbit_ai.engine import OrbitAI
 app = FastAPI()
 
 app.add_middleware(
+    
     CORSMiddleware,
 
     allow_origins=[

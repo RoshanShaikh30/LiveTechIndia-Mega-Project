@@ -1,4 +1,5 @@
 import "./OrbitQuestionModal.css";
+import { useState } from "react";
 
 function OrbitQuestionModal({
   isOpen,
@@ -6,10 +7,13 @@ function OrbitQuestionModal({
   onClose
 
 }) {
+  
+  const [answers, setAnswers] = useState({});
 
   if (!isOpen) return null;
 
   return (
+
 
     <div className="orbit-modal-overlay">
 
