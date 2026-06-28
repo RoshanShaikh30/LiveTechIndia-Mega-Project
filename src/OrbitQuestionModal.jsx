@@ -3,6 +3,8 @@ import { useState } from "react";
 import DurationInput from "./inputs/DurationInput";
 import TimePreferenceInput from "./inputs/TimePreferenceInput";
 import PriorityInput from "./inputs/PriorityInput";
+import DateInput from "./inputs/DateInput";
+import DaysInput from "./inputs/DaysInput";
 
 function OrbitQuestionModal({
   isOpen,
