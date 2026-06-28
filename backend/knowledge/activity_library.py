@@ -14,7 +14,7 @@ ACTIVITY_LIBRARY = {
 
             "duration",
 
-           "preferred_time"
+            "preferred_time"
  
         ],
 
@@ -70,7 +70,19 @@ ACTIVITY_LIBRARY = {
 
     "Coaching": {
 
-        "category": "fixed_commitment"
+        "category": "fixed_commitment",
+        
+        "nature": "fixed",
+
+        "recurring": True,
+
+        "deadline_possible": False,
+
+         "needs": [
+           "days",
+           "start_time",
+           "end_time"
+        ]
     },
 
     "College": {
