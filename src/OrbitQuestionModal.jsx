@@ -36,8 +36,9 @@ function OrbitQuestionModal({
         );
 
         const data = await response.json();
-
-        console.log("Routine:", data);
+        setRoutine(data);
+        onComplete();
+        // console.log("Routine:", data);
 
     }
 
