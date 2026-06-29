@@ -44,7 +44,7 @@ import "./App.css";
 import OrbitQuestionModal from "./OrbitQuestionModal";
 import { useEffect, useMemo, useState } from "react";
 
-function RoutineBuilder({ onComplete }) {
+function RoutineBuilder({ onComplete, setRoutine }) {
   const [habitIntent, setHabitIntent] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
   const [step, setStep] = useState(1);

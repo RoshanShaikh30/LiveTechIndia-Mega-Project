@@ -140,7 +140,7 @@ less time managing your plans and more time following them.</p>
       setRoutine={setRoutine}
       onComplete={() => setActiveTab("Calendar")}
       />)}
-     {activeTab === "Calendar" && <Calendar />}
+     {activeTab === "Calendar" && <Calendar routine={routine} />}
 
     </div>
   );
