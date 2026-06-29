@@ -16,6 +16,36 @@ function OrbitQuestionModal({
   // console.log(groupedQuestions);
 
   const [answers, setAnswers] = useState({});
+  const generateRoutine = async () => {
+
+    console.log(answers);
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/orbit/generate-routine",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(answers)
+            }
+        );
+
+        const data = await response.json();
+
+        console.log("Routine:", data);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+    }
+
+};
   const updateAnswer = (activity, field, value) => {
 
   // console.log(activity,field,value);
@@ -146,7 +176,7 @@ function OrbitQuestionModal({
 
         ))}
 
-        <button onClick = {() => console.log(answers)}>
+        <button onClick = {generateRoutine}>
           Generate Routine
         </button>
 
