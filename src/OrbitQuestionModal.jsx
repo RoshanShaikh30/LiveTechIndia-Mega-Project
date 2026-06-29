@@ -9,7 +9,9 @@ import DaysInput from "./inputs/DaysInput";
 function OrbitQuestionModal({
   isOpen,
   groupedQuestions,
-  onClose
+  onClose,
+  setRoutine,
+  onComplete
 
 }) {
 
