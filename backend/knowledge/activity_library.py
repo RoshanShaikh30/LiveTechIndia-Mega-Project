@@ -203,6 +203,71 @@ ACTIVITY_LIBRARY = {
     "deadline_possible": False,
 
     "needs": []
+},
+    "Office": {
+
+    "category": "fixed_commitment",
+
+    "nature": "fixed",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "days",
+        "start_time",
+        "end_time"
+    ]
+
+},
+    "Internship": {
+
+    "category": "fixed_commitment",
+
+    "nature": "fixed",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "days",
+        "start_time",
+        "end_time"
+    ]
+
+},
+    "Tuition": {
+
+    "category": "fixed_commitment",
+
+    "nature": "fixed",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "days",
+        "start_time",
+        "end_time"
+    ]
+
+},
+    "Relationship": {
+
+    "category": "habit",
+
+    "nature": "relationship",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": [
+        "preferred_time"
+    ]
 
 }
     

@@ -19,6 +19,7 @@ Question generation is only one part of its reasoning process.
 from knowledge.category_rules import CATEGORY_RULES
 from knowledge.question_templates import QUESTION_TEMPLATES
 from knowledge.activity_library import ACTIVITY_LIBRARY
+from knowledge.activity_aliases import ACTIVITY_ALIASES
 
 
 class QuestionEngine:
@@ -40,6 +41,11 @@ class QuestionEngine:
         # for rule in category_data["required_fields"]:
 
         #     field = rule["field"]
+        
+        activity_name = ACTIVITY_ALIASES.get(
+           activity_name,
+           activity_name
+         )
         
         activity_data = ACTIVITY_LIBRARY.get(activity_name)
 
@@ -97,12 +103,13 @@ class QuestionEngine:
         sections = [
             ("habits", "habit"),
             ("goals", "goal"),
-            ("fixedCommitments", "fixed_commitment")
+            ("commitments", "fixed_commitment")
         ]
 
         for section_name, category in sections:
 
             activities = user_data.get(section_name, [])
+            print(section_name, activities)
 
             for activity in activities:
 

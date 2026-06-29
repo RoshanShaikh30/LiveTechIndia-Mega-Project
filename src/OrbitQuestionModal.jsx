@@ -5,6 +5,7 @@ import TimePreferenceInput from "./inputs/TimePreferenceInput";
 import PriorityInput from "./inputs/PriorityInput";
 import DateInput from "./inputs/DateInput";
 import DaysInput from "./inputs/DaysInput";
+import TimeInput from "./inputs/TimeInput";
 
 function OrbitQuestionModal({
   isOpen,
@@ -156,6 +157,18 @@ function OrbitQuestionModal({
       )
     }
   />
+)}
+
+{question.input_type === "time" && (
+    <TimeInput
+        onChange={(value) =>
+            updateAnswer(
+                group.activity,
+                question.field,
+                value
+            )
+        }
+    />
 )}
 
                 {/* <p>

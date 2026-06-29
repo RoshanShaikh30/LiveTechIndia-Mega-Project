@@ -16,13 +16,37 @@ def duration_to_minutes(duration):
 class RoutineEngine:
 
     def generate_routine(self, user_data):
+        
+        print(user_data)
 
         routine = []
         morning_pointer = datetime.strptime("08:00", "%H:%M")
         afternoon_pointer = datetime.strptime("14:00", "%H:%M")
         evening_pointer = datetime.strptime("18:00", "%H:%M")
         night_pointer = datetime.strptime("21:00", "%H:%M")
+        
+        blocked_periods = []
 
+        for activity, details in user_data.items():
+
+         if "start_time" in details and "end_time" in details:
+
+            blocked_periods.append({
+
+               "title": activity,
+
+               "start": datetime.strptime(
+                details["start_time"],
+                "%H:%M"
+               ),
+
+               "end": datetime.strptime(
+                details["end_time"],
+                "%H:%M"
+               )
+
+          })
+  
         for activity, details in user_data.items():
 
             duration = details.get("duration", "30 mins")

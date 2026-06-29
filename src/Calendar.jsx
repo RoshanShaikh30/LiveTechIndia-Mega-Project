@@ -1,23 +1,176 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
-  FaBell,
-  FaBookOpen,
   FaCalendarAlt,
   FaCheckCircle,
   FaChevronLeft,
   FaChevronRight,
-  FaDumbbell,
-  FaFire,
   FaHome,
   FaLightbulb,
-  FaMoon,
   FaRegCalendarCheck,
-  FaRegClock,
-  FaSun,
   FaSyncAlt,
-  FaUtensils
 } from "react-icons/fa";
 import "./App.css";
+
+const weekDays = [
+  { key: "monday", label: "Monday", short: "Mon" },
+  { key: "tuesday", label: "Tuesday", short: "Tue" },
+  { key: "wednesday", label: "Wednesday", short: "Wed" },
+  { key: "thursday", label: "Thursday", short: "Thu" },
+  { key: "friday", label: "Friday", short: "Fri" },
+  { key: "saturday", label: "Saturday", short: "Sat" },
+  { key: "sunday", label: "Sunday", short: "Sun" }
+];
+
+const dayAliases = {
+  mon: "monday",
+  monday: "monday",
+  tue: "tuesday",
+  tues: "tuesday",
+  tuesday: "tuesday",
+  wed: "wednesday",
+  wednesday: "wednesday",
+  thu: "thursday",
+  thur: "thursday",
+  thurs: "thursday",
+  thursday: "thursday",
+  fri: "friday",
+  friday: "friday",
+  sat: "saturday",
+  saturday: "saturday",
+  sun: "sunday",
+  sunday: "sunday"
+};
+
+const parseTimeToMinutes = (time) => {
+  if (!time) return null;
+
+  const normalizedTime = String(time).trim();
+  const match = normalizedTime.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+  if (!match) return null;
+
+  let hours = Number(match[1]);
+  const minutes = Number(match[2] || 0);
+  const meridiem = match[3]?.toUpperCase();
+
+  if (meridiem === "PM" && hours !== 12) hours += 12;
+  if (meridiem === "AM" && hours === 12) hours = 0;
+
+  return hours * 60 + minutes;
+};
+
+const formatTime = (minutes) => {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+};
+
+const normalizeRoutineDays = (item) => {
+  const rawDays = item.days || item.day || item.weekdays || item.weekday;
+  if (!rawDays) return weekDays.map((day) => day.key);
+
+  const dayValues = Array.isArray(rawDays) ? rawDays : String(rawDays).split(/[,/]/);
+  const normalizedDays = dayValues
+    .map((day) => dayAliases[String(day).trim().toLowerCase()])
+    .filter(Boolean);
+
+  return normalizedDays.length > 0 ? normalizedDays : weekDays.map((day) => day.key);
+};
+
+function WeeklyTimetable({ routine }) {
+  const timetableItems = useMemo(() => (
+    (routine || [])
+      .map((item, index) => {
+        const startMinutes = parseTimeToMinutes(item.start || item.start_time || item.time);
+        if (startMinutes === null) return null;
+
+        const parsedEndMinutes = parseTimeToMinutes(item.end || item.end_time);
+        const endMinutes = parsedEndMinutes === null ? startMinutes + 60 : parsedEndMinutes;
+
+        return {
+          id: `${item.title}-${startMinutes}-${index}`,
+          title: item.title || item.task || "Routine activity",
+          startMinutes,
+          endMinutes,
+          days: normalizeRoutineDays(item)
+        };
+      })
+      .filter(Boolean)
+  ), [routine]);
+
+  const timeSlots = useMemo(() => {
+    if (timetableItems.length === 0) {
+      return Array.from({ length: 15 }, (_, index) => 8 * 60 + index * 60);
+    }
+
+    const earliest = Math.min(...timetableItems.map((item) => item.startMinutes));
+    const latest = Math.max(...timetableItems.map((item) => item.endMinutes));
+    const start = Math.max(0, Math.floor(earliest / 60) * 60);
+    const end = Math.min(24 * 60, Math.ceil(latest / 60) * 60);
+    const slotCount = Math.max(1, Math.ceil((end - start) / 60));
+
+    return Array.from({ length: slotCount }, (_, index) => start + index * 60);
+  }, [timetableItems]);
+
+  const getItemsForCell = (dayKey, slotStart) => {
+    const slotEnd = slotStart + 60;
+    return timetableItems.filter((item) => (
+      item.days.includes(dayKey) &&
+      item.startMinutes >= slotStart &&
+      item.startMinutes < slotEnd
+    ));
+  };
+
+  return (
+    <section className="weekly-timetable-panel">
+      <div className="timetable-header">
+        <div>
+          <FaRegCalendarCheck className="calendar-title-icon" />
+          <div>
+            <h3>Weekly Timetable</h3>
+            <p>Your generated routine, arranged across the week.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="timetable-scroll">
+        <div className="weekly-timetable">
+          <div className="timetable-heading time-heading">Time</div>
+          {weekDays.map((day) => (
+            <div className="timetable-heading" key={day.key}>
+              <span>{day.short}</span>
+            </div>
+          ))}
+
+          {timeSlots.map((slot) => (
+            <div className="timetable-row" key={slot}>
+              <div className="timetable-time">{formatTime(slot)}</div>
+              {weekDays.map((day) => {
+                const cellItems = getItemsForCell(day.key, slot);
+
+                return (
+                  <div className="timetable-cell" key={`${day.key}-${slot}`}>
+                    {cellItems.map((item) => (
+                      <div className="timetable-activity" key={`${day.key}-${item.id}`}>
+                        <span>{`${formatTime(item.startMinutes)}-${formatTime(item.endMinutes)}`}</span>
+                        <strong>{item.title}</strong>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {timetableItems.length === 0 && (
+          <div className="empty-timetable-note">
+            Generate your Orbit routine to fill this weekly timetable.
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 function Calendar( { routine } ) {
   const today = new Date();
@@ -43,14 +196,11 @@ function Calendar( { routine } ) {
 
   const userGoals = onboardingData.goals || [];
   const userHabits = onboardingData.habits || [];
-  const userCommitments = onboardingData.commitments || [];
   const userObstacles = onboardingData.habitObstacles || [];
   const userHelp = onboardingData.orbitHelp || [];
   const userStruggles = onboardingData.priorityStruggles || [];
   const focusGoal = userGoals[0] || "Your top goal";
-  const secondaryGoal = userGoals[1] || "Focused work";
   const habitFocus = userHabits[0] || "Your selected habit";
-  const commitmentFocus = userCommitments[0] || "Flexible block";
   const obstacle = userObstacles[0] || userStruggles[0] || "your routine changes";
   const helpPreference = userHelp[0] || "smart adjustments";
 
@@ -154,28 +304,6 @@ function Calendar( { routine } ) {
     { label: "Habits", icon: <FaCheckCircle /> }
   ];
 
-  // const routineItems = [
-  //   { time: "7:00 AM", title: "Wake Up", icon: <FaSun />, tone: "sun" },
-  //   { time: "7:30 AM", title: "Morning Routine", icon: <FaHome />, tone: "home" },
-  //   { time: "8:00 AM", title: commitmentFocus, icon: <FaBookOpen />, tone: "study" },
-  //   { time: "1:00 PM", title: "Lunch", icon: <FaUtensils />, tone: "food" },
-  //   { time: "2:00 PM", title: focusGoal, icon: <FaRegClock />, tone: "focus" },
-  //   { time: "5:00 PM", title: habitFocus, icon: <FaDumbbell />, tone: "fitness" },
-  //   { time: "7:00 PM", title: secondaryGoal, icon: <FaBookOpen />, tone: "study" },
-  //   { time: "9:30 PM", title: habitFocus, icon: <FaBookOpen />, tone: "reading" },
-  //   { time: "10:30 PM", title: "Sleep", icon: <FaMoon />, tone: "sleep" }
-  // ];
-
-  const routineItems =
-  routine.length > 0
-    ? routine.map((item) => ({
-        time: item.start,
-        title: item.title,
-        icon: <FaBookOpen />,
-        tone: "study"
-      }))
-    : [];
-
   return (
     <div className="calendar-page">
       <aside className="orbit-sidebar">
@@ -206,7 +334,8 @@ function Calendar( { routine } ) {
       <main className="calendar-main">
         {activePage === "Calendar" ? (
           <>
-            <section className="month-panel">
+          
+            {/* <section className="month-panel">
               <div className="calendar-header">
                 <div>
                   <FaRegCalendarCheck className="calendar-title-icon" />
@@ -240,28 +369,9 @@ function Calendar( { routine } ) {
                   </button>
                 ))}
               </div>
-            </section>
+            </section> */}
 
-            <section className="daily-panel">
-              <div className="daily-header">
-                <h3>{selectedDateTitle}</h3>
-                <button>
-                  <FaCalendarAlt />
-                </button>
-              </div>
-
-              <div className="routine-timeline">
-                {routineItems.map((item) => (
-                  <div className="timeline-row" key={`${item.time}-${item.title}`}>
-                    <span className="timeline-time">{item.time}</span>
-                    <div className={`routine-card ${item.tone}`}>
-                      <span className="routine-icon">{item.icon}</span>
-                      <strong>{item.title}</strong>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+            <WeeklyTimetable routine={routine} />
           </>
         ) : (
           <section className="calendar-placeholder-panel">
@@ -275,91 +385,6 @@ function Calendar( { routine } ) {
             </div>
           </section>
         )}
-        {activePage === "Calendar" && (
- <div className = "calendar-bottom-section">         
-  <div className="bottom-insight-row">
-
-    {/* Today's Focus */}
-
-    <div className="insight-card focus-card">
-      <div className="insight-label">
-        <FaRegCalendarCheck />
-        <strong>Today's Focus</strong>
-      </div>
-
-      <div className="focus-content">
-        <div className="focus-target">O</div>
-
-        <div>
-          <h4>{focusGoal}</h4>
-          <p>
-            {onboardingData.dailyTime || "A realistic focus block"} at 2:00 PM
-          </p>
-        </div>
-      </div>
-    </div>
-
-    {/* Reminders */}
-
-    <div className="insight-card">
-      <div className="insight-label">
-        <FaBell />
-        <strong>Reminders</strong>
-      </div>
-
-      <div className="insight-row">
-        <span className="small-icon reminder">
-          <FaBell />
-        </span>
-
-        <div>
-          <h4>{focusGoal} check-in</h4>
-
-          <p>
-            {onboardingData.deadlineType
-              ? "Aligned with your goal timeline"
-              : "Review your progress today"}
-          </p>
-        </div>
-      </div>
-    </div>
-
-    {/* Habit Streaks */}
-
-    <div className="insight-card">
-      <div className="insight-label">
-        <FaFire />
-        <strong>Habit Streaks</strong>
-      </div>
-
-      <div className="insight-row">
-        <span className="small-icon streak">
-          <FaFire />
-        </span>
-
-        <div>
-          <h4>{habitFocus}</h4>
-
-          <p>
-            {onboardingData.habitFrequency || "Habit streak"} plan
-          </p>
-
-          <div className="streak-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  </div>
-)}
       </main>
 
       
