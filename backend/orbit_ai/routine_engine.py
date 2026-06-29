@@ -1,8 +1,13 @@
+from datetime import datetime, timedelta
 class RoutineEngine:
 
     def generate_routine(self, user_data):
 
         routine = []
+        morning_pointer = datetime.strptime("08:00", "%H:%M")
+        afternoon_pointer = datetime.strptime("14:00", "%H:%M")
+        evening_pointer = datetime.strptime("18:00", "%H:%M")
+        night_pointer = datetime.strptime("21:00", "%H:%M")
 
         for activity, details in user_data.items():
 

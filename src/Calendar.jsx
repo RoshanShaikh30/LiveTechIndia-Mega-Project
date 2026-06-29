@@ -19,7 +19,7 @@ import {
 } from "react-icons/fa";
 import "./App.css";
 
-function Calendar() {
+function Calendar( { routine } ) {
   const today = new Date();
   const [activePage, setActivePage] = useState("Calendar");
   const [selectedDate, setSelectedDate] = useState(today);
@@ -154,17 +154,27 @@ function Calendar() {
     { label: "Habits", icon: <FaCheckCircle /> }
   ];
 
-  const routineItems = [
-    { time: "7:00 AM", title: "Wake Up", icon: <FaSun />, tone: "sun" },
-    { time: "7:30 AM", title: "Morning Routine", icon: <FaHome />, tone: "home" },
-    { time: "8:00 AM", title: commitmentFocus, icon: <FaBookOpen />, tone: "study" },
-    { time: "1:00 PM", title: "Lunch", icon: <FaUtensils />, tone: "food" },
-    { time: "2:00 PM", title: focusGoal, icon: <FaRegClock />, tone: "focus" },
-    { time: "5:00 PM", title: habitFocus, icon: <FaDumbbell />, tone: "fitness" },
-    { time: "7:00 PM", title: secondaryGoal, icon: <FaBookOpen />, tone: "study" },
-    { time: "9:30 PM", title: habitFocus, icon: <FaBookOpen />, tone: "reading" },
-    { time: "10:30 PM", title: "Sleep", icon: <FaMoon />, tone: "sleep" }
-  ];
+  // const routineItems = [
+  //   { time: "7:00 AM", title: "Wake Up", icon: <FaSun />, tone: "sun" },
+  //   { time: "7:30 AM", title: "Morning Routine", icon: <FaHome />, tone: "home" },
+  //   { time: "8:00 AM", title: commitmentFocus, icon: <FaBookOpen />, tone: "study" },
+  //   { time: "1:00 PM", title: "Lunch", icon: <FaUtensils />, tone: "food" },
+  //   { time: "2:00 PM", title: focusGoal, icon: <FaRegClock />, tone: "focus" },
+  //   { time: "5:00 PM", title: habitFocus, icon: <FaDumbbell />, tone: "fitness" },
+  //   { time: "7:00 PM", title: secondaryGoal, icon: <FaBookOpen />, tone: "study" },
+  //   { time: "9:30 PM", title: habitFocus, icon: <FaBookOpen />, tone: "reading" },
+  //   { time: "10:30 PM", title: "Sleep", icon: <FaMoon />, tone: "sleep" }
+  // ];
+
+  const routineItems =
+  routine.length > 0
+    ? routine.map((item) => ({
+        time: item.start,
+        title: item.title,
+        icon: <FaBookOpen />,
+        tone: "study"
+      }))
+    : [];
 
   return (
     <div className="calendar-page">
