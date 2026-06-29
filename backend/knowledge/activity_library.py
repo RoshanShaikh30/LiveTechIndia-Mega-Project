@@ -191,5 +191,19 @@ ACTIVITY_LIBRARY = {
         "Afternoon",
         "Evening"
     ]
+},
+    "Better Sleep": {
+
+    "category": "habit",
+
+    "nature": "sleep",
+
+    "recurring": True,
+
+    "deadline_possible": False,
+
+    "needs": []
+
 }
+    
 }

@@ -44,8 +44,11 @@ class QuestionEngine:
         activity_data = ACTIVITY_LIBRARY.get(activity_name)
 
         if activity_data:
+            
+            if activity_data["nature"] == "sleep":
+              return []
 
-           required_fields = activity_data["needs"]
+            required_fields = activity_data["needs"]
 
         else:
 
