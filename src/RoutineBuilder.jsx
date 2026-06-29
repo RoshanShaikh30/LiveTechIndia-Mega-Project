@@ -1792,6 +1792,8 @@ const addCustomPriorityStruggle = () => {
     isOpen={showQuestionModal}
     groupedQuestions={groupedQuestions}
     onClose={() => setShowQuestionModal(false)}
+    setRoutine={setRoutine}
+    onComplete={onComplete}
 />
 
   </div>
