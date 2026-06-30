@@ -13,6 +13,15 @@ def duration_to_minutes(duration):
     }
 
     return duration_map.get(duration, 30)
+  
+def overlaps(start, end, blocked_periods):
+
+    for period in blocked_periods:
+
+        if start < period["end"] and end > period["start"]:
+            return True
+
+    return False
 class RoutineEngine:
 
     def generate_routine(self, user_data):
@@ -75,46 +84,33 @@ class RoutineEngine:
                 "Morning")
             
                duration_minutes = duration_to_minutes(duration)
+               
+            if not is_fixed:
 
-            if preferred_time == "Morning":
+              if preferred_time == "Morning":
 
-              start = morning_pointer
-              end = start + timedelta(minutes=duration_minutes)
-              morning_pointer = end
+                start = morning_pointer
+                end = start + timedelta(minutes=duration_minutes)
+                morning_pointer = end
 
-            elif preferred_time == "Afternoon":
+              elif preferred_time == "Afternoon":
 
-              start = afternoon_pointer
-              end = start + timedelta(minutes=duration_minutes)
-              afternoon_pointer = end
+                start = afternoon_pointer
+                end = start + timedelta(minutes=duration_minutes)
+                afternoon_pointer = end
 
-            elif preferred_time == "Evening":
+              elif preferred_time == "Evening":
 
-              start = evening_pointer
-              end = start + timedelta(minutes=duration_minutes)
-              evening_pointer = end
+                start = evening_pointer
+                end = start + timedelta(minutes=duration_minutes)
+                evening_pointer = end
 
-            else:
+              else:
 
-              start = night_pointer
-              end = start + timedelta(minutes=duration_minutes)
-              night_pointer = end
+                start = night_pointer
+                end = start + timedelta(minutes=duration_minutes)
+                night_pointer = end
 
-            # if preferred_time == "Morning":
-            #     start = "08:00"
-            #     end = "08:30"
-
-            # elif preferred_time == "Afternoon":
-            #     start = "14:00"
-            #     end = "14:30"
-
-            # elif preferred_time == "Evening":
-            #     start = "18:00"
-            #     end = "18:30"
-
-            # else:
-            #     start = "21:00"
-            #     end = "21:30"
 
             routine.append({
 
@@ -126,7 +122,20 @@ class RoutineEngine:
 
                 "start": start.strftime("%H:%M"),
 
-                "end": end.strftime("%H:%M")
+                "end": end.strftime("%H:%M"),
+                
+                "days": details.get(
+                 "days",
+                    [
+                       "Monday",
+                       "Tuesday",
+                       "Wednesday",
+                       "Thursday",
+                       "Friday",
+                       "Saturday",
+                       "Sunday"
+                    ]
+                 )
 
             })
 
