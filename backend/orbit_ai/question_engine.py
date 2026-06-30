@@ -116,12 +116,25 @@ class QuestionEngine:
             print(section_name, activities)
 
             for activity in activities:
-
+                
+                parsed = self.parser.parse(activity)
+                
                 activity_questions = self.analyze_activity(
-                    activity_name=activity,
-                    category=category,
-                    known_information={}
-                )
+                 activity_name=parsed["activity"],
+                 category=category,
+                 known_information=parsed
+                 )
+
+
+                # activity_questions = self.analyze_activity(
+                #     activity_name=activity,
+                #     category=category,
+                #     parsed = self.parser.parse(activity)
+                #     activity_questions = self.analyze_activity(
+                #     activity_name=parsed["activity"],
+                #     category=category,
+                #     known_information=parsed
+                #    ))
 
                 if activity_questions:
 

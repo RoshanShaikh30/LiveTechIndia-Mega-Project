@@ -48,15 +48,33 @@ class RoutineEngine:
           })
   
         for activity, details in user_data.items():
+          
+            is_fixed = (
+             "start_time" in details and
+             "end_time" in details )
 
-            duration = details.get("duration", "30 mins")
-
-            preferred_time = details.get(
-                "preferred_time",
-                "Morning"
-            )
             
-            duration_minutes = duration_to_minutes(duration)
+            if is_fixed:
+              start = datetime.strptime(
+                details["start_time"],
+                "%H:%M"
+              )
+              
+              end = datetime.strptime(
+                details["end_time"], "%H:%M"
+              )
+              
+              duration = None
+              preferred_time = "Fixed"
+              
+            else:
+               duration = details.get("duration", "30 mins")
+
+               preferred_time = details.get(
+                "preferred_time",
+                "Morning")
+            
+               duration_minutes = duration_to_minutes(duration)
 
             if preferred_time == "Morning":
 
