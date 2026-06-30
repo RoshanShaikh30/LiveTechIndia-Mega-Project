@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from orbit_ai.parser import Parser
 
 def duration_to_minutes(duration):
 
@@ -25,7 +26,8 @@ def overlaps(start, end, blocked_periods):
 class RoutineEngine:
 
     def generate_routine(self, user_data):
-        
+      
+        parser = Parser()
         print(user_data)
 
         routine = []
@@ -37,8 +39,12 @@ class RoutineEngine:
         blocked_periods = []
 
         for activity, details in user_data.items():
+          parsed = parser.parse(activity)
 
-         if "start_time" in details and "end_time" in details:
+          for key, value in parsed.items():
+            details.setdefault(key, value)
+
+          if "start_time" in details and "end_time" in details:
 
             blocked_periods.append({
 
@@ -158,5 +164,7 @@ class RoutineEngine:
                  )
 
             })
-
+            
+            
+        print(routine)
         return routine
