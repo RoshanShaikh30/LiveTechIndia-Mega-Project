@@ -91,24 +91,44 @@ class RoutineEngine:
 
                 start = morning_pointer
                 end = start + timedelta(minutes=duration_minutes)
+                
+                while overlaps(start,end,blocked_periods):
+                  start += timedelta(minutes=30)
+                  end = start + timedelta(minutes=duration_minutes)
+                
                 morning_pointer = end
 
               elif preferred_time == "Afternoon":
 
                 start = afternoon_pointer
                 end = start + timedelta(minutes=duration_minutes)
+                
+                while overlaps(start,end,blocked_periods):
+                  start += timedelta(minutes=30)
+                  end = start + timedelta(minutes=duration_minutes)
+                  
                 afternoon_pointer = end
 
               elif preferred_time == "Evening":
 
                 start = evening_pointer
                 end = start + timedelta(minutes=duration_minutes)
+                
+                while overlaps(start,end,blocked_periods):
+                  start += timedelta(minutes=30)
+                  end = start + timedelta(minutes=duration_minutes)
+                  
                 evening_pointer = end
 
               else:
 
                 start = night_pointer
                 end = start + timedelta(minutes=duration_minutes)
+                
+                while overlaps(start,end,blocked_periods):
+                  start += timedelta(minutes=30)
+                  end = start + timedelta(minutes=duration_minutes)
+                  
                 night_pointer = end
 
 
