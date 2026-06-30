@@ -20,9 +20,13 @@ from knowledge.category_rules import CATEGORY_RULES
 from knowledge.question_templates import QUESTION_TEMPLATES
 from knowledge.activity_library import ACTIVITY_LIBRARY
 from knowledge.activity_aliases import ACTIVITY_ALIASES
+from orbit_ai.parser import Parser
 
 
 class QuestionEngine:
+    
+    def __init__(self):
+        self.parser = Parser()
 
     def analyze_activity(
         self,
