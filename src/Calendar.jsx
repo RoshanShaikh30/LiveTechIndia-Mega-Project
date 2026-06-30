@@ -185,6 +185,22 @@ function Calendar( { routine } ) {
       return [];
     }
   });
+  const [waterCount, setWaterCount] = useState(() => {
+  return Number(localStorage.getItem("orbitWaterCount")) || 0;
+});
+
+const addGlass = () => {
+  if (waterCount >= 8) return;
+
+  const nextCount = waterCount + 1;
+
+  setWaterCount(nextCount);
+
+  localStorage.setItem(
+    "orbitWaterCount",
+    nextCount
+  );
+};
 
   const onboardingData = (() => {
     try {
@@ -196,6 +212,7 @@ function Calendar( { routine } ) {
 
   const userGoals = onboardingData.goals || [];
   const userHabits = onboardingData.habits || [];
+  console.log(userHabits);
   const userObstacles = onboardingData.habitObstacles || [];
   const userHelp = onboardingData.orbitHelp || [];
   const userStruggles = onboardingData.priorityStruggles || [];
@@ -375,14 +392,114 @@ function Calendar( { routine } ) {
           </>
         ) : (
           <section className="calendar-placeholder-panel">
-            <div className="placeholder-card">
+            {activePage === "Habits" ? (
+  <div className="orbit-habits-page">
+
+    <div className="habits-header">
+      <h2>🌱 Your Habits</h2>
+      <p>
+        These are the habits Orbit is helping you stay consistent with.
+      </p>
+    </div>
+
+    <div className="habits-grid">
+
+      {userHabits.includes("Healthy Eating") && (
+        <div className="habit-tracker-card">
+          <h3>🍎 Healthy Eating</h3>
+         <div className="meal-buttons">
+          <button className="habit-action-btn">Breakfast</button>
+          <button className="habit-action-btn">Lunch</button>
+          <button className="habit-action-btn">Dinner</button>
+          </div>
+        </div>
+      )}
+
+      {userHabits.includes("Drink More Water") && (
+        <div className="habit-tracker-card">
+          <h3>💧 Drink More Water</h3>
+
+          <div className="water-counter">
+
+             {Array.from({ length: 8 }).map((_, index) => (
+              <span key={index}>
+               {index < waterCount ? "💧" : "○"}
+              </span>
+             ))}
+
+          </div>
+
+          <p> {waterCount} / 8 Glasses </p>
+
+          <button className="habit-action-btn" onClick={addGlass}>
+            + Add Glass
+          </button>
+        </div>
+      )}
+
+      {userHabits.includes("Mindfulness") && (
+        <div className="habit-tracker-card">
+          <h3>🧘 Mindfulness</h3>
+
+          <button className="habit-action-btn">
+            Mark Today's Session Complete
+          </button>
+        </div>
+      )}
+
+       {userHabits.includes("Reading") && (
+        <div className="habit-tracker-card">
+          <h3>📚 Reading</h3>
+
+          <button className="habit-action-btn">
+            Mark Reading Complete
+          </button>
+        </div>
+      )} 
+
+      {userHabits.includes("Better Sleep") && (
+        <div className="habit-tracker-card">
+          <h3>🌙 Better Sleep</h3>
+
+          <p>
+            Sleep Goal
+          </p>
+
+          <strong>
+            {onboardingData.sleepTime || "--:--"}
+          </strong>
+
+          <p>
+            Wake Time
+          </p>
+
+          <strong>
+            {onboardingData.wakeTime || "--:--"}
+          </strong>
+
+        </div>
+      )}
+
+    </div>
+
+  </div>
+) : (
+  <div className="placeholder-card">
+    <h3>{activePage}</h3>
+    <p>
+      {activePage === "Today" && `Your selected day is ${selectedDateTitle}.`}
+      {activePage === "Routine" && "Routine details will appear here as Orbit grows."}
+    </p>
+  </div>
+)}
+            {/* <div className="placeholder-card">
               <h3>{activePage}</h3>
               <p>
                 {activePage === "Today" && `Your selected day is ${selectedDateTitle}.`}
                 {activePage === "Routine" && "Routine details will appear here as Orbit grows."}
                 {activePage === "Habits" && "Habit tracking will appear here as Orbit grows."}
               </p>
-            </div>
+            </div> */}
           </section>
         )}
       </main>

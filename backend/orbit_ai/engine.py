@@ -15,20 +15,23 @@ class OrbitAI:
 
         print("\n===== ORBIT AI ANALYSIS =====")
 
-        questions = self.question_engine.analyze_user(user_data)
+        analysis = self.question_engine.analyze_user(user_data)
+        questions = analysis["questions"]
+        routine_seed = analysis["routine_seed"]
 
         if questions:
 
          print("Follow-up Questions Needed:")
 
-        return {
+         return {
             "status": "needs_more_information",
-            "questions": questions
-        }
+            "questions": questions,
+            "routine_seed": routine_seed
+         }
 
         print("Enough information received.")
 
-        routine = self.routine_engine.generate_routine(user_data)
+        routine = self.routine_engine.generate_routine(routine_seed)
 
         return {
         "status": "ready",

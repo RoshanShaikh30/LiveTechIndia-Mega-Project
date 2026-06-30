@@ -1,6 +1,9 @@
 // import "./PriorityInput.css";
+import { useState } from "react";
 
 function PriorityInput({ onChange }) {
+
+    const [selected, setSelected] = useState("");
 
     const priorities = ["High", "Medium", "Low"];
 
@@ -11,7 +14,11 @@ function PriorityInput({ onChange }) {
                 <button
                     key={priority}
                     type="button"
-                    onClick={() => onChange(priority)}
+                    className={selected === priority ? "selected" : ""}
+                    onClick={() => {
+                        setSelected(priority);
+                        onChange(priority);
+                    }}
                 >
                     {priority}
                 </button>

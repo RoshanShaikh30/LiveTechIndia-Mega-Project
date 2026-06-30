@@ -2,7 +2,7 @@ QUESTION_TEMPLATES = {
 
     "duration": {
 
-        "question": "How long would you like to spend on {activity}?",
+        "question": "How much time would you like to set aside for {activity}?",
 
         "input_type": "duration",
 
@@ -18,14 +18,14 @@ QUESTION_TEMPLATES = {
 
     "preferred_time": {
 
-        "question": "When would you prefer to do {activity}?",
+        "question": "When would {activity} fit most naturally?",
 
         "input_type": "time_preference"
     },
 
     "priority": {
 
-        "question": "How important is {activity} to your daily routine?",
+        "question": "How important should {activity} be when Orbit plans your routine?",
 
         "input_type": "priority",
 
@@ -38,7 +38,7 @@ QUESTION_TEMPLATES = {
 
     "days": {
 
-        "question": "Which days would you like to schedule {activity}?",
+        "question": "Which days is {activity} fixed?",
 
         "input_type": "days"
     },
@@ -59,11 +59,25 @@ QUESTION_TEMPLATES = {
 
     "session_duration": {
 
-        "question": "How long would you like each {activity} session to be?",
+        "question": "How much time would you like to set aside for {activity}?",
 
         "input_type": "duration",
 
         "allow_custom": True
+    },
+
+    "frequency": {
+
+        "question": "How often would you like to make time for {activity}?",
+
+        "input_type": "time_preference",
+
+        "suggestions": [
+            "Daily",
+            "A few times a week",
+            "Weekly",
+            "Weekends"
+        ]
     },
 
     "deadline": {

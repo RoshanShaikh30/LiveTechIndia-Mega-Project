@@ -1,37 +1,265 @@
 .orbit-modal-overlay {
-
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.45);
+    background: rgba(34, 22, 17, 0.52);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 999;
-
+    padding: 18px;
+    box-sizing: border-box;
+    backdrop-filter: blur(4px);
 }
 
 .orbit-modal {
-
-    width: 700px;
-    max-height: 80vh;
+    width: min(720px, 100%);
+    max-height: 86vh;
     overflow-y: auto;
-    background: white;
+    background: rgba(245, 239, 220, 0.96);
+    border: 1px solid rgba(61, 37, 30, 0.16);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 22px 60px rgba(34, 22, 17, 0.24);
+    color: #3d251e;
+}
+
+.orbit-modal h2 {
+    font-family: "Ahsing", cursive;
+    font-size: 2.35rem;
+    font-weight: normal;
+    margin: 0 0 8px;
+}
+
+.orbit-modal > p {
+    margin: 0 0 22px;
+    max-width: 560px;
+    color: #60483f;
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+.activity-group {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(61, 37, 30, 0.12);
+}
+
+.activity-group h3 {
+    margin: 0 0 12px;
+    font-family: "Playfair Display", serif;
+    font-size: 1.25rem;
+    color: #3d251e;
+}
+
+.question-card {
+    padding: 18px;
+    border: 1px solid rgba(61, 37, 30, 0.12);
     border-radius: 16px;
-    padding: 30px;
-
+    margin-top: 12px;
+    background: rgba(255, 255, 255, 0.42);
+    box-shadow: 0 8px 24px rgba(61, 37, 30, 0.06);
 }
 
-.activity-group{
-
-    margin-top:25px;
-
+.question-card label {
+    display: block;
+    margin-bottom: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #3d251e;
 }
 
-.question-card{
+.orbit-modal button {
+    font-family: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
 
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    margin-top:10px;
+.orbit-modal button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
 
+.orbit-modal button:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.options-list,
+.time-options,
+.priority-options,
+.days-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.option,
+.time-options button,
+.priority-options button,
+.days-input button,
+.custom-duration-btn {
+    min-height: 42px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(61, 37, 30, 0.16);
+    background: rgba(255, 255, 255, 0.5);
+    color: #3d251e;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.option:hover,
+.time-options button:hover,
+.priority-options button:hover,
+.days-input button:hover,
+.custom-duration-btn:hover {
+    border-color: rgba(61, 37, 30, 0.34);
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 8px 18px rgba(61, 37, 30, 0.08);
+}
+
+.option.active,
+.time-options button.selected,
+.priority-options button.selected,
+.days-input button.selected,
+.custom-duration-btn.active {
+    background: #3d251e;
+    color: #f5efdc;
+    border-color: #3d251e;
+    box-shadow: 0 10px 22px rgba(61, 37, 30, 0.16);
+}
+
+.duration-input {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.custom-duration-btn {
+    width: fit-content;
+}
+
+.custom-duration-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(61, 37, 30, 0.1);
+    background: rgba(255, 255, 255, 0.34);
+}
+
+.custom-duration-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.custom-duration-row input,
+.question-card input[type="time"],
+.question-card input[type="date"] {
+    min-height: 42px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(61, 37, 30, 0.18);
+    background: rgba(255, 255, 255, 0.68);
+    color: #3d251e;
+    font: inherit;
+    outline: none;
+}
+
+.custom-duration-row input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.custom-duration-row input:focus,
+.question-card input[type="time"]:focus,
+.question-card input[type="date"]:focus {
+    border-color: #3d251e;
+    box-shadow: 0 0 0 3px rgba(61, 37, 30, 0.1);
+}
+
+.apply-duration-btn,
+.orbit-primary-action,
+.orbit-secondary-action {
+    min-height: 42px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.apply-duration-btn,
+.orbit-primary-action {
+    border: 1px solid #3d251e;
+    background: #3d251e;
+    color: #f5efdc;
+    box-shadow: 0 10px 20px rgba(61, 37, 30, 0.14);
+}
+
+.orbit-secondary-action {
+    border: 1px solid rgba(61, 37, 30, 0.18);
+    background: rgba(255, 255, 255, 0.46);
+    color: #3d251e;
+}
+
+.duration-validation,
+.duration-applied {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.35;
+}
+
+.duration-validation {
+    color: #8a3f28;
+}
+
+.duration-applied {
+    width: fit-content;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(78, 126, 70, 0.14);
+    color: #385f31;
+    font-weight: 800;
+}
+
+.duration-applied::before {
+    content: "✓";
+    margin-right: 6px;
+}
+
+.orbit-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(61, 37, 30, 0.12);
+}
+
+@media (max-width: 620px) {
+    .orbit-modal {
+        padding: 22px;
+        border-radius: 18px;
+    }
+
+    .orbit-modal h2 {
+        font-size: 2rem;
+    }
+
+    .custom-duration-row,
+    .orbit-modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .custom-duration-row input {
+        min-width: 0;
+    }
+
+    .custom-duration-btn,
+    .orbit-modal-actions button {
+        width: 100%;
+    }
 }

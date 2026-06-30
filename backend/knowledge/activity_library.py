@@ -68,6 +68,37 @@ ACTIVITY_LIBRARY = {
         ]
     },
 
+    "Exercise": {
+
+        "category": "habit",
+
+        "nature": "continuous",
+
+        "recurring": True,
+
+        "deadline_possible": False,
+
+        "needs": [
+
+           "duration",
+
+           "preferred_time"
+
+       ],
+
+        "recommended_duration": [
+            "30 mins",
+            "45 mins",
+            "1 hour",
+            "1 hour 30 mins"
+        ],
+
+        "preferred_times": [
+            "Morning",
+            "Evening"
+        ]
+    },
+
     "Coaching": {
 
         "category": "fixed_commitment",
@@ -124,6 +155,35 @@ ACTIVITY_LIBRARY = {
 
     "recommended_duration": [
         "30 mins",
+        "1 hour",
+        "2 hours"
+    ],
+
+    "preferred_times": [
+        "Morning",
+        "Afternoon",
+        "Evening",
+        "Night"
+    ]
+},
+    "Project": {
+
+    "category": "goal",
+
+    "nature": "deadline_goal",
+
+    "recurring": True,
+
+    "deadline_possible": True,
+
+    "needs": [
+        "duration",
+        "deadline",
+        "preferred_time"
+    ],
+
+    "recommended_duration": [
+        "45 mins",
         "1 hour",
         "2 hours"
     ],

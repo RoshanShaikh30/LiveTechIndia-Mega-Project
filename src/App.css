@@ -1008,12 +1008,12 @@ body {
 }
 
 .habit-card{
-  min-height:110px;
+  min-height:100px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:12px;
+  gap:8px;
   border-radius:18px;
   background:rgba(255,255,255,0.35);
   border:1px solid rgba(61,37,30,0.15);
@@ -1027,7 +1027,7 @@ body {
 }
 
 .habit-icon{
-  font-size:1.8rem;
+  font-size:1.5rem;
 }
 
 .study{
@@ -2018,6 +2018,187 @@ body {
   .profile-card{
     display:none;
   }
+}
+
+/* HABITS */
+
+.orbit-habits-page{
+    padding:32px;
+}
+
+.habits-header{
+    margin-bottom:30px;
+}
+
+.habits-header h2{
+    font-size:2.2rem;
+    color:#4a2d22;
+    margin-bottom:8px;
+    font-weight:700;
+}
+
+.habits-header p{
+    color:#776257;
+    font-size:1rem;
+}
+
+.habits-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+    gap:26px;
+
+}
+
+.habit-tracker-card{
+
+    background:rgba(255,255,255,.58);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(90,60,45,.12);
+
+    border-radius:26px;
+
+    padding:24px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    box-shadow:0 12px 28px rgba(82,54,42,.08);
+
+    transition:.25s;
+
+}
+
+.habit-tracker-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 20px 40px rgba(82,54,42,.12);
+
+}
+
+.habit-tracker-card h3{
+
+    margin:0;
+
+    color:#4d3024;
+
+    font-size:1.55rem;
+
+    font-weight:700;
+
+}
+
+.habit-tracker-card p{
+
+    margin:0;
+
+    color:#7b665d;
+
+}
+
+.habit-tracker-card strong{
+
+    color:#4d3024;
+
+    font-size:1.35rem;
+
+}
+
+/*      Buttons         */
+
+.habit-action-btn{
+
+    width:fit-content;
+
+    padding:11px 18px;
+
+    border-radius:999px;
+
+    border:none;
+
+    background:#f5eee7;
+
+    color:#4d3024;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.22s;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+
+}
+
+.habit-action-btn:hover{
+
+    background:#4d3024;
+
+    color:white;
+
+    transform:translateY(-2px);
+
+}
+
+.meal-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+/* Water Tracker */
+
+.water-counter{
+
+    display:flex;
+
+    gap:8px;
+
+    font-size:1.9rem;
+
+    letter-spacing:2px;
+
+}
+
+/* Meal Buttons */
+
+.habit-tracker-card button{
+
+    margin-right:8px;
+
+}
+
+/* Sleep Card */
+
+.habit-tracker-card strong{
+
+    display:block;
+
+    margin-top:-8px;
+
+    margin-bottom:8px;
+
+}
+
+/* Mobile */
+
+@media(max-width:900px){
+
+    .habits-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
 }
 
 /* .builder-section{

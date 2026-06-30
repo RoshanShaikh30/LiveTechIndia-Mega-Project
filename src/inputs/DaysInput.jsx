@@ -31,13 +31,14 @@ function DaysInput({ onChange }) {
 
     return (
 
-        <div>
+        <div className="days-input">
 
             {weekDays.map(day => (
 
                 <button
                     key={day}
                     type="button"
+                    className={selectedDays.includes(day) ? "selected" : ""}
                     onClick={() => toggleDay(day)}
                 >
                     {day}

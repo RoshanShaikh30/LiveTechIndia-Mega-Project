@@ -1,8 +1,12 @@
+import { useState } from "react";
+
 // import "./TimePreferenceInput.css";
 
-function TimePreferenceInput({ onChange }) {
+function TimePreferenceInput({ question, onChange }) {
 
-    const options = [
+    const [selected, setSelected] = useState("");
+
+    const options = question?.suggestions || [
         "Morning",
         "Afternoon",
         "Evening",
@@ -17,7 +21,11 @@ function TimePreferenceInput({ onChange }) {
                 <button
                     key={option}
                     type="button"
-                    onClick={() => onChange(option)}
+                    className={selected === option ? "selected" : ""}
+                    onClick={() => {
+                        setSelected(option);
+                        onChange(option);
+                    }}
                 >
                     {option}
                 </button>

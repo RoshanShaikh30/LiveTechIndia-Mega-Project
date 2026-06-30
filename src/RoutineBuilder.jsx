@@ -53,6 +53,9 @@ function RoutineBuilder({ onComplete, setRoutine }) {
   const [scheduleType, setScheduleType] = useState("");
   const [productiveHours, setProductiveHours] = useState([]);
   const [freeDays, setFreeDays] = useState([]);
+  const [wakeTime, setWakeTime] = useState("");
+  const [sleepTime, setSleepTime] = useState("");
+  const [weeklySleepTimes, setWeeklySleepTimes] = useState({});
   const [commitments, setCommitments] = useState([]);
   const [commitmentInput, setCommitmentInput] = useState("");
   const [customCommitments, setCustomCommitments] = useState([]);
@@ -85,6 +88,7 @@ function RoutineBuilder({ onComplete, setRoutine }) {
   const [notesSaved, setNotesSaved] = useState(false);
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [groupedQuestions, setGroupedQuestions] = useState([]);
+  const [routineSeed, setRoutineSeed] = useState({});
 
   console.log("Role:", selectedRole);
   console.log("Schedule Type:", scheduleType);
@@ -138,6 +142,7 @@ const generateOrbit = async () => {
     if (data.status === "needs_more_information") {
 
       setGroupedQuestions(data.questions);
+      setRoutineSeed(data.routine_seed || {});
 
       setShowQuestionModal(true);
 
@@ -145,6 +150,7 @@ const generateOrbit = async () => {
 
     }
 
+    setRoutine(data.routine || []);
     onComplete();
 
   }
@@ -188,6 +194,16 @@ const toggleFreeDay = (day) => {
     ]);
   }
 
+};
+
+const updateWeeklySleepTime = (day, field, value) => {
+  setWeeklySleepTimes((prev) => ({
+    ...prev,
+    [day]: {
+      ...(prev[day] || {}),
+      [field]: value
+    }
+  }));
 };
 
 const toggleCommitment = (commitment) => {
@@ -276,6 +292,9 @@ useEffect(() => {
     scheduleType,
     productiveHours,
     freeDays,
+    wakeTime,
+    sleepTime,
+    weeklySleepTimes,
     commitments: allCommitments,
     goals: allGoals,
     goalPriority,
@@ -311,6 +330,9 @@ useEffect(() => {
   scheduleType,
   productiveHours,
   freeDays,
+  wakeTime,
+  sleepTime,
+  weeklySleepTimes,
   allCommitments,
   allGoals,
   goalPriority,
@@ -617,12 +639,20 @@ const addCustomPriorityStruggle = () => {
 
            <div className="input-group">
              <label>Wake Up Time</label>
-             <input type="time" />
+             <input
+               type="time"
+               value={wakeTime}
+               onChange={(e) => setWakeTime(e.target.value)}
+             />
            </div>
 
            <div className="input-group">
              <label>Sleep Time</label>
-             <input type="time" />
+             <input
+               type="time"
+               value={sleepTime}
+               onChange={(e) => setSleepTime(e.target.value)}
+             />
             </div>
 
           </div>
@@ -634,44 +664,100 @@ const addCustomPriorityStruggle = () => {
            <h4>2. Wake Up & Sleep Time (Per Day)</h4>
            <div className="day-row">
              <span>Mon</span>
-             <input type="time" />
-             <input type="time" />
+             <input
+               type="time"
+               value={weeklySleepTimes.Mon?.wake || ""}
+               onChange={(e) => updateWeeklySleepTime("Mon", "wake", e.target.value)}
+             />
+             <input
+               type="time"
+               value={weeklySleepTimes.Mon?.sleep || ""}
+               onChange={(e) => updateWeeklySleepTime("Mon", "sleep", e.target.value)}
+             />
            </div>
 
            <div className="day-row">
              <span>Tue</span>
-             <input type="time" />
-             <input type="time" />
+             <input
+               type="time"
+               value={weeklySleepTimes.Tue?.wake || ""}
+               onChange={(e) => updateWeeklySleepTime("Tue", "wake", e.target.value)}
+             />
+             <input
+               type="time"
+               value={weeklySleepTimes.Tue?.sleep || ""}
+               onChange={(e) => updateWeeklySleepTime("Tue", "sleep", e.target.value)}
+             />
             </div>
 
             <div className="day-row">
               <span>Wed</span>
-              <input type="time" />
-              <input type="time" />
+              <input
+                type="time"
+                value={weeklySleepTimes.Wed?.wake || ""}
+                onChange={(e) => updateWeeklySleepTime("Wed", "wake", e.target.value)}
+              />
+              <input
+                type="time"
+                value={weeklySleepTimes.Wed?.sleep || ""}
+                onChange={(e) => updateWeeklySleepTime("Wed", "sleep", e.target.value)}
+              />
             </div>
 
             <div className="day-row">
               <span>Thu</span>
-              <input type="time" />
-              <input type="time" />
+              <input
+                type="time"
+                value={weeklySleepTimes.Thu?.wake || ""}
+                onChange={(e) => updateWeeklySleepTime("Thu", "wake", e.target.value)}
+              />
+              <input
+                type="time"
+                value={weeklySleepTimes.Thu?.sleep || ""}
+                onChange={(e) => updateWeeklySleepTime("Thu", "sleep", e.target.value)}
+              />
             </div>
 
             <div className="day-row">
              <span>Fri</span>
-             <input type="time" />
-             <input type="time" />
+             <input
+               type="time"
+               value={weeklySleepTimes.Fri?.wake || ""}
+               onChange={(e) => updateWeeklySleepTime("Fri", "wake", e.target.value)}
+             />
+             <input
+               type="time"
+               value={weeklySleepTimes.Fri?.sleep || ""}
+               onChange={(e) => updateWeeklySleepTime("Fri", "sleep", e.target.value)}
+             />
             </div>
 
             <div className="day-row">
               <span>Sat</span>
-              <input type="time"/>
-              <input type="time" />
+              <input
+                type="time"
+                value={weeklySleepTimes.Sat?.wake || ""}
+                onChange={(e) => updateWeeklySleepTime("Sat", "wake", e.target.value)}
+              />
+              <input
+                type="time"
+                value={weeklySleepTimes.Sat?.sleep || ""}
+                onChange={(e) => updateWeeklySleepTime("Sat", "sleep", e.target.value)}
+              />
             </div>
 
             <div className="day-row">
               <span>Sun</span>
-              <input type="time"/>
-              <input type="time" />
+              <input
+                type="time"
+                value={weeklySleepTimes.Sun?.wake || ""}
+                onChange={(e) => updateWeeklySleepTime("Sun", "wake", e.target.value)}
+              />
+              <input
+                type="time"
+                value={weeklySleepTimes.Sun?.sleep || ""}
+                onChange={(e) => updateWeeklySleepTime("Sun", "sleep", e.target.value)}
+              />
             </div>
 
           </div>
@@ -1793,6 +1879,7 @@ const addCustomPriorityStruggle = () => {
     <OrbitQuestionModal
     isOpen={showQuestionModal}
     groupedQuestions={groupedQuestions}
+    routineSeed={routineSeed}
     onClose={() => setShowQuestionModal(false)}
     setRoutine={setRoutine}
     onComplete={onComplete}

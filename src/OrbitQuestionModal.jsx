@@ -12,7 +12,8 @@ function OrbitQuestionModal({
   groupedQuestions,
   onClose,
   setRoutine,
-  onComplete
+  onComplete,
+  routineSeed = {}
 
 }) {
 
@@ -21,7 +22,21 @@ function OrbitQuestionModal({
   const [answers, setAnswers] = useState({});
   const generateRoutine = async () => {
 
-    console.log(answers);
+    const routineDetails = {
+      ...routineSeed,
+      ...Object.fromEntries(
+        groupedQuestions.map((group) => [
+          group.activity,
+          {
+            ...(routineSeed[group.activity] || {}),
+            ...(group.known_information || {}),
+            ...(answers[group.activity] || {})
+          }
+        ])
+      )
+    };
+
+    console.log(routineDetails);
 
     try {
 
@@ -32,7 +47,7 @@ function OrbitQuestionModal({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(answers)
+                body: JSON.stringify(routineDetails)
             }
         );
 
@@ -116,6 +131,7 @@ function OrbitQuestionModal({
 
                 {question.input_type === "time_preference" && (
                   <TimePreferenceInput
+                   question={question}
                    onChange={(value) => updateAnswer(
                     group.activity,
                     question.field,
@@ -192,15 +208,15 @@ function OrbitQuestionModal({
 
         ))}
 
-        <button onClick = {generateRoutine}>
-          Generate Routine
-        </button>
+        <div className="orbit-modal-actions">
+          <button className="orbit-primary-action" onClick={generateRoutine}>
+            Generate Routine
+          </button>
 
-        <button onClick={onClose}>
-
-          Close
-
-        </button>
+          <button className="orbit-secondary-action" onClick={onClose}>
+            Close
+          </button>
+        </div>
 
       </div>
 
