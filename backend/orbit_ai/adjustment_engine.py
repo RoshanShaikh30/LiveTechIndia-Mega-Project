@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import re
-
 from orbit_ai.parser import Parser
 
 
@@ -55,6 +54,24 @@ class AdjustmentEngine:
                     "removed": removed_titles,
                 },
             }
+            
+        existing_item = next(
+            (item 
+             for item in updated
+             if self._normalize_title(item.get("title")) == self._normalize_title(parsed["activity"]) 
+             ), 
+            None,
+        )
+        
+        if existing_item:
+            if parsed["start"] is None:
+                parsed["start"] = self._to_minutes(existing_item.get("start"))
+                parsed["end"] = self._to_minutes(existing_item.get("end"))
+        
+        if parsed["start"] is None:
+          parsed["start"] = 9 * 60
+          parsed["end"] = 10 * 60
+
 
         new_item = {
             "title": parsed["activity"],
@@ -144,8 +161,11 @@ class AdjustmentEngine:
         if start is None and re.search(r"\b(busy|unavailable)\b", lower):
             start, end = 9 * 60, 17 * 60
 
+        # if start is None:
+        #     start, end = 9 * 60, 10 * 60
         if start is None:
-            start, end = 9 * 60, 10 * 60
+            start = None
+            end = None
 
         activity = self._clean_activity(parsed.get("activity") or "Adjustment", intent)
         activity = re.sub(r"\b(today|tomorrow)\b", "", activity, flags=re.IGNORECASE).strip()
