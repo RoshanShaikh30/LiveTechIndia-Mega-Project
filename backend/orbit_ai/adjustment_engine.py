@@ -55,18 +55,84 @@ class AdjustmentEngine:
                 },
             }
             
-        existing_item = next(
-            (item 
-             for item in updated
-             if self._normalize_title(item.get("title")) == self._normalize_title(parsed["activity"]) 
-             ), 
-            None,
+        # existing_item = next(
+        #     (item 
+        #      for item in updated
+        #      if self._normalize_title(item.get("title")) == self._normalize_title(parsed["activity"]) 
+        #      ), 
+        #     None,
+        # )
+        
+        # same_day_existing = (
+        #     existing_item 
+        #     and target_day in self._item_days(existing_item)
+        # )
+        
+        same_day_existing = next(
+    (
+        item
+        for item in updated
+        if (
+            self._normalize_title(item.get("title"))
+            == self._normalize_title(parsed["activity"])
+            and target_day in self._item_days(item)
         )
+    ),
+    None,
+)
+
+        existing_item = same_day_existing or next(
+    (
+        item
+        for item in updated
+        if self._normalize_title(item.get("title"))
+        == self._normalize_title(parsed["activity"])
+    ),
+    None,
+)
+        
+        # if (
+        #     same_day_existing
+        #     and parsed["intent"] == "add"
+        #     and not parsed["has_time"]
+        #     ):
+        #         return {
+        #             "schedule": updated,
+        #             "parsed_adjustment": existing_item,
+        #             "target": parsed["target"],
+        #             "proposal": {
+        #                 "message": (
+        #                     f"{existing_item.get('title')} is already scheduled for {target_day} from {existing_item['start']} to {existing_item['end']}. Add another session anyways?"
+        #                     ),
+        #                 "conflicts": [],
+        #                 "moved": [],
+        #                 "duplicate": True,
+        #             },
+        #         } 
         
         if existing_item:
             if parsed["start"] is None:
                 parsed["start"] = self._to_minutes(existing_item.get("start"))
                 parsed["end"] = self._to_minutes(existing_item.get("end"))
+                
+        if (
+            same_day_existing
+            and parsed["intent"] == "add"
+            and not parsed["has_time"]
+            ):
+                return {
+                    "schedule": updated,
+                    "parsed_adjustment": existing_item,
+                    "target": parsed["target"],
+                    "proposal": {
+                        "message": (
+                            f"{existing_item.get('title')} is already scheduled for {target_day} from {existing_item['start']} to {existing_item['end']}. Add another session anyways?"
+                            ),
+                        "conflicts": [],
+                        "moved": [],
+                        "duplicate": True,
+                    },
+                } 
         
         if parsed["start"] is None:
           parsed["start"] = 9 * 60
@@ -79,7 +145,7 @@ class AdjustmentEngine:
             "end": self._format_minutes(parsed["end"]),
             "days": target_days,
             "preferred_time": "Fixed",
-            "adjustment": True,
+            "adjustment": True
         }
 
         day_items = [
@@ -173,12 +239,15 @@ class AdjustmentEngine:
             activity = "Busy"
         if not activity:
             activity = "Adjustment"
+            
+        has_time = start is not None
 
         return {
             "activity": activity.title(),
             "day": target_day,
             "start": start,
             "end": end,
+            "has_time": has_time,
             "target": target,
             "intent": intent,
         }
@@ -207,7 +276,7 @@ class AdjustmentEngine:
             ).strip()
         else:
             activity = re.sub(
-                r"^(i\s*(am|'m)\s+|i\s+have\s+)",
+                r"^(i\s*(am|'m)\s+|i\s+have\s+|i\s+want\s+to\s+add\s+|add\s+)",
                 "",
                 activity,
                 flags=re.IGNORECASE,
