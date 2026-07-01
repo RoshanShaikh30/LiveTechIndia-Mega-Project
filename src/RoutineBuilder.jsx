@@ -43,6 +43,11 @@ import {
 import "./App.css";
 import OrbitQuestionModal from "./OrbitQuestionModal";
 import { useEffect, useMemo, useState } from "react";
+// {import.meta.env.DEV && (
+//   <button onClick={loadDemoData}>
+//     Load Demo Data
+//   </button>
+//   )}
 
 function RoutineBuilder({ onComplete, setRoutine }) {
   const [habitIntent, setHabitIntent] = useState([]);
@@ -182,6 +187,64 @@ const generateOrbit = async () => {
 //   onComplete();
 // };
 
+// const loadDemoData = () => {
+//     const demoData = {
+//         role: "Student",
+
+//         scheduleType: "different",
+
+//         weeklySleepTimes: {
+//             Mon: { wake: "08:00", sleep: "23:00" },
+//             Tue: { wake: "06:30", sleep: "22:30" },
+//             Wed: { wake: "08:00", sleep: "23:00" },
+//             Thu: { wake: "10:00", sleep: "00:00" },
+//             Fri: { wake: "08:00", sleep: "23:00" },
+//             Sat: { wake: "09:00", sleep: "00:00" },
+//             Sun: { wake: "10:30", sleep: "00:00" }
+//         },
+
+//         productiveHours: ["Evening", "Night"],
+
+//         freeDays: ["Sunday"],
+
+//         commitments: ["Internship"],
+
+//         goals: ["Study", "Project"],
+
+//         habits: ["Reading"],
+
+//         goalPriority: {
+//             Study: "High",
+//             Project: "Medium"
+//         },
+
+//         dailyTime: "2 - 4 hrs",
+
+//         deadlineType: "none",
+
+//         habitIntent: ["Build"],
+
+//         habitFrequency: "Every day",
+
+//         habitObstacles: [],
+
+//         orbitHelp: [],
+
+//         priorityStruggles: [],
+
+//         routineStructure: "Balanced",
+
+//         planChangePreference: "Automatically Adjust",
+
+//         priorityNotes: "Internship is on Monday, Wednesday & Friday, from 8 am to 10 am."
+//     };
+
+//     localStorage.setItem(
+//         "orbitOnboarding",
+//         JSON.stringify(demoData)
+//     );
+// };
+
 const toggleFreeDay = (day) => {
   if (freeDays.includes(day)) {
     setFreeDays(
@@ -309,10 +372,10 @@ useEffect(() => {
       ...habitObstacles.filter(obstacle => obstacle !== "Other"),
       ...customHabitObstacles
     ],
-    orbitHelp: [
-      ...orbitHelp.filter(help => help !== "Other"),
-      ...customOrbitHelp
-    ],
+    // orbitHelp: [
+    //   ...orbitHelp.filter(help => help !== "Other"),
+    //   ...customOrbitHelp
+    // ],
     priorityStruggles: [
       ...priorityStruggles.filter(struggle => struggle !== "Other"),
       ...customPriorityStruggles
@@ -1565,14 +1628,14 @@ const addCustomPriorityStruggle = () => {
   </div>
 )}
 
-       <div className="section-divider"></div>
+       {/* <div className="section-divider"></div> */}
 
-<div className="goal-section-row">
+{/* <div className="goal-section-row">
 
-  <div className="schedule-question">
+   <div className="schedule-question">
     <h4>5. How would you like Orbit to help?</h4>
     <p>Select all that apply.</p>
-  </div>
+  </div> 
 
   <div className="habit-grid compact">
 
@@ -1642,7 +1705,7 @@ const addCustomPriorityStruggle = () => {
       </div>
     ))}
   </div>
-)}
+)} */}
 
        </div>
       ) } {/* habits onboarding card ends here. */}

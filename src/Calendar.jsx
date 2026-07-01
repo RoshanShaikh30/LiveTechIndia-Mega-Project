@@ -64,6 +64,67 @@ const formatTime = (minutes) => {
   return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
 };
 
+const WATER_MAX_GLASSES = 8;
+
+const getDateKey = (date) => date.toISOString().slice(0, 10);
+
+const getDefaultHabitProgress = (dateKey) => ({
+  date: dateKey,
+  waterCount: 0,
+  healthyEating: {
+    breakfast: false,
+    lunch: false,
+    dinner: false
+  },
+  reading: false,
+  mindfulness: {
+    meditation: false,
+    yoga: false,
+    deepBreathing: false
+  },
+  exercise: {
+    walk: false,
+    workout: false,
+    stretching: false
+  }
+});
+
+const loadHabitProgress = (dateKey) => {
+  const defaultProgress = getDefaultHabitProgress(dateKey);
+
+  try {
+    const savedProgress = JSON.parse(localStorage.getItem("orbitHabitProgress"));
+
+    if (savedProgress?.date === dateKey) {
+      return {
+        ...defaultProgress,
+        ...savedProgress,
+        healthyEating: {
+          ...defaultProgress.healthyEating,
+          ...savedProgress.healthyEating
+        },
+        mindfulness: {
+          ...defaultProgress.mindfulness,
+          ...savedProgress.mindfulness
+        },
+        exercise: {
+          ...defaultProgress.exercise,
+          ...savedProgress.exercise
+        }
+      };
+    }
+  } catch {
+    return defaultProgress;
+  }
+
+  const savedWaterCount = Number(localStorage.getItem("orbitWaterCount")) || 0;
+
+  return {
+    ...defaultProgress,
+    waterCount: Math.min(Math.max(savedWaterCount, 0), WATER_MAX_GLASSES)
+  };
+};
+
 const normalizeRoutineDays = (item) => {
   const rawDays = item.days || item.day || item.weekdays || item.weekday;
   if (!rawDays) return weekDays.map((day) => day.key);
@@ -74,6 +135,28 @@ const normalizeRoutineDays = (item) => {
     .filter(Boolean);
 
   return normalizedDays.length > 0 ? normalizedDays : weekDays.map((day) => day.key);
+};
+
+const getDayName = (date) => (
+  date.toLocaleString("en-US", { weekday: "long" })
+);
+
+const getDayKey = (date) => getDayName(date).toLowerCase();
+
+const itemBelongsToDay = (item, dayKey) => normalizeRoutineDays(item).includes(dayKey);
+
+const compareScheduleItems = (first, second) => {
+  const firstStart = parseTimeToMinutes(first.start || first.start_time || first.time) ?? 0;
+  const secondStart = parseTimeToMinutes(second.start || second.start_time || second.time) ?? 0;
+  return firstStart - secondStart;
+};
+
+const normalizePlanPreference = (preference) => {
+  if (preference === "Never Change Without Permission") {
+    return "Never Change Automatically";
+  }
+
+  return preference || "Only Suggest Changes";
 };
 
 function WeeklyTimetable({ routine }) {
@@ -172,12 +255,26 @@ function WeeklyTimetable({ routine }) {
   );
 }
 
-function Calendar( { routine } ) {
+function Calendar( { routine, setRoutine } ) {
   const today = new Date();
+  const todayKey = getDateKey(today);
   const [activePage, setActivePage] = useState("Calendar");
   const [selectedDate, setSelectedDate] = useState(today);
   const [scheduleChange, setScheduleChange] = useState("");
   const [adjustmentScope, setAdjustmentScope] = useState("");
+  const [adjustmentMessage, setAdjustmentMessage] = useState("");
+  const [pendingProposal, setPendingProposal] = useState(null);
+  const [orbitSuggestion, setOrbitSuggestion] = useState(null);
+  const [dismissedSuggestionId, setDismissedSuggestionId] = useState("");
+  const [sleepHours, setSleepHours] = useState(8);
+  const [sleepMood, setSleepMood] = useState("");
+  const [dailySchedules, setDailySchedules] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("orbitDailySchedules")) || {};
+    } catch {
+      return {};
+    }
+  });
   const [scheduleAdjustments, setScheduleAdjustments] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("orbitScheduleAdjustments")) || [];
@@ -185,21 +282,60 @@ function Calendar( { routine } ) {
       return [];
     }
   });
-  const [waterCount, setWaterCount] = useState(() => {
-  return Number(localStorage.getItem("orbitWaterCount")) || 0;
-});
+  const [habitProgress, setHabitProgress] = useState(() => loadHabitProgress(todayKey));
 
-const addGlass = () => {
-  if (waterCount >= 8) return;
+  const saveHabitProgress = (updater) => {
+    setHabitProgress((currentProgress) => {
+      const baseProgress = currentProgress.date === todayKey
+        ? currentProgress
+        : getDefaultHabitProgress(todayKey);
+      const nextProgress = updater(baseProgress);
 
-  const nextCount = waterCount + 1;
+      localStorage.setItem(
+        "orbitHabitProgress",
+        JSON.stringify(nextProgress)
+      );
+      localStorage.setItem(
+        "orbitWaterCount",
+        String(nextProgress.waterCount)
+      );
 
-  setWaterCount(nextCount);
+      return nextProgress;
+    });
+  };
 
-  localStorage.setItem(
-    "orbitWaterCount",
-    nextCount
-  );
+const updateWaterCount = (change) => {
+  saveHabitProgress((currentProgress) => ({
+    ...currentProgress,
+    waterCount: Math.min(
+      Math.max(currentProgress.waterCount + change, 0),
+      WATER_MAX_GLASSES
+    )
+  }));
+};
+
+const resetWaterCount = () => {
+  saveHabitProgress((currentProgress) => ({
+    ...currentProgress,
+    waterCount: 0
+  }));
+};
+
+const toggleHabitChecklistItem = (habitName, itemName) => {
+  saveHabitProgress((currentProgress) => ({
+    ...currentProgress,
+    [habitName]: {
+      ...currentProgress[habitName],
+      [itemName]: !currentProgress[habitName][itemName]
+    }
+  }));
+};
+
+const toggleReadingComplete = () => {
+  saveHabitProgress((currentProgress) => ({
+    ...currentProgress,
+    reading: !currentProgress.reading
+  }));
 };
 
   const onboardingData = (() => {
@@ -220,6 +356,10 @@ const addGlass = () => {
   const habitFocus = userHabits[0] || "Your selected habit";
   const obstacle = userObstacles[0] || userStruggles[0] || "your routine changes";
   const helpPreference = userHelp[0] || "smart adjustments";
+  const waterCount = habitProgress.waterCount;
+  const healthyEatingComplete = Object.values(habitProgress.healthyEating).every(Boolean);
+  const mindfulnessComplete = Object.values(habitProgress.mindfulness).some(Boolean);
+  const exerciseComplete = Object.values(habitProgress.exercise).some(Boolean);
 
   const monthName = selectedDate.toLocaleString("en-US", {
     month: "long",
@@ -231,6 +371,20 @@ const addGlass = () => {
     day: "numeric"
   });
   const selectedDateKey = selectedDate.toISOString().slice(0, 10);
+  const selectedDayName = getDayName(selectedDate);
+  const selectedDayKey = getDayKey(selectedDate);
+  const planChangePreference = normalizePlanPreference(onboardingData.planChangePreference);
+  const activeRoutine = dailySchedules[selectedDateKey] || routine || [];
+  const selectedDaySchedule = activeRoutine
+    .filter((item) => itemBelongsToDay(item, selectedDayKey))
+    .sort(compareScheduleItems);
+  const allHabitsComplete = userHabits.length > 0 && [
+    !userHabits.includes("Healthy Eating") || healthyEatingComplete,
+    !userHabits.includes("Drink More Water") || waterCount >= WATER_MAX_GLASSES,
+    !userHabits.includes("Mindfulness") || mindfulnessComplete,
+    !userHabits.includes("Reading") || habitProgress.reading,
+    !userHabits.includes("Exercise") || exerciseComplete
+  ].every(Boolean);
 
   const getCalendarCells = (date) => {
     const year = date.getFullYear();
@@ -291,7 +445,7 @@ const addGlass = () => {
     });
   };
 
-  const saveScheduleAdjustment = (scope) => {
+  const saveAdjustmentHistory = (scope) => {
     if (!scheduleChange.trim()) return;
 
     const nextAdjustment = {
@@ -311,13 +465,219 @@ const addGlass = () => {
       "orbitScheduleAdjustments",
       JSON.stringify(updatedAdjustments)
     );
+
+    return nextAdjustment;
+  };
+
+  const applySchedule = (nextSchedule, scope, dateKey = selectedDateKey) => {
+    if (scope === "future") {
+      setRoutine(nextSchedule);
+      return;
+    }
+
+    const updatedDailySchedules = {
+      ...dailySchedules,
+      [dateKey]: nextSchedule
+    };
+
+    setDailySchedules(updatedDailySchedules);
+    localStorage.setItem("orbitDailySchedules", JSON.stringify(updatedDailySchedules));
+  };
+
+  const requestScheduleAdjustment = async (scope) => {
+    const savedAdjustment = saveAdjustmentHistory(scope);
+    if (!savedAdjustment) return;
+
+    setPendingProposal(null);
+    setAdjustmentMessage("");
+
+    if (planChangePreference === "Never Change Automatically") {
+      setAdjustmentMessage("Adjustment saved. Your schedule was not changed.");
+      setScheduleChange("");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/orbit/adjust-schedule", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          routine: scope === "future" ? routine : activeRoutine,
+          adjustment: {
+            text: savedAdjustment.text,
+            scope,
+            day: selectedDayName,
+            date: selectedDateKey
+          }
+        })
+      });
+
+      const data = await response.json();
+      const target = data.target || {};
+      const proposal = {
+        id: savedAdjustment.id,
+        scope,
+        dateKey: target.date || selectedDateKey,
+        schedule: data.schedule || activeRoutine,
+        message: data.proposal?.message || "Orbit found a schedule change.",
+        target
+      };
+
+      if (planChangePreference === "Automatically Adjust") {
+        applySchedule(proposal.schedule, proposal.scope, proposal.dateKey);
+        setAdjustmentMessage("Schedule updated.");
+      } else if (planChangePreference === "Ask Before Changing") {
+        setPendingProposal(proposal);
+        setAdjustmentMessage("Orbit found a possible schedule change.");
+      } else {
+        setOrbitSuggestion({
+          ...proposal,
+          type: "adjustment",
+          message: proposal.message
+        });
+        setAdjustmentMessage("Orbit added one suggestion. Your schedule was not changed.");
+      }
+    } catch (error) {
+      console.error(error);
+      setAdjustmentMessage("Adjustment saved. Orbit could not update the schedule right now.");
+    }
+
     setScheduleChange("");
   };
+
+  const acceptProposal = (proposal) => {
+    applySchedule(proposal.schedule, proposal.scope, proposal.dateKey);
+    setPendingProposal(null);
+    setOrbitSuggestion(null);
+    setAdjustmentMessage("Schedule updated.");
+  };
+
+  const ignoreProposal = () => {
+    setPendingProposal(null);
+    setAdjustmentMessage("Proposal ignored. Your schedule was not changed.");
+  };
+
+  const moveExerciseToTomorrow = () => {
+    const exerciseItem = selectedDaySchedule.find((item) => (
+      String(item.title || "").toLowerCase().includes("exercise")
+    ));
+
+    if (!exerciseItem) {
+      setOrbitSuggestion(null);
+      return;
+    }
+
+    const tomorrow = new Date(selectedDate);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowKey = getDateKey(tomorrow);
+    const tomorrowDay = getDayName(tomorrow);
+    const updatedToday = activeRoutine.filter((item) => item !== exerciseItem);
+    const updatedTomorrow = [
+      ...(dailySchedules[tomorrowKey] || routine || []),
+      {
+        ...exerciseItem,
+        days: [tomorrowDay]
+      }
+    ];
+    const updatedDailySchedules = {
+      ...dailySchedules,
+      [selectedDateKey]: updatedToday,
+      [tomorrowKey]: updatedTomorrow
+    };
+
+    setDailySchedules(updatedDailySchedules);
+    localStorage.setItem("orbitDailySchedules", JSON.stringify(updatedDailySchedules));
+    setOrbitSuggestion(null);
+    setAdjustmentMessage("Exercise moved to tomorrow.");
+  };
+
+  const acceptSuggestion = () => {
+    if (!orbitSuggestion) return;
+
+    if (orbitSuggestion.type === "adjustment") {
+      acceptProposal(orbitSuggestion);
+      return;
+    }
+
+    if (orbitSuggestion.action === "move-exercise") {
+      moveExerciseToTomorrow();
+      return;
+    }
+
+    setOrbitSuggestion(null);
+  };
+
+  const ignoreSuggestion = () => {
+    if (orbitSuggestion?.id) {
+      setDismissedSuggestionId(orbitSuggestion.id);
+    }
+    setOrbitSuggestion(null);
+  };
+
+  const generatedSuggestion = useMemo(() => {
+    const exerciseToday = selectedDaySchedule.some((item) => (
+      String(item.title || "").toLowerCase().includes("exercise")
+    ));
+
+    if (userHabits.includes("Better Sleep") && sleepHours < 8 && exerciseToday) {
+      return {
+        id: "sleep-exercise",
+        message: "You slept less than your goal. Consider moving Exercise to tomorrow.",
+        action: "move-exercise"
+      };
+    }
+
+    if (allHabitsComplete) {
+      return {
+        id: "habits-complete",
+        message: "You completed all today's habits. Great consistency."
+      };
+    }
+
+    const projectPostpones = scheduleAdjustments.filter((adjustment) => (
+      /project/i.test(adjustment.text) && /postpone|move|later|tomorrow/i.test(adjustment.text)
+    ));
+
+    if (projectPostpones.length >= 2) {
+      return {
+        id: "project-catch-up",
+        message: "You've postponed Project multiple times. Consider scheduling a catch-up block."
+      };
+    }
+
+    if (userHabits.includes("Drink More Water") && waterCount < 3) {
+      return {
+        id: "water-check",
+        message: "Your water tracker is low today. Consider adding a short water break."
+      };
+    }
+
+    return {
+      id: "routine-support",
+      message: `Orbit can use ${helpPreference} to keep ${focusGoal} and ${habitFocus} easier to follow today.`
+    };
+  }, [
+    allHabitsComplete,
+    focusGoal,
+    habitFocus,
+    helpPreference,
+    scheduleAdjustments,
+    selectedDaySchedule,
+    sleepHours,
+    userHabits,
+    waterCount
+  ]);
+
+  const visibleSuggestion = orbitSuggestion || (
+    generatedSuggestion.id === dismissedSuggestionId ? null : generatedSuggestion
+  );
 
   const sideNavItems = [
     { label: "Today", icon: <FaHome /> },
     { label: "Calendar", icon: <FaCalendarAlt /> },
-    { label: "Routine", icon: <FaRegCalendarCheck /> },
+    // { label: "Routine", icon: <FaRegCalendarCheck /> },
     { label: "Habits", icon: <FaCheckCircle /> }
   ];
 
@@ -405,13 +765,37 @@ const addGlass = () => {
     <div className="habits-grid">
 
       {userHabits.includes("Healthy Eating") && (
-        <div className="habit-tracker-card">
+        <div className={`habit-tracker-card ${healthyEatingComplete ? "habit-complete" : ""}`}>
           <h3>🍎 Healthy Eating</h3>
-         <div className="meal-buttons">
-          <button className="habit-action-btn">Breakfast</button>
-          <button className="habit-action-btn">Lunch</button>
-          <button className="habit-action-btn">Dinner</button>
+         <div className="habit-checklist">
+          <label className="habit-check-option">
+            <input
+              type="checkbox"
+              checked={habitProgress.healthyEating.breakfast}
+              onChange={() => toggleHabitChecklistItem("healthyEating", "breakfast")}
+            />
+            <span>Breakfast</span>
+          </label>
+          <label className="habit-check-option">
+            <input
+              type="checkbox"
+              checked={habitProgress.healthyEating.lunch}
+              onChange={() => toggleHabitChecklistItem("healthyEating", "lunch")}
+            />
+            <span>Lunch</span>
+          </label>
+          <label className="habit-check-option">
+            <input
+              type="checkbox"
+              checked={habitProgress.healthyEating.dinner}
+              onChange={() => toggleHabitChecklistItem("healthyEating", "dinner")}
+            />
+            <span>Dinner</span>
+          </label>
           </div>
+          {healthyEatingComplete && (
+            <p className="habit-complete-note">Today's Healthy Eating habit is complete.</p>
+          )}
         </div>
       )}
 
@@ -429,35 +813,158 @@ const addGlass = () => {
 
           </div>
 
-          <p> {waterCount} / 8 Glasses </p>
+          <p> {waterCount} / {WATER_MAX_GLASSES} Glasses </p>
 
-          <button className="habit-action-btn" onClick={addGlass}>
-            + Add Glass
-          </button>
+          <div className="water-actions">
+            <button
+              className="habit-action-btn"
+              onClick={() => updateWaterCount(1)}
+              disabled={waterCount >= WATER_MAX_GLASSES}
+            >
+              +
+            </button>
+            <button
+              className="habit-action-btn"
+              onClick={() => updateWaterCount(-1)}
+              disabled={waterCount <= 0}
+            >
+              −
+            </button>
+            <button className="habit-action-btn" onClick={resetWaterCount}>
+              Reset
+            </button>
+          </div>
         </div>
       )}
 
       {userHabits.includes("Mindfulness") && (
-        <div className="habit-tracker-card">
+        <div className={`habit-tracker-card ${mindfulnessComplete ? "habit-complete" : ""}`}>
           <h3>🧘 Mindfulness</h3>
 
-          <button className="habit-action-btn">
-            Mark Today's Session Complete
-          </button>
+          <div className="habit-checklist">
+            <label className="habit-check-option">
+              <input
+                type="checkbox"
+                checked={habitProgress.mindfulness.meditation}
+                onChange={() => toggleHabitChecklistItem("mindfulness", "meditation")}
+              />
+              <span>Meditation</span>
+            </label>
+            <label className="habit-check-option">
+              <input
+                type="checkbox"
+                checked={habitProgress.mindfulness.yoga}
+                onChange={() => toggleHabitChecklistItem("mindfulness", "yoga")}
+              />
+              <span>Yoga</span>
+            </label>
+            <label className="habit-check-option">
+              <input
+                type="checkbox"
+                checked={habitProgress.mindfulness.deepBreathing}
+                onChange={() => toggleHabitChecklistItem("mindfulness", "deepBreathing")}
+              />
+              <span>Deep Breathing</span>
+            </label>
+          </div>
+          {mindfulnessComplete && (
+            <p className="habit-complete-note">Today's Mindfulness habit is complete.</p>
+          )}
         </div>
       )}
 
        {userHabits.includes("Reading") && (
-        <div className="habit-tracker-card">
+        <div className={`habit-tracker-card ${habitProgress.reading ? "habit-complete" : ""}`}>
           <h3>📚 Reading</h3>
 
-          <button className="habit-action-btn">
-            Mark Reading Complete
-          </button>
+          <label className="habit-check-option">
+            <input
+              type="checkbox"
+              checked={habitProgress.reading}
+              onChange={toggleReadingComplete}
+            />
+            <span>Reading complete today</span>
+          </label>
         </div>
       )} 
 
+      {userHabits.includes("Exercise") && (
+        <div className={`habit-tracker-card ${exerciseComplete ? "habit-complete" : ""}`}>
+          <h3>🏃 Exercise</h3>
+
+          <div className="habit-checklist">
+            <label className="habit-check-option">
+              <input
+                type="checkbox"
+                checked={habitProgress.exercise.walk}
+                onChange={() => toggleHabitChecklistItem("exercise", "walk")}
+              />
+              <span>Walk</span>
+            </label>
+            <label className="habit-check-option">
+              <input
+                type="checkbox"
+                checked={habitProgress.exercise.workout}
+                onChange={() => toggleHabitChecklistItem("exercise", "workout")}
+              />
+              <span>Workout</span>
+            </label>
+            <label className="habit-check-option">
+              <input
+                type="checkbox"
+                checked={habitProgress.exercise.stretching}
+                onChange={() => toggleHabitChecklistItem("exercise", "stretching")}
+              />
+              <span>Stretching</span>
+            </label>
+          </div>
+          {exerciseComplete && (
+            <p className="habit-complete-note">Today's Exercise habit is complete.</p>
+          )}
+        </div>
+      )}
+
       {userHabits.includes("Better Sleep") && (
+      <div className="habit-tracker-card">
+        <h3>🌙 Better Sleep</h3>
+
+    <p className="habit-label">How many hours did you sleep?</p>
+
+    <div className="sleep-hours-control">
+      <button onClick={() => setSleepHours(Math.max(0, sleepHours - 0.5))}>
+         −
+      </button>
+
+      <span>{sleepHours} hrs  </span>
+
+      <button onClick={() => setSleepHours(Math.min(12, sleepHours + 0.5))}>
+        +
+      </button>
+    </div>
+
+    <p className="habit-label">How do you feel today?</p>
+
+    <div className="sleep-mood-options">
+      {["😴 Tired", "🙂 Okay", "⚡ Energized"].map((mood) => (
+        <button
+          key={mood}
+          className={sleepMood === mood ? "selected" : ""}
+          onClick={() => setSleepMood(mood)}
+        >
+          {mood}
+        </button>
+      ))}
+    </div>
+
+    <div className="sleep-summary">
+      <p><strong>Sleep Goal:</strong> 8 hrs</p>
+      <br></br>
+      <p><strong> Today's Sleep:</strong> {sleepHours} hrs</p>
+    </div>
+  </div>
+)}
+
+      {/* {userHabits.includes("Better Sleep") && (
         <div className="habit-tracker-card">
           <h3>🌙 Better Sleep</h3>
 
@@ -478,7 +985,7 @@ const addGlass = () => {
           </strong>
 
         </div>
-      )}
+      )} */}
 
     </div>
 
@@ -486,10 +993,27 @@ const addGlass = () => {
 ) : (
   <div className="placeholder-card">
     <h3>{activePage}</h3>
-    <p>
-      {activePage === "Today" && `Your selected day is ${selectedDateTitle}.`}
-      {activePage === "Routine" && "Routine details will appear here as Orbit grows."}
-    </p>
+    {activePage === "Today" && (
+      <>
+        <p>{`Your selected day is ${selectedDateTitle}.`}</p>
+        <div className="today-schedule-list">
+          {selectedDaySchedule.length > 0 ? (
+            selectedDaySchedule.map((item, index) => (
+              <div className="insight-row" key={`${item.title}-${item.start}-${index}`}>
+                <span className="small-icon reminder"><FaRegCalendarCheck /></span>
+                <div>
+                  <h4>{item.title || item.task || "Routine activity"}</h4>
+                  <p>{item.start || item.time || "--:--"} - {item.end || "--:--"}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No schedule items for this day yet.</p>
+          )}
+        </div>
+      </>
+    )}
+    {/* {activePage === "Routine" && "Routine details will appear here as Orbit grows."} */}
   </div>
 )}
             {/* <div className="placeholder-card">
@@ -525,17 +1049,31 @@ const addGlass = () => {
           <div className="adjustment-actions">
             <button
               className={adjustmentScope === "today" ? "active" : ""}
-              onClick={() => saveScheduleAdjustment("today")}
+              onClick={() => requestScheduleAdjustment("today")}
             >
               Adjust Today Only
             </button>
             <button
               className={adjustmentScope === "future" ? "active" : ""}
-              onClick={() => saveScheduleAdjustment("future")}
+              onClick={() => requestScheduleAdjustment("future")}
             >
               Adjust Future Schedule
             </button>
           </div>
+          {pendingProposal && (
+            <div className="adjustment-proposal">
+              <p className="adjustment-note">{pendingProposal.message}</p>
+              <div className="suggestion-actions">
+                <button onClick={() => acceptProposal(pendingProposal)}>Accept</button>
+                <button className="ignore-btn" onClick={ignoreProposal}>Ignore</button>
+              </div>
+            </div>
+          )}
+          {adjustmentMessage && (
+            <p className="adjustment-note">
+              {adjustmentMessage}
+            </p>
+          )}
           {scheduleAdjustments.length > 0 && (
             <p className="adjustment-note">
               Last saved as {scheduleAdjustments[0].scope === "today" ? "today only" : "future schedule"}.
@@ -589,19 +1127,19 @@ const addGlass = () => {
           </div>
         </div> */}
 
-        <div className="insight-card suggestion-card">
-          <div className="insight-label">
-            <FaLightbulb />
-            <strong>Orbit Suggestion</strong>
+        {visibleSuggestion && (
+          <div className="insight-card suggestion-card">
+            <div className="insight-label">
+              <FaLightbulb />
+              <strong>Orbit Suggestion</strong>
+            </div>
+            <p>{visibleSuggestion.message}</p>
+            <div className="suggestion-actions">
+              <button onClick={acceptSuggestion}>Accept</button>
+              <button className="ignore-btn" onClick={ignoreSuggestion}>Ignore</button>
+            </div>
           </div>
-          <p>
-            You mentioned {obstacle} can get in the way. Orbit can use {helpPreference} to keep {focusGoal} and {habitFocus} easier to follow today.
-          </p>
-          <div className="suggestion-actions">
-            <button>Accept</button>
-            <button className="ignore-btn">Ignore</button>
-          </div>
-        </div>
+        )}
       </aside>
     </div>
   );

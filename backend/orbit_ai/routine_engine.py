@@ -188,6 +188,9 @@ class RoutineEngine:
         return start, end, duration, preferred_time
 
     def generate_routine(self, user_data):
+        print("\n========== WEEKLY SLEEP TIMES ==========")
+        print(user_data.get("weeklySleepTimes"))
+        print("========================================")
         parser = Parser()
         print(user_data)
 
@@ -214,6 +217,9 @@ class RoutineEngine:
 
         for day in WEEK_DAYS:
             wake_time = self._wake_time_for_day(user_data, day)
+            print(f"\n===== {day} =====")
+            print("weeklySleepTimes:", user_data.get("weeklySleepTimes"))
+            print("Resolved wake time:", wake_time.strftime("%H:%M"))
             pointers = {
                 "Morning": wake_time,
                 "Afternoon": later_time(parse_time("14:00"), wake_time),

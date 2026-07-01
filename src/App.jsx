@@ -11,7 +11,18 @@ import bg2 from "./assets/bg5.jpg";
 function App() {
   const [activeTab, setActiveTab] = useState("Orbit");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [routine, setRoutine] = useState([]);
+  const [routine, setRoutineState] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("orbitRoutine")) || [];
+    } catch {
+      return [];
+    }
+  });
+
+  const setRoutine = (nextRoutine) => {
+    setRoutineState(nextRoutine);
+    localStorage.setItem("orbitRoutine", JSON.stringify(nextRoutine));
+  };
 
   return (
 
@@ -140,7 +151,7 @@ less time managing your plans and more time following them.</p>
       setRoutine={setRoutine}
       onComplete={() => setActiveTab("Calendar")}
       />)}
-     {activeTab === "Calendar" && <Calendar routine={routine} />}
+     {activeTab === "Calendar" && <Calendar routine={routine} setRoutine={setRoutine} />}
 
     </div>
   );

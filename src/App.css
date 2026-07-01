@@ -1893,6 +1893,13 @@ body {
   color:#3d251e;
 }
 
+.sleep-hours-control span {
+    font-size: 1.3rem;
+    font-weight: 700;
+    min-width: 70px;
+    text-align: center;
+}
+
 @media (max-width: 1180px){
   .routine-builder{
     width:90%;
@@ -2148,6 +2155,24 @@ body {
 
 }
 
+.habit-action-btn:disabled{
+
+    opacity:.45;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+.habit-action-btn:disabled:hover{
+
+    background:#f5eee7;
+
+    color:#4d3024;
+
+}
+
 .meal-buttons{
     display:flex;
     gap:10px;
@@ -2161,11 +2186,93 @@ body {
 
     display:flex;
 
+    flex-wrap:wrap;
+
     gap:8px;
 
     font-size:1.9rem;
 
     letter-spacing:2px;
+
+    max-width:100%;
+
+    overflow:hidden;
+
+}
+
+.water-counter span{
+
+    line-height:1;
+
+}
+
+.water-actions{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    align-items:center;
+
+}
+
+.habit-checklist{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.habit-check-option{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    width:fit-content;
+
+    color:#4d3024;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
+
+.habit-check-option input{
+
+    width:18px;
+
+    height:18px;
+
+    accent-color:#4d3024;
+
+    cursor:pointer;
+
+}
+
+.habit-complete{
+
+    border-color:rgba(76,128,72,.34);
+
+    background:rgba(255,255,255,.68);
+
+}
+
+.habit-complete-note{
+
+    color:#4c8048 !important;
+
+    font-weight:700;
+
+    font-size:.95rem;
 
 }
 

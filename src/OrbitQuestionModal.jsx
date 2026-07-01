@@ -38,6 +38,15 @@ function OrbitQuestionModal({
 
     console.log(routineDetails);
 
+    const onboardingData = JSON.parse(
+    localStorage.getItem("orbitOnboarding")
+     ) || {};
+
+    const payload = {
+    ...onboardingData,
+    ...routineDetails
+    };
+
     try {
 
         const response = await fetch(
@@ -47,7 +56,7 @@ function OrbitQuestionModal({
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(routineDetails)
+                body: JSON.stringify(payload)
             }
         );
 

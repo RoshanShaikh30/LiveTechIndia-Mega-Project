@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from orbit_ai.engine import OrbitAI
 from orbit_ai.routine_engine import RoutineEngine
+from orbit_ai.adjustment_engine import AdjustmentEngine
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.add_middleware(
 
 orbit = OrbitAI()
 routine_engine = RoutineEngine()
+adjustment_engine = AdjustmentEngine()
 
 @app.get("/")
 def home():
@@ -39,3 +41,11 @@ def analyze_user(user_data: dict):
 def generate_routine(data: dict):
 
     return routine_engine.generate_routine(data)
+
+@app.post("/orbit/adjust-schedule")
+def adjust_schedule(data: dict):
+
+    return adjustment_engine.adjust_schedule(
+        data.get("routine", []),
+        data.get("adjustment", {})
+    )
