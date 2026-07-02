@@ -573,7 +573,7 @@ const toggleReadingComplete = () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowKey = getDateKey(tomorrow);
     const tomorrowDay = getDayName(tomorrow);
-    const updatedToday = activeRoutine.filter(
+    const updatedToday = selectedDaySchedule.filter(
       (item) => !( 
         item.title === exerciseItem.title &&
         item.start === exerciseItem.start &&
@@ -619,18 +619,19 @@ const toggleReadingComplete = () => {
   };
 
   const acceptSuggestion = () => {
-    if (!orbitSuggestion) return;
+    const suggestion = orbitSuggestion || visibleSuggestion;
+    if (!suggestion) return;
 
-    if (orbitSuggestion.type === "adjustment") {
-      acceptProposal(orbitSuggestion);
+    if (suggestion.type === "adjustment") {
+      acceptProposal(suggestion);
       return;
     }
 
-    if (orbitSuggestion.action === "move-exercise") {
+    if (suggestion.action === "move-exercise") {
       moveExerciseToTomorrow();
       return;
     }
-
+    setDismissedSuggestionId(suggestion.id);
     setOrbitSuggestion(null);
   };
 
