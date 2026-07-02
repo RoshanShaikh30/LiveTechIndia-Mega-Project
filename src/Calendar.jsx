@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import {
   FaCalendarAlt,
   FaCheckCircle,
@@ -204,7 +206,9 @@ function WeeklyTimetable({ routine }) {
   };
 
   return (
-    <section className="weekly-timetable-panel">
+    <section 
+    id = "orbit-timetable"
+    className="weekly-timetable-panel">
       <div className="timetable-header">
         <div>
           <FaRegCalendarCheck className="calendar-title-icon" />
