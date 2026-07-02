@@ -272,6 +272,65 @@ function Calendar( { routine, setRoutine } ) {
   const [dismissedSuggestionId, setDismissedSuggestionId] = useState("");
   const [sleepHours, setSleepHours] = useState(8);
   const [sleepMood, setSleepMood] = useState("");
+  const exportImage = async () => {
+
+   const timetable =
+    document.getElementById("orbit-timetable");
+
+   if (!timetable) return;
+
+   const canvas =
+    await html2canvas(timetable);
+
+   const image =
+    canvas.toDataURL("image/png");
+
+   const link =
+    document.createElement("a");
+
+   link.download = "Orbit-Routine.png";
+
+   link.href = image;
+
+   link.click();
+
+};
+
+const exportPDF = async () => {
+
+  const timetable =
+    document.getElementById("orbit-timetable");
+
+  if (!timetable) return;
+
+  const canvas =
+    await html2canvas(timetable);
+
+  const image =
+    canvas.toDataURL("image/png");
+
+  const pdf =
+    new jsPDF("p","mm","a4");
+
+  const width =
+    190;
+
+  const height =
+    canvas.height * width / canvas.width;
+
+  pdf.addImage(
+    image,
+    "PNG",
+    10,
+    10,
+    width,
+    height
+  );
+
+  pdf.save("Orbit-Routine.pdf");
+
+};
+
   const [dailySchedules, setDailySchedules] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("orbitDailySchedules")) || {};
@@ -729,13 +788,34 @@ const toggleReadingComplete = () => {
           ))}
         </nav>
 
-        <div className="profile-card">
+        <div className="export-card">
+
+         <h4>✨ Export</h4>
+
+         <p>
+        Save your weekly routine.
+         </p>
+
+         <button className="export-btn"
+         onClick={exportPDF}>
+         Download PDF
+         </button>
+
+        <button
+        className="export-btn"
+        onClick={exportImage}>
+        Save as Image
+        </button>
+
+    </div>
+
+        {/* <div className="profile-card">
           <div className="profile-avatar">R</div>
           <div>
             <strong>Rosie</strong>
             <span>View Profile</span>
           </div>
-        </div>
+        </div> */}
       </aside>
 
       <main className="calendar-main">

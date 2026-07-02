@@ -2386,6 +2386,62 @@ body {
   color: #3f3026;
 }
 
+.export-card{
+
+    margin-top:auto;
+    padding:10px;
+    border-radius:18px;
+    border-color:rgba(100, 57, 4, 0.12);
+    /* backdrop-filter:blur(12px); */
+    background:#ffffff56;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+
+}
+
+.export-card h4{
+
+    margin-bottom:5px;
+
+}
+
+.export-card p{
+
+    font-size:.9rem;
+
+    margin-bottom:12px;
+
+    color:#666;
+
+}
+
+.export-btn{
+
+    width:100%;
+
+    margin-bottom:10px;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    background:#fab55b;
+
+    color:white;
+
+    font-weight:600;
+
+}
+
+.export-btn:hover{
+
+    opacity:.9;
+
+}
+
 /* Mobile */
 
 @media(max-width:900px){
