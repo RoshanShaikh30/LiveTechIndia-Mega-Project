@@ -2296,6 +2296,96 @@ body {
 
 }
 
+/* ---------- Better Sleep ---------- */
+
+.habit-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b5b4d;
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+.sleep-hours-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.sleep-hours-control button {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #f2e7dc;
+  color: #5a4636;
+  font-size: 1.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sleep-hours-control button:hover {
+  background: #e6d6c8;
+  transform: scale(1.08);
+}
+
+.sleep-hours-control span {
+  min-width: 80px;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #5a4636;
+}
+
+.sleep-mood-options {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.sleep-mood-options button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: #f6efe8;
+  color: #5a4636;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.sleep-mood-options button:hover {
+  background: #ead7c5;
+}
+
+.sleep-mood-options button.selected {
+  background: #8b6f56;
+  color: white;
+}
+
+.sleep-summary {
+  margin-top: 15px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(139,111,86,0.15);
+}
+
+.sleep-summary p {
+  margin: 6px 0;
+  color: #5a4636;
+  font-size: 0.95rem;
+}
+
+.sleep-summary strong {
+  color: #3f3026;
+}
+
 /* Mobile */
 
 @media(max-width:900px){
