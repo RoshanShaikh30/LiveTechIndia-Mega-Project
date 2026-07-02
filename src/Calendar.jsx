@@ -573,14 +573,38 @@ const toggleReadingComplete = () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowKey = getDateKey(tomorrow);
     const tomorrowDay = getDayName(tomorrow);
-    const updatedToday = activeRoutine.filter((item) => item !== exerciseItem);
-    const updatedTomorrow = [
-      ...(dailySchedules[tomorrowKey] || routine || []),
+    const updatedToday = activeRoutine.filter(
+      (item) => !( 
+        item.title === exerciseItem.title &&
+        item.start === exerciseItem.start &&
+        item.end === exerciseItem.end)
+    );
+
+    // const updatedTomorrow = [
+    //   ...(dailySchedules[tomorrowKey] || []),
+    //   {
+    //     ...exerciseItem,
+    //     days: [tomorrowDay]
+    //   }
+    // ];
+
+    const tomorrowSchedule = dailySchedules[tomorrowKey] || [];
+
+    const alreadyHasExercise = tomorrowSchedule.some(
+     (item) =>
+       String(item.title || "").toLowerCase().includes("exercise")
+     );
+
+    const updatedTomorrow = alreadyHasExercise
+  ? tomorrowSchedule
+  : [
+      ...tomorrowSchedule,
       {
         ...exerciseItem,
-        days: [tomorrowDay]
-      }
+        days: [tomorrowDay],
+      },
     ];
+
     const updatedDailySchedules = {
       ...dailySchedules,
       [selectedDateKey]: updatedToday,
@@ -590,6 +614,7 @@ const toggleReadingComplete = () => {
     setDailySchedules(updatedDailySchedules);
     localStorage.setItem("orbitDailySchedules", JSON.stringify(updatedDailySchedules));
     setOrbitSuggestion(null);
+    setDismissedSuggestionId("sleep-exercise");
     setAdjustmentMessage("Exercise moved to tomorrow.");
   };
 
