@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from orbit_ai.engine import OrbitAI
 from orbit_ai.routine_engine import RoutineEngine
 from orbit_ai.adjustment_engine import AdjustmentEngine
+from orbit_ai.gemini_service import understand_user_input
 
 app = FastAPI()
 
@@ -48,4 +49,10 @@ def adjust_schedule(data: dict):
     return adjustment_engine.adjust_schedule(
         data.get("routine", []),
         data.get("adjustment", {})
+    )
+
+@app.post("/test-gemini")
+def test_gemini(data: dict):
+    return understand_user_input(
+        data.get("text", "")
     )
