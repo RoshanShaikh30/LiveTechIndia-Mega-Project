@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import re
 from orbit_ai.parser import Parser
+from orbit_ai.gemini_service import understand_user_input
 
 
 WEEK_DAYS = [
@@ -210,7 +211,12 @@ class AdjustmentEngine:
         }
 
     def _parse_adjustment(self, text, fallback_day=None):
-        parsed = self.parser.parse(text)
+        # parsed = self.parser.parse(text)
+        try:
+         parsed = understand_user_input(text)
+        except Exception:
+         parsed = self.parser.parse(text)
+         
         lower = str(text or "").lower()
 
         target = self._target_day(lower, parsed, fallback_day)
