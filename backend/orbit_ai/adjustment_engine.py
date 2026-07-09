@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta
 import re
 from orbit_ai.parser import Parser
-from orbit_ai.gemini_service import understand_user_input
+from orbit_ai.gemini_service import (
+    understand_user_input,
+    convert_to_orbit_format
+)
+# from orbit_ai.gemini_service import understand_user_input
 
 
 WEEK_DAYS = [
@@ -213,31 +217,98 @@ class AdjustmentEngine:
     def _parse_adjustment(self, text, fallback_day=None):
         # parsed = self.parser.parse(text)
         try:
-         parsed = understand_user_input(text)
-        except Exception:
-         parsed = self.parser.parse(text)
+          gemini = understand_user_input(text)
+          parsed = convert_to_orbit_format(gemini)
+          
+          print("\n===== GEMINI PARSED =====")
+          print(gemini)
+          print(parsed)
+          print("=========================\n")
+
+        except Exception as e:
+            
+            if "429" in str(e):
+             print("Gemini quota exceeded. Using Orbit parser.")
+            else:
+             print("Gemini Error:", e)
+             print("Gemini failed:", e)
+             
+            parsed = self.parser.parse(text)
          
         lower = str(text or "").lower()
 
         target = self._target_day(lower, parsed, fallback_day)
         target_day = target["day"]
-        intent = "remove" if self._is_removal(lower) else "add"
-        time_range = self._extract_time_range(lower)
-        start = time_range[0]
-        end = time_range[1]
+        
+        # intent = "remove" if self._is_removal(lower) else "add"
+        
+        gemini_intent = parsed.get("intent", "")
 
+        INTENT_MAP = {
+         "add_commitment": "add",
+         "remove_commitment": "remove",
+         "move_activity": "move",
+         "reschedule": "move",
+         "delay_activity": "move",
+         "update_activity": "update",
+         "skip_activity": "skip",
+         "reduce_workload": "reduce_workload",
+         "increase_workload": "increase_workload",
+         "swap_activity": "swap",
+        }
+
+        intent = INTENT_MAP.get(gemini_intent)
+
+        if intent is None:
+         intent = "remove" if self._is_removal(lower) else "add"
+         
+         
+        # First, trust Gemini
+        start = None
+        end = None
+
+        if parsed.get("start"):
+          start = self._to_minutes(parsed["start"])
+
+        if parsed.get("end"):
+          end = self._to_minutes(parsed["end"])
+
+# If Gemini didn't detect a time, fall back to the old parser
         if start is None:
-            start = self._single_time(lower)
-            end = start + 60 if start is not None else None
+          time_range = self._extract_time_range(lower)
 
+          if time_range != (None, None):
+           start = time_range[0]
+           end = time_range[1]
+
+# Finally, try a single time like "at 4 PM"
+        if start is None:
+          start = self._single_time(lower)
+
+          if start is not None:
+             end = start + 60
+
+# Preserve your existing busy/unavailable behavior
         if start is None and re.search(r"\b(busy|unavailable)\b", lower):
-            start, end = 9 * 60, 17 * 60
+           start, end = 9 * 60, 17 * 60
+        
+        
+        # time_range = self._extract_time_range(lower)
+        # start = time_range[0]
+        # end = time_range[1]
 
         # if start is None:
-        #     start, end = 9 * 60, 10 * 60
-        if start is None:
-            start = None
-            end = None
+        #     start = self._single_time(lower)
+        #     end = start + 60 if start is not None else None
+
+        # if start is None and re.search(r"\b(busy|unavailable)\b", lower):
+        #     start, end = 9 * 60, 17 * 60
+
+        # # if start is None:
+        # #     start, end = 9 * 60, 10 * 60
+        # if start is None:
+        #     start = None
+        #     end = None
 
         activity = self._clean_activity(parsed.get("activity") or "Adjustment", intent)
         activity = re.sub(r"\b(today|tomorrow)\b", "", activity, flags=re.IGNORECASE).strip()
@@ -247,6 +318,11 @@ class AdjustmentEngine:
             activity = "Adjustment"
             
         has_time = start is not None
+        
+        print("\n===== FINAL PARSED =====")
+        print("Activity:", activity)
+        print("Intent:", intent)
+        print("========================\n")
 
         return {
             "activity": activity.title(),

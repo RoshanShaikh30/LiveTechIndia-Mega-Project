@@ -136,3 +136,158 @@ User message:
         return {
             "error": str(e)
         }
+        
+def convert_to_orbit_format(gemini_data):
+    """
+    Converts Gemini JSON into the format expected by
+    Orbit's AdjustmentEngine.
+    """
+
+    return {
+        "activity": gemini_data.get("activity", ""),
+        "days": [gemini_data["day"]] if gemini_data.get("day") else [],
+        "intent": gemini_data.get("intent", ""),
+        "start": gemini_data.get("start_time"),
+        "end": gemini_data.get("end_time"),
+        "priority": gemini_data.get("priority", "unknown"),
+        "action": gemini_data.get("action", ""),
+        "scope": gemini_data.get("scope", ""),
+        "reason": gemini_data.get("reason", ""),
+        "reference_activity": gemini_data.get("reference_activity", ""),
+        "constraints": gemini_data.get("constraints", {}),
+        "confidence": gemini_data.get("confidence", 0.0),
+        "requires_followup": gemini_data.get("requires_followup", False),
+        "followup_question": gemini_data.get("followup_question", "")
+    }
+    
+def understand_activity_input(user_input: str):
+    """
+    Uses Gemini to understand onboarding activities.
+    Returns structured JSON containing ALL activities found.
+    """
+
+    prompt = f"""
+You are the onboarding understanding engine for Orbit AI.
+
+The user is describing their habits, goals or fixed commitments.
+
+Your job is to identify EVERY activity separately.
+
+Return ONLY valid JSON.
+
+Return this EXACT format:
+
+{{
+  "activities": [
+    {{
+      "activity": "",
+      "category": "",
+      "days": [],
+      "start_time": "",
+      "end_time": "",
+      "preferred_time": "",
+      "duration": "",
+      "frequency": "",
+      "priority": ""
+    }}
+  ]
+}}
+
+Rules:
+
+- Split multiple activities into separate objects.
+- Never merge two different activities.
+- Infer the category whenever possible.
+
+Valid categories:
+
+- fixed_commitment
+- habit
+- goal
+
+Example 1
+
+Input:
+My internship is on Monday Wednesday Friday and college is Wednesday Friday.
+
+Output:
+{{
+  "activities": [
+    {{
+      "activity": "Internship",
+      "category": "fixed_commitment",
+      "days": ["Monday", "Wednesday", "Friday"],
+      "start_time": "",
+      "end_time": "",
+      "preferred_time": "",
+      "duration": "",
+      "frequency": "",
+      "priority": ""
+    }},
+    {{
+      "activity": "College",
+      "category": "fixed_commitment",
+      "days": ["Wednesday", "Friday"],
+      "start_time": "",
+      "end_time": "",
+      "preferred_time": "",
+      "duration": "",
+      "frequency": "",
+      "priority": ""
+    }}
+  ]
+}}
+
+Example 2
+
+Input:
+I study every evening for 2 hours.
+
+Output:
+{{
+  "activities": [
+    {{
+      "activity": "Study",
+      "category": "goal",
+      "days": [],
+      "start_time": "",
+      "end_time": "",
+      "preferred_time": "Evening",
+      "duration": "2 hours",
+      "frequency": "",
+      "priority": ""
+    }}
+  ]
+}}
+
+User input:
+
+{user_input}
+"""
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+        )
+
+        text = response.text.strip()
+
+        text = text.replace("```json", "").replace("```", "").strip()
+
+        print("\n===== GEMINI ONBOARDING RESPONSE =====")
+        print(text)
+        print("======================================\n")
+
+        return json.loads(text)
+
+    except json.JSONDecodeError:
+        return {
+            "error": "Gemini returned invalid JSON.",
+            "raw_response": text
+        }
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }

@@ -4,6 +4,7 @@ from orbit_ai.engine import OrbitAI
 from orbit_ai.routine_engine import RoutineEngine
 from orbit_ai.adjustment_engine import AdjustmentEngine
 from orbit_ai.gemini_service import understand_user_input
+from orbit_ai.gemini_service import understand_activity_input
 
 app = FastAPI()
 
@@ -56,3 +57,7 @@ def test_gemini(data: dict):
     return understand_user_input(
         data.get("text", "")
     )
+    
+@app.post("/test-activity-gemini")
+def test_activity_gemini(data: dict):
+    return understand_activity_input(data.get("text", ""))

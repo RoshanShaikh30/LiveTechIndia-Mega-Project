@@ -24,6 +24,7 @@ from knowledge.behavior_rules import (
 from knowledge.category_rules import CATEGORY_RULES
 from knowledge.question_templates import QUESTION_TEMPLATES
 from orbit_ai.parser import Parser
+from orbit_ai.gemini_service import understand_activity_input
 
 
 class QuestionEngine:
@@ -49,6 +50,9 @@ class QuestionEngine:
         }
 
     def analyze_user(self, user_data):
+        print("\n========== USER DATA ==========")
+        print(user_data)
+        print("===============================\n")
         grouped_questions = []
         routine_seed = {}
         activity_entries = {}
@@ -60,21 +64,66 @@ class QuestionEngine:
             ("commitments", "fixed_commitment"),
         ]
 
+        # for section_name, fallback_category in sections:
+        #     for activity_text in user_data.get(section_name, []):
+        #         parsed = self.parser.parse(activity_text)
+        #         activity_name = self._canonical_activity(parsed["activity"])
+        #         dedupe_key = activity_name.lower()
+
+        #         if dedupe_key not in activity_entries:
+        #             activity_entries[dedupe_key] = {
+        #                 "activity_name": activity_name,
+        #                 "category": fallback_category,
+        #                 "texts": [],
+        #             }
+        #             activity_order.append(dedupe_key)
+
+        #         activity_entries[dedupe_key]["texts"].append(str(activity_text))
+        
         for section_name, fallback_category in sections:
-            for activity_text in user_data.get(section_name, []):
-                parsed = self.parser.parse(activity_text)
-                activity_name = self._canonical_activity(parsed["activity"])
-                dedupe_key = activity_name.lower()
+          for activity_text in user_data.get(section_name, []):
+              
+             print("Section:", section_name)
+             print("Activity text:", activity_text)
+              
+             try:
+               gemini_result = understand_activity_input(activity_text)
+               activities = gemini_result.get("activities", [])
+               print("Gemini Activities:", activities)
 
-                if dedupe_key not in activity_entries:
-                    activity_entries[dedupe_key] = {
-                        "activity_name": activity_name,
-                        "category": fallback_category,
-                        "texts": [],
-                    }
-                    activity_order.append(dedupe_key)
+             except Exception as e:
+                 print("Gemini Error:", e)
+                 activities = []
 
-                activity_entries[dedupe_key]["texts"].append(str(activity_text))
+             if not activities:
+              parsed = self.parser.parse(activity_text)
+
+              activities = [{
+                "activity": parsed.get("activity", ""),
+                "category": fallback_category,
+                "days": parsed.get("days", []),
+                "start_time": parsed.get("start_time", ""),
+                "end_time": parsed.get("end_time", ""),
+                "preferred_time": parsed.get("preferred_time", ""),
+                "duration": parsed.get("duration", ""),
+                "frequency": parsed.get("frequency", ""),
+                "priority": ""
+               }]
+
+             for parsed in activities:
+
+              activity_name = self._canonical_activity(parsed["activity"])
+              dedupe_key = activity_name.lower()
+
+              if dedupe_key not in activity_entries:
+                activity_entries[dedupe_key] = {
+                    "activity_name": activity_name,
+                    "category": parsed.get("category") or fallback_category,
+                    "texts": [],
+                }
+                activity_order.append(dedupe_key)
+
+              activity_entries[dedupe_key]["texts"].append(activity_text)
 
         for dedupe_key in activity_order:
             entry = activity_entries[dedupe_key]
