@@ -55,20 +55,6 @@ Artificial Intelligence is used to understand user information and schedule modi
 
 - Browser LocalStorage
 
-## Project Structure :
-Orbit
-│
-├── src/                 # React Frontend
-├── backend/             # FastAPI Backend
-│   ├── app.py
-│   ├── parser.py
-│   ├── question_engine.py
-│   ├── routine_engine.py
-│   ├── adjustment_engine.py
-│   └── gemini_service.py
-│
-└── README.md
-
 
 # React + Vite
 
