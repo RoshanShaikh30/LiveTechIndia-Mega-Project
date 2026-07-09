@@ -101,6 +101,10 @@ class QuestionEngine:
 
              if not activities:
               parsed = self.parser.parse(activity_text)
+              print("\n========== PARSED ==========")
+              print(parsed) 
+              print("============================\n")
+
 
               activities = [{
                 "activity": parsed.get("activity", ""),
@@ -337,7 +341,7 @@ class QuestionEngine:
         else:
             fields = [field for field in fields if field != "deadline"]
 
-        if lower_name in {"mindfulness", "better sleep", "healthy eating"}:
+        if lower_name in {"mindfulness", "better sleep","sleep earlier", "healthy eating","drink more water","water"}:
             return []
 
         if behavior == "relationship":
