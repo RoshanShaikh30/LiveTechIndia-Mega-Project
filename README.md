@@ -12,37 +12,49 @@ Orbit is not a chatbot.
 Artificial Intelligence is used to understand user information and schedule modification requests, while Orbit's own scheduling engine generates and updates the timetable.
 
 ## Features
-Multi-step guided onboarding
-AI-generated personalized weekly timetable
-Intelligent follow-up questions
-Weekly timetable
-Today page
-Habit tracker
-Orbit Insights for natural language schedule adjustments
-Voice input support
-Conflict detection
-Automatic rescheduling of flexible activities
-Export timetable as PDF
-Export timetable as PNG
-Local data storage using LocalStorage
-Technology Stack
-Frontend
-React
-Vite
-CSS
-Backend
-Python
-FastAPI
-AI & APIs
-Orbit AI
-Parser
-Question Engine
-Routine Engine
-Adjustment Engine
-Gemini API (Natural Language Understanding)
-Browser Speech Recognition API
-Storage
-Browser LocalStorage
+
+- Multi-step guided onboarding
+- AI-generated personalized weekly timetable
+- Intelligent follow-up questions
+- Weekly timetable
+- Today page
+- Habit tracker
+- Orbit Insights for natural language schedule adjustments
+- Voice input support
+- Conflict detection
+- Automatic rescheduling of flexible activities
+- Export timetable as PDF
+- Export timetable as PNG
+- Local data storage using LocalStorage
+
+---
+
+## Technology Stack
+
+### Frontend
+
+- React
+- Vite
+- CSS
+
+### Backend
+
+- Python
+- FastAPI
+
+### AI & APIs
+
+- Parser
+- Question Engine
+- Routine Engine
+- Adjustment Engine
+- Gemini API (Natural Language Understanding)
+- Browser Speech Recognition API
+
+### Storage
+
+- Browser LocalStorage
+
 
 # React + Vite
 
