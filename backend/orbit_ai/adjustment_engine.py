@@ -142,8 +142,10 @@ class AdjustmentEngine:
         if parsed["start"] is None:
           parsed["start"] = 9 * 60
           parsed["end"] = 10 * 60
-
-
+          
+        if parsed["end"] is None:
+          parsed["end"] = parsed["start"] + 60
+    
         new_item = {
             "title": parsed["activity"],
             "start": self._format_minutes(parsed["start"]),
@@ -184,6 +186,15 @@ class AdjustmentEngine:
             conflict["end"] = self._format_minutes(next_end)
 
         updated.append(new_item)
+        
+        print("\n===== NEW ITEM =====")
+        print(new_item)
+        print("====================\n")
+        
+        print("\n========== UPDATED SCHEDULE ==========")
+        for item in updated:
+          print(item)
+        print("=====================================\n")
 
         moved_titles = [
             item.get("title", "a flexible activity")

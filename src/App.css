@@ -1442,6 +1442,57 @@ body {
   cursor:pointer;
 }
 
+.voice-textarea-wrapper{
+    position:relative;
+}
+
+.voice-textarea-wrapper textarea{
+    padding-right:46px;
+}
+
+.mic-button{
+    position:absolute;
+    right:12px;
+    bottom:12px;
+
+    width:32px;
+    height:32px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#3d251e;
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+    transition:.2s;
+}
+
+.mic-button:hover{
+    transform:scale(1.08);
+}
+
+.mic-button.listening{
+    background:#d66a4f;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+    0%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.18);
+    }
+    100%{
+        transform:scale(1);
+    }
+}
+
 .weekday-row,
 .month-grid{
   display:grid;

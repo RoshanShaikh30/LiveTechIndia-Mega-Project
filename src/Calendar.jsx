@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import {
@@ -10,6 +10,7 @@ import {
   FaLightbulb,
   FaRegCalendarCheck,
   FaSyncAlt,
+  FaMicrophone
 } from "react-icons/fa";
 import "./App.css";
 
@@ -65,6 +66,8 @@ const formatTime = (minutes) => {
   const mins = minutes % 60;
   return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
 };
+
+// const [isListening, setIsListening] = useState(false);
 
 const WATER_MAX_GLASSES = 8;
 
@@ -266,7 +269,9 @@ function Calendar( { routine, setRoutine } ) {
   const [selectedDate, setSelectedDate] = useState(today);
   const [scheduleChange, setScheduleChange] = useState("");
   const [adjustmentScope, setAdjustmentScope] = useState("");
+  const [isListening, setIsListening] = useState(false);
   const [adjustmentMessage, setAdjustmentMessage] = useState("");
+  const recognitionRef = useRef(null);
   const [pendingProposal, setPendingProposal] = useState(null);
   const [orbitSuggestion, setOrbitSuggestion] = useState(null);
   const [dismissedSuggestionId, setDismissedSuggestionId] = useState("");
@@ -399,6 +404,59 @@ const toggleReadingComplete = () => {
     ...currentProgress,
     reading: !currentProgress.reading
   }));
+};
+
+const startListening = () => {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Speech recognition is not supported in this browser.");
+    return;
+  }
+
+  // Stop if already listening
+  if (isListening && recognitionRef.current) {
+    recognitionRef.current.stop();
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognitionRef.current = recognition;
+
+  recognition.lang = "en-IN";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+
+  setIsListening(true);
+  setAdjustmentMessage("Listening...");
+
+  recognition.start();
+
+  recognition.onresult = (event) => {
+    let finalText = "";
+
+    for (let i = 0; i < event.results.length; i++) {
+      finalText += event.results[i][0].transcript + " ";
+    }
+
+    setScheduleChange(finalText.trim());
+  };
+
+  recognition.onerror = (event) => {
+    console.log("Speech Error:", event.error);
+
+    setIsListening(false);
+    setAdjustmentMessage("Voice input failed.");
+    recognitionRef.current = null;
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+    setAdjustmentMessage("");
+    recognitionRef.current = null;
+  };
 };
 
   const onboardingData = (() => {
@@ -1151,11 +1209,21 @@ const toggleReadingComplete = () => {
             <FaSyncAlt />
             <strong>What changed?</strong>
           </div>
-          <textarea
-            placeholder="I have coaching at 6 PM today."
+          <div className="voice-textarea-wrapper">
+           <textarea
+            placeholder="Type or speak a schedule change..."
             value={scheduleChange}
             onChange={(e) => setScheduleChange(e.target.value)}
-          />
+              />
+
+            <button
+            type="button"
+            title="Speak your schedule change"
+            className={`mic-button ${isListening ? "listening" : ""}`}
+            onClick={startListening}>
+            {isListening ? "⏹" : <FaMicrophone />}
+            </button>
+          </div>
           <div className="adjustment-actions">
             <button
               className={adjustmentScope === "today" ? "active" : ""}

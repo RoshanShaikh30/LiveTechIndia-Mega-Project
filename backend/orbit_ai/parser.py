@@ -40,6 +40,23 @@ class Parser:
         "evening": "Evening",
         "night": "Night",
     }
+    
+    def split_multiple_activities(self, text):
+       """Splits sentences containing multiple activities joined by
+       'and', 'also', or ',' into separate activity strings.
+       """
+       if not text:
+          return []
+
+       parts = re.split(
+         r"\s+(?:and|also)\s+|,\s*",
+         text,
+         flags=re.IGNORECASE
+      )
+
+       cleaned = [p.strip() for p in parts if p.strip()]
+
+       return cleaned
 
     def parse(self, text):
         info = {}

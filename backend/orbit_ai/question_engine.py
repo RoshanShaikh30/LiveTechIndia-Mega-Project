@@ -83,6 +83,10 @@ class QuestionEngine:
         for section_name, fallback_category in sections:
           for activity_text in user_data.get(section_name, []):
               
+           activity_parts = self.parser.split_multiple_activities(activity_text)
+
+           for activity_text in activity_parts:
+              
              print("Section:", section_name)
              print("Activity text:", activity_text)
               
